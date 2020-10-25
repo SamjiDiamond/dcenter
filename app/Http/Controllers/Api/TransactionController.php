@@ -7,6 +7,7 @@ use App\Models\AirtimeConfig;
 use App\Models\DataConfig;
 use App\Models\ElectricityConfig;
 use App\Models\TvConfig;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -109,15 +110,13 @@ class TransactionController extends Controller
 
         if ($validator->passes())
         {
-            $live_key="sk_live_90b0e90fb3f0308e5e76c6fdde683c6871205b4c";
-
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => "https://api.paystack.co/bank/resolve?account_number=". $input['account_number'] ."&bank_code=". $input['bank_code'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CUSTOMREQUEST => "GET",
                 CURLOPT_HTTPHEADER => [
-                    "authorization: Bearer ".$live_key, //replace this with your own test key
+                    "authorization: Bearer ".env('PAYSTACK_SECRET'), //replace this with your own test key
                     "content-type: application/json",
                     "cache-control: no-cache"
                 ],
@@ -134,7 +133,7 @@ class TransactionController extends Controller
             $tranx = json_decode($response, true);
 
             if($tranx['status']){
-                return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $tranx['data']]);
+                return response()->json(['status' => 1, 'message'=>'Validated successfully', 'data'=> $tranx['data']]);
             }else{
                 return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
             }
@@ -156,8 +155,8 @@ class TransactionController extends Controller
         {
             $us=User::where('phoneno', $input['username'])->orWhere('email', $input['username'])->exists();
             if($us){
-                $use=User::where('phoneno', $input['username'])->orWhere('email', $input['username'])->first();
-                return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $use->last_name . " ".$use->first_name ]);
+                $use=User::where('phoneno', $input['username'])->orWhere('email', $input['username'])->select("last_name", "first_name")->first();
+                return response()->json(['status' => 1, 'message'=>'Validated successfully', 'data'=> $use->last_name . " ".$use->first_name ]);
             }else{
                 return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
             }

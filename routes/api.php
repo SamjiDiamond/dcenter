@@ -32,4 +32,9 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('tvconfig/{provider}', [TransactionController::class, 'tvConfig'])->name('tv');
     Route::get('electricityconfig', [TransactionController::class, 'electricityConfig'])->name('electricity');
     Route::get('banktransferconfig', [TransactionController::class, 'banktransferConfig'])->name('banktransfer');
+
+    Route::post('validatebankaccount', [TransactionController::class, 'ValidateBankAccount'])->name('bankactval');
+    Route::post('validateuseraccount', [TransactionController::class, 'ValidateUserAccount'])->name('useractval');
+    Route::post('validatetv', [TransactionController::class, 'ValidateTV'])->name('tvval');
+    Route::post('validatemeter', [TransactionController::class, 'ValidateMeter'])->name('meterval');
 });
