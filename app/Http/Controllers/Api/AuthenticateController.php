@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -102,8 +103,10 @@ class AuthenticateController extends Controller
 
 //            $set=DB::table("Settings")->where("id","=","1")->first();
 
+            $company=Company::find($user->company_id);
+
             $token=$user->createToken($request->device_name)->plainTextToken;
-            return response()->json(['status'=> 1, 'message' => "User authenticated successfully", 'token' => $token, 'user_id'=>Auth::id()]);
+            return response()->json(['status'=> 1, 'message' => "User authenticated successfully", 'token' => $token, 'wallet'=>$user->wallet, 'first_name'=>$user->first_name, 'last_name'=>$user->last_name, 'company'=>$company->name, 'profile_path'=> 'https://ui-avatars.com/api/?name='. substr($user->first_name,0,2).'&color=7F9CF5&background=EBF4FF']);
 
         }else{
             return response()->json(['status'=> 0, 'message'=>'Unable to login with errors', 'error' => $validator->errors()]);;
