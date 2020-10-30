@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Api\AuthenticateController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\OthersController;
+use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('signup', [AuthenticateController::class, 'signup'])->name('signup');
 Route::post('login', [AuthenticateController::class, 'login'])->name('login');
+Route::post('resetpassword', [AuthenticateController::class, 'resetpassword'])->name('resetpassword');
 
 Route::get('companys', [CompanyController::class, 'index'])->name('companys');
 
@@ -37,4 +41,52 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('validateuseraccount', [TransactionController::class, 'ValidateUserAccount'])->name('useractval');
     Route::post('validatetv', [TransactionController::class, 'ValidateTV'])->name('tvval');
     Route::post('validatemeter', [TransactionController::class, 'ValidateMeter'])->name('meterval');
+
+    Route::get('faq', [OthersController::class, 'faq'])->name('faq');
+
+    Route::get('companydetails', [CompanyController::class, 'getcompany'])->name('company');
+
+    Route::post('uploaddp',  [UserController::class, 'uploaddp'])->name('uploaddp');
+    Route::post('updateprofile', [UserController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('changepassword', [UserController::class, 'changepassword'])->name('changepassword');
+
+    Route::post('buy/data', [ServerController::class, 'buydata'])->name('buydata');
+    Route::post('buy/airtime', 'RequestServerController@buyairtime')->name('buyairtime');
+    Route::post('buy/paytv', 'RequestServerController@paytv')->name('paytv');
+    Route::post('buy/electricity', 'RequestServerController@buyelectricity')->name('buyelectricity');
+    Route::post('buy/transfer', 'RequestServerController@buytransfer')->name('buytransfer')->middleware("apphelper");
+
 });
+
+Route::get('/user/image/{filename}', function ($filename)
+{
+    $path = storage_path('app/public/user/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
+
+Route::get('/company/image/{filename}', function ($filename)
+{
+    $path = storage_path('app/public/company/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
+
+
+

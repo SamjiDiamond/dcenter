@@ -90,8 +90,6 @@ class AuthenticateController extends Controller
 
         if ($validator->passes())
         {
-
-
             $user = User::where('email', $request->username)->orWhere('phoneno', $request->username)->first();
 
             if (! $user || ! Hash::check($request->password, $user->password)) {
@@ -110,5 +108,35 @@ class AuthenticateController extends Controller
         }else{
             return response()->json(['status'=> 0, 'message'=>'Unable to login with errors', 'error' => $validator->errors()]);;
         }
+    }
+
+    public function resetpassword(Request $request)
+    {
+        $input = $request->all();
+        $rules = array(
+            'username'   => 'required');
+
+        $messages = array(
+            'min' => 'Hmm, that looks short.',
+            'max' => 'Oops, that too long.',
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+
+        $validator = Validator::make($input, $rules, $messages);
+
+        if ($validator->passes()) {
+
+            $user=User::where('email', $request->username)->orWhere('phoneno', $request->username)->first();
+
+            if(!$user){
+                return response()->json(['status'=> 0, 'message'=>'User not found']);
+            }
+//            email reset link
+
+            return response()->json(['status'=> 1, 'message'=>'Password Reset successfully! Kindly check your email.']);
+
+        }else{
+            return response()->json(['status'=> 0, 'message'=>'Error resetting password', 'error' => $validator->errors()]);
+        }
+
     }
 }
