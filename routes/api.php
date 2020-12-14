@@ -46,13 +46,13 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::get('companydetails', [CompanyController::class, 'getcompany'])->name('company');
 
-    Route::post('uploaddp',  [UserController::class, 'uploaddp'])->name('uploaddp');
+    Route::post('uploaddp', [UserController::class, 'uploaddp'])->name('uploaddp');
     Route::post('updateprofile', [UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('changepassword', [UserController::class, 'changepassword'])->name('changepassword');
 
     Route::post('buy/data', [ServerController::class, 'buydata'])->name('buydata');
-    Route::post('buy/airtime', 'RequestServerController@buyairtime')->name('buyairtime');
-    Route::post('buy/paytv', 'RequestServerController@paytv')->name('paytv');
+    Route::post('buy/airtime', [ServerController::class, 'buyairtime'])->name('buyairtime');
+    Route::post('buy/paytv', [ServerController::class, 'paytv'])->name('paytv');
     Route::post('buy/electricity', 'RequestServerController@buyelectricity')->name('buyelectricity');
     Route::post('buy/transfer', 'RequestServerController@buytransfer')->name('buytransfer')->middleware("apphelper");
 

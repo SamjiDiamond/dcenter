@@ -33,7 +33,7 @@ class TransactionController extends Controller
 
     public function airtimeConfig() {
         $user = Auth::user();
-        $config = AirtimeConfig::where([['company_id', $user->company_id], ['status', 1]])->select('code','price')->get();
+        $config = AirtimeConfig::where([['company_id', $user->company_id], ['status', 1]])->select('identifier', 'code', 'price')->get();
         if($config->isEmpty()){
             return response()->json(['status' => 0, 'message'=>'Packages not available']);
         }else{
@@ -43,7 +43,7 @@ class TransactionController extends Controller
 
     public function dataConfig($network) {
         $user = Auth::user();
-        $config = DataConfig::where([['company_id', $user->company_id], ['network', $network], ['status', 1] ])->select('code','price','network','desc')->get();
+        $config = DataConfig::where([['company_id', $user->company_id], ['network', $network], ['status', 1]])->select('identifier', 'price', 'network', 'desc')->get();
         if($config->isEmpty()){
             return response()->json(['status' => 0, 'message'=>'Packages not available']);
         }else{
@@ -53,7 +53,7 @@ class TransactionController extends Controller
 
     public function tvConfig($provider) {
         $user = Auth::user();
-        $config = TvConfig::where([['company_id', $user->company_id], ['provider', $provider], ['status', 1] ])->select('code','price','provider','desc')->get();
+        $config = TvConfig::where([['company_id', $user->company_id], ['provider', $provider], ['status', 1]])->select('identifier', 'price', 'provider', 'desc')->get();
         if($config->isEmpty()){
             return response()->json(['status' => 0, 'message'=>'Packages not available']);
         }else{

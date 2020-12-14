@@ -9,5 +9,5 @@ class ElectricityConfig extends Model
 {
     use HasFactory;
 
-    protected $table= 'config_tv';
+    protected $table = 'config_electricity';
 }
