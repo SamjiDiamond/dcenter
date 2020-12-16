@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AirtimeConfig;
 use App\Models\DataConfig;
 use App\Models\ElectricityConfig;
+use App\Models\Transaction;
 use App\Models\TvConfig;
 use App\Models\User;
 use Illuminate\Http\Request;

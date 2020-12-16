@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\A2CConfig;
 use App\Models\AirtimeConfig;
 use App\Models\DataConfig;
+use App\Models\ElectricityConfig;
 use App\Models\Transaction;
 use App\Models\TvConfig;
 use App\Models\User;
@@ -192,9 +194,71 @@ class ServerController extends Controller
     {
         $rules = array(
             'version' => 'required',
-            'type' => 'required',
+            'dest' => 'required',
             'amount' => 'required',
-            'phone' => 'required',
+            'number' => 'required',);
+        $input = $request->all();
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->passes()) {
+
+            try {
+
+                $dc = A2CConfig::where([['company_id', Auth::user()->company_id], ['code', $input['dest']]])->first();
+                if (!$dc) {
+                    return response()->json(['status' => 0, 'message' => 'Invalid Request. Current Company do not support your request']);
+                }
+
+                if ($dc->company_id != Auth::user()->company_id) {
+                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
+                }
+
+                $amount=$input['amount'];
+                $p=$dc->price/100;
+                $pri=$amount*$p;
+                $price=$amount-$pri;
+
+                $input['reference_id'] = Auth::user()->company_id . "d" . date('ymd') . rand();
+                $input['company_id'] = Auth::user()->company_id;
+                $input['user_id'] = Auth::id();
+                $input['amount'] = $price;
+                $input['i_wallet'] = Auth::user()->wallet;
+                $input['f_wallet'] = Auth::user()->wallet + $price;
+                $input['date'] = Carbon::now();
+                $input['status'] = "pending";
+                $input['code'] = $dc->code;
+                $input['type'] = "credit";
+                $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+                $input['description'] = ' A2C - ' .$input['dest']." -  #" . $amount. " " . $input['number'];
+                if($input['dest']=="bank"){
+                    $input['description'] .= " " . $input['bank'];
+                }
+                $input['extra'] = $amount;
+
+                Transaction::create($input);
+
+//                User::where('id', Auth::id())->update(['wallet' => $input['f_wallet']]);
+
+                return response()->json(['status' => 1, 'message' => 'Transaction Successful']);
+
+            } catch (\Exception $e) {
+                dd($e);
+                return response()->json(['status' => 0, 'message' => 'Error processing transaction', 'error' => $e]);
+            }
+
+        } else {
+            return response()->json(['status' => 0, 'message' => 'Error processing transaction', 'error' => $validator->errors()]);
+        }
+
+    }
+
+    public function buyelectricity(Request $request)
+    {
+        $rules = array(
+            'version' => 'required',
+            'code' => 'required',
+            'amount' => 'required',
             'number' => 'required');
         $input = $request->all();
 
@@ -204,7 +268,7 @@ class ServerController extends Controller
 
             try {
 
-                $dc = TvConfig::where('identifier', $input['code'])->first();
+                $dc = ElectricityConfig::where('identifier', $input['code'])->first();
                 if (!$dc) {
                     return response()->json(['status' => 0, 'message' => 'Invalid Code supplied']);
                 }
@@ -217,18 +281,23 @@ class ServerController extends Controller
                     return response()->json(['status' => 0, 'message' => 'Insufficient balance. Kindly topup']);
                 }
 
+                $amount=$input['amount'];
+                $p=$dc->price/100;
+                $pri=$amount*$p;
+                $price=$amount-$pri;
+
                 $input['reference_id'] = Auth::user()->company_id . "d" . date('ymd') . rand();
                 $input['company_id'] = Auth::user()->company_id;
                 $input['user_id'] = Auth::id();
-                $input['amount'] = $dc->price;
+                $input['amount'] = $price;
                 $input['i_wallet'] = Auth::user()->wallet;
-                $input['f_wallet'] = Auth::user()->wallet - $dc->price;
+                $input['f_wallet'] = Auth::user()->wallet - $price;
                 $input['date'] = Carbon::now();
                 $input['status'] = "successful";
                 $input['code'] = $dc->code;
                 $input['type'] = "debit";
                 $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
-                $input['description'] = $dc->desc . ' - ' . $input['number'];
+                $input['description'] = $dc->desc . ' - #' . $amount . " " . $input['number'];
 
                 Transaction::create($input);
 
@@ -248,7 +317,7 @@ class ServerController extends Controller
     }
 
 
-    public function buyelectricity(Request $request)
+    public function buyelectricit(Request $request)
     {
         $input = $request->all();
         $rules = array(

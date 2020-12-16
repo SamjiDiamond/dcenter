@@ -37,6 +37,9 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('electricityconfig', [TransactionController::class, 'electricityConfig'])->name('electricity');
     Route::get('banktransferconfig', [TransactionController::class, 'banktransferConfig'])->name('banktransfer');
 
+    Route::get('transactions', [TransactionController::class, 'transactions'])->name('transactions');
+    Route::get('transaction/{id}', [TransactionController::class, 'transaction'])->name('transaction');
+
     Route::post('validatebankaccount', [TransactionController::class, 'ValidateBankAccount'])->name('bankactval');
     Route::post('validateuseraccount', [TransactionController::class, 'ValidateUserAccount'])->name('useractval');
     Route::post('validatetv', [TransactionController::class, 'ValidateTV'])->name('tvval');
@@ -53,7 +56,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('buy/data', [ServerController::class, 'buydata'])->name('buydata');
     Route::post('buy/airtime', [ServerController::class, 'buyairtime'])->name('buyairtime');
     Route::post('buy/paytv', [ServerController::class, 'paytv'])->name('paytv');
-    Route::post('buy/electricity', 'RequestServerController@buyelectricity')->name('buyelectricity');
+    Route::post('buy/a2c', [ServerController::class, 'a2c'])->name('a2c');
+    Route::post('buy/electricity', [ServerController::class, 'buyelectricity'])->name('buyelectricity');
     Route::post('buy/transfer', 'RequestServerController@buytransfer')->name('buytransfer')->middleware("apphelper");
 
 });
