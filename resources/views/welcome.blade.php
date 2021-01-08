@@ -1,132 +1,906 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noarchive">
+    <title> Dynamic Centre | App Showcase </title>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="assets1/css/bootstrap.min.css">
+    <!-- icofont -->
+    <link rel="stylesheet" href="assets1/css/fontawesome.5.7.2.css">
+    <!-- flaticon -->
+    <link rel="stylesheet" href="assets1/css/flaticon.css">
+    <!-- animate.css -->
+    <link rel="stylesheet" href="assets1/css/animate.css">
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="assets1/css/owl.carousel.min.css">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="assets1/css/magnific-popup.css">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="assets1/css/style.css">
+    <!-- responsive -->
+    <link rel="stylesheet" href="assets1/css/responsive.css">
+</head>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<body>
 
-        <!-- Styles -->
-        <style>
-            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-t{border-top-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@media (min-width:640px){.sm\:rounded-lg{border-radius:.5rem}.sm\:block{display:block}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:h-20{height:5rem}.sm\:ml-0{margin-left:0}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pt-0{padding-top:0}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width:768px){.md\:border-t-0{border-top-width:0}.md\:border-l{border-left-width:1px}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (prefers-color-scheme:dark){.dark\:bg-gray-800{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity))}.dark\:bg-gray-900{--bg-opacity:1;background-color:#1a202c;background-color:rgba(26,32,44,var(--bg-opacity))}.dark\:border-gray-700{--border-opacity:1;border-color:#4a5568;border-color:rgba(74,85,104,var(--border-opacity))}.dark\:text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.dark\:text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}}
-        </style>
+<nav class="navbar navbar-area navbar-expand-lg nav-absolute white nav-style-01">
+    <div class="container nav-container">
+        <div class="responsive-mobile-menu">
+            <div class="logo-wrapper">
+                <a href="index.html" class="logo">
+                    <img class="img img-thumbnail" src="assets/images/logo_small.png" alt="logo">
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#appside_main_menu"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="appside_main_menu">
+            <ul class="navbar-nav">
+                <li class="current-menu-item">
+                    <a href="#">Home</a>
+                </li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#team">Team</a></li>
+                <li class="menu-item-has-children">
+                    <a href="#">Blog</a>
+                    <ul class="sub-menu">
+                        <li><a href="blog.html">Blog 01</a></li>
+                        <li><a href="blog-details.html">Blog Details</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children">
+                    <a href="#">Authentication</a>
+                    <ul class="sub-menu">
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Signup</a></li>
+                    </ul>
+                </li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="nav-right-content">
+            <ul>
+                <li class="button-wrapper">
+                    <a href="#" class="boxed-btn btn-rounded">Download</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-        <style>
-            body {
-                font-family: 'Nunito';
-            }
-        </style>
-    </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 underline">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
+<!-- header area start  -->
+<header class="header-area header-bg dark-home-1" id="home">
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
-                        @endif
-                    @endif
-                </div>
-            @endif
+    <div class="shape-1"><img src="assets1/img/shape/01.png" alt=""></div>
+    <div class="shape-2"><img src="assets1/img/shape/02.png" alt=""></div>
+    <div class="shape-3"><img src="assets1/img/shape/03.png" alt=""></div>
+    <div class="shape-4"><img src="assets1/img/shape/05.png" alt=""></div>
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
-                        <g clip-path="url(#clip0)" fill="#EF3B2D">
-                            <path d="M248.032 44.676h-16.466v100.23h47.394v-14.748h-30.928V44.676zM337.091 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.431 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162-.001 2.863-.479 5.584-1.432 8.161zM463.954 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.432 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162 0 2.863-.479 5.584-1.432 8.161zM650.772 44.676h-15.606v100.23h15.606V44.676zM365.013 144.906h15.607V93.538h26.776V78.182h-42.383v66.724zM542.133 78.182l-19.616 51.096-19.616-51.096h-15.808l25.617 66.724h19.614l25.617-66.724h-15.808zM591.98 76.466c-19.112 0-34.239 15.706-34.239 35.079 0 21.416 14.641 35.079 36.239 35.079 12.088 0 19.806-4.622 29.234-14.688l-10.544-8.158c-.006.008-7.958 10.449-19.832 10.449-13.802 0-19.612-11.127-19.612-16.884h51.777c2.72-22.043-11.772-40.877-33.023-40.877zm-18.713 29.28c.12-1.284 1.917-16.884 18.589-16.884 16.671 0 18.697 15.598 18.813 16.884h-37.402zM184.068 43.892c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002-35.648-20.524a2.971 2.971 0 00-2.964 0l-35.647 20.522-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v38.979l-29.706 17.103V24.493a3 3 0 00-.103-.776c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002L40.098 1.396a2.971 2.971 0 00-2.964 0L1.487 21.919l-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v122.09c0 1.063.568 2.044 1.489 2.575l71.293 41.045c.156.089.324.143.49.202.078.028.15.074.23.095a2.98 2.98 0 001.524 0c.069-.018.132-.059.2-.083.176-.061.354-.119.519-.214l71.293-41.045a2.971 2.971 0 001.489-2.575v-38.979l34.158-19.666a2.971 2.971 0 001.489-2.575V44.666a3.075 3.075 0 00-.106-.774zM74.255 143.167l-29.648-16.779 31.136-17.926.001-.001 34.164-19.669 29.674 17.084-21.772 12.428-43.555 24.863zm68.329-76.259v33.841l-12.475-7.182-17.231-9.92V49.806l12.475 7.182 17.231 9.92zm2.97-39.335l29.693 17.095-29.693 17.095-29.693-17.095 29.693-17.095zM54.06 114.089l-12.475 7.182V46.733l17.231-9.92 12.475-7.182v74.537l-17.231 9.921zM38.614 7.398l29.693 17.095-29.693 17.095L8.921 24.493 38.614 7.398zM5.938 29.632l12.475 7.182 17.231 9.92v79.676l.001.005-.001.006c0 .114.032.221.045.333.017.146.021.294.059.434l.002.007c.032.117.094.222.14.334.051.124.088.255.156.371a.036.036 0 00.004.009c.061.105.149.191.222.288.081.105.149.22.244.314l.008.01c.084.083.19.142.284.215.106.083.202.178.32.247l.013.005.011.008 34.139 19.321v34.175L5.939 144.867V29.632h-.001zm136.646 115.235l-65.352 37.625V148.31l48.399-27.628 16.953-9.677v33.862zm35.646-61.22l-29.706 17.102V66.908l17.231-9.92 12.475-7.182v33.841z"/>
-                        </g>
-                    </svg>
-                </div>
-
-                <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 dark:text-white">Documentation</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 dark:text-white">Laracasts</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel-news.com/" class="underline text-gray-900 dark:text-white">Laravel News</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">Vibrant Ecosystem</div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 sm:text-left">
-                        <div class="flex items-center">
-                            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="-mt-px w-5 h-5 text-gray-400">
-                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-
-                            <a href="https://laravel.bigcartel.com" class="ml-1 underline">
-                                Shop
-                            </a>
-
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-
-                            <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
-                                Sponsor
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Build v{{ Illuminate\Foundation\Application::VERSION }}
+    <div class="header-right-image">
+        <img src="assets1/img/mobile-image-4.png" alt="header right image">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="header-inner">
+                    <h1 class="title wow fadeInDown">Dynamic Centre</h1>
+                    <p>Dynamic Centre is the best platform for Data, Airtime, Tv Subscriptions, Fund Transfer in the best possible manner.</p>
+                    <div class="btn-wrapper wow fadeInUp">
+                        <a href="#" class="boxed-btn btn-rounded">Download now</a>
+                        <a href="#" class="boxed-btn btn-rounded blank">Learn More</a>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</header>
+<!-- header area end  -->
+
+<!-- about us area start -->
+
+<section class="about-us-area dark-bg">
+    <div class="shape-1"><img src="assets1/img/shape/04.png" alt=""></div>
+    <div class="shape-2"><img src="assets1/img/shape/05.png" alt=""></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">About Dynamic Centre</span>
+                    <h3 class="title extra">Bulit for everybody with unlimited unique features</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="feature-area">
+                    <ul class="feature-list white">
+                        <li class="single-feature-list white">
+                            <div class="icon icon-bg-1">
+                                <i class="flaticon-vector"></i>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="#">Clean Design</a></h4>
+                                <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt</p>
+                            </div>
+                        </li>
+                        <li class="single-feature-list white">
+                            <div class="icon icon-bg-2">
+                                <i class="flaticon-responsive"></i>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="#">Fully Respnosive</a></h4>
+                                <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor  tempor incididunt</p>
+                            </div>
+                        </li>
+                        <li class="single-feature-list white">
+                            <div class="icon icon-bg-3">
+                                <i class="flaticon-layers-2"></i>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="#">Pixel Perfect</a></h4>
+                                <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt</p>
+                            </div>
+                        </li>
+                        <li class="single-feature-list white">
+                            <div class="icon icon-bg-4">
+                                <i class="flaticon-picture"></i>
+                            </div>
+                            <div class="content">
+                                <h4 class="title"><a href="#">Retina Ready</a></h4>
+                                <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="btn-wrapper ">
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-1"><i class="flaticon-apple-1"></i> App Store</a>
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-2"><i class="flaticon-android-logo"></i> Play Store</a>
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-3"><i class="flaticon-windows"></i> Windows</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- about us area end -->
+
+<!-- video area start -->
+<section class="video-area dark-bg white" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="img-with-video">
+                    <div class="img-wrap">
+                        <img src="assets1/img/video-image.jpg" alt="">
+                        <div class="hover">
+                            <a href="https://www.youtube.com/watch?v=tdBzJRdy33M" class="video-play-btn mfp-iframe"><i class="fas fa-play"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="right-content-area ">
+                    <span class="subtitle">aMazing experience</span>
+                    <h3 class="title">Boost your business one step</h3>
+                    <p>Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                    <p>Built purse maids cease her ham new seven among and. Pulled coming wooded tended it answer remain me be. So landlord by we unlocked sensible it. Fat cannot use denied excuse son law. Wisdom happen suffer common the appear ham beauty her had. Or belonging zealously existence as by resources. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- video area end -->
+
+<!-- counterup area start -->
+<section class="counterup-area dark-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counter-item white"><!-- single counter item -->
+                    <div class="icon">
+                        <i class="flaticon-rating"></i>
+                    </div>
+                    <div class="content">
+                        <span class="count-num">14,567</span>
+                        <h4 class="title">Positive Reviews</h4>
+                    </div>
+                </div><!-- //. single counter item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counter-item white"><!-- single counter item -->
+                    <div class="icon">
+                        <i class="flaticon-conversation-1"></i>
+                    </div>
+                    <div class="content">
+                        <span class="count-num">567</span>
+                        <h4 class="title">Good Comments</h4>
+                    </div>
+                </div><!-- //. single counter item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counter-item white"><!-- single counter item -->
+                    <div class="icon">
+                        <i class="flaticon-email"></i>
+                    </div>
+                    <div class="content">
+                        <span class="count-num">36,778</span>
+                        <h4 class="title">App Downloads</h4>
+                    </div>
+                </div><!-- //. single counter item -->
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="single-counter-item white"><!-- single counter item -->
+                    <div class="icon">
+                        <i class="flaticon-trophy"></i>
+                    </div>
+                    <div class="content">
+                        <span class="count-num">30</span>
+                        <h4 class="title">Best Awards</h4>
+                    </div>
+                </div><!-- //. single counter item -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- counterup area end -->
+
+<!-- why choose area start -->
+<section class="why-choose-area dark-bg">
+    <div class="shape-1"><img src="assets1/img/shape/05.png" alt=""></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">why choose this</span>
+                    <h3 class="title extra">Users love appside to make cool landing page</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <div class="single-why-us-item white margin-top-60 fadeInUp wow"><!-- single why us item -->
+                    <div class="icon gdbg-1">
+                        <i class="flaticon-settings-1"></i>
+                    </div>
+                    <div class="content">
+                        <h4 class="title">Easy Customize</h4>
+                        <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                    </div>
+                </div><!-- //. single why us item -->
+                <div class="single-why-us-item white fadeInUp wow"><!-- single why us item -->
+                    <div class="icon gdbg-2">
+                        <i class="flaticon-checked"></i>
+                    </div>
+                    <div class="content">
+                        <h4 class="title">Fast & Secure</h4>
+                        <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                    </div>
+                </div><!-- //. single why us item -->
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="center-image">
+                    <img src="assets1/img/mobile-img-2.png" alt="mobile image two">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="single-why-us-item white margin-top-60 fadeInUp wow"><!-- single why us item -->
+                    <div class="icon gdbg-3">
+                        <i class="flaticon-chat-1"></i>
+                    </div>
+                    <div class="content">
+                        <h4 class="title">Live Chat</h4>
+                        <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                    </div>
+                </div><!-- //. single why us item -->
+                <div class="single-why-us-item white fadeInUp wow"><!-- single why us item -->
+                    <div class="icon gdbg-4">
+                        <i class="flaticon-cloud"></i>
+                    </div>
+                    <div class="content">
+                        <h4 class="title">Secure Data</h4>
+                        <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
+                    </div>
+                </div><!-- //. single why us item -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- why choose area end -->
+
+<!-- how it works area start -->
+<section class="how-it-work-area dark-bg">
+    <div class="shape-1"><img src="assets1/img/shape/06.png" alt=""></div>
+    <div class="shape-2"><img src="assets1/img/shape/07.png" alt=""></div>
+    <div class="shape-3"><img src="assets1/img/shape/06.png" alt=""></div>
+    <div class="shape-4"><img src="assets1/img/shape/07.png" alt=""></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">Working Process</span>
+                    <h3 class="title">How it works?</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="how-it-work-tab-nav">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" role="tab" aria-controls="account" aria-selected="true"><i class="flaticon-checked"></i> Log In Account <span class="number">1</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><i class="flaticon-settings-1"></i> Open Settings <span class="number">2</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false"><i class="flaticon-chat-1"></i> Start Your Chat <span class="number">3</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content fadeInUp wow">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <div class="how-it-works-tab-content white">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="left-content-area">
+                                        <h4 class="title">Login Account</h4>
+                                        <p>Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="right-content-area">
+                                        <div class="img-wrapper">
+                                            <img src="assets1/img/how-it-works-image.png" alt="how it works image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                        <div class="how-it-works-tab-content white">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="left-content-area">
+                                        <h4 class="title">Login Account</h4>
+                                        <p>Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="right-content-area">
+                                        <div class="img-wrapper">
+                                            <img src="assets1/img/how-it-works-image.png" alt="how it works image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                        <div class="how-it-works-tab-content white">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="left-content-area">
+                                        <h4 class="title">Login Account</h4>
+                                        <p>Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                        <p>Adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore
+                                            Innovative solutions with the best.  Incididunt dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore et dolore </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="right-content-area">
+                                        <div class="img-wrapper">
+                                            <img src="assets1/img/how-it-works-image.png" alt="how it works image">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- how it works area end -->
+
+<!-- screenshort area start -->
+<section class="screenshort-area dark-bg">
+    <div class="shape-1"><img src="assets1/img/shape/06.png" alt=""></div>
+    <div class="shape-2"><img src="assets1/img/shape/07.png" alt=""></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">Screenshots</span>
+                    <h3 class="title extra">Amazing visual interface</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="screenshort-carousel"><!-- screenshort carousel -->
+                    <div class="single-screenshort-item"><!-- single screenshort item -->
+                        <img src="assets1/img/screenshort/screen-1.jpg" alt="">
+                    </div><!-- //.single screenshort item -->
+                    <div class="single-screenshort-item"><!-- single screenshort item -->
+                        <img src="assets1/img/screenshort/screen-2.jpg" alt="">
+                    </div><!-- //.single screenshort item -->
+                    <div class="single-screenshort-item"><!-- single screenshort item -->
+                        <img src="assets1/img/screenshort/screen-3.jpg" alt="">
+                    </div><!-- //.single screenshort item -->
+                    <div class="single-screenshort-item"><!-- single screenshort item -->
+                        <img src="assets1/img/screenshort/screen-4.jpg" alt="">
+                    </div><!-- //.single screenshort item -->
+                </div><!-- //. screenshort carousel -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- screenshort area end -->
+
+<!-- testimonial area start -->
+<section class="testimonial-area dark-bg">
+    <div class="shape-1"><img src="assets1/img/shape/06.png" alt=""></div>
+    <div class="shape-2"><img src="assets1/img/shape/07.png" alt=""></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">Testimonial</span>
+                    <h3 class="title extra">What People Say</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="testimonial-carousel">
+
+                    <div class="single-testimonial-item"><!-- single testimonial item -->
+                        <img src="assets1/img/testimonial/01.png" alt="">
+                        <div class="hover"><!-- hover -->
+                            <div class="hover-inner">
+                                <div class="icon"><i class="fas fa-quote-left"></i></div>
+                                <p>They  provide innovative solutions with the best.  tempor incididunt utla bore et dolor  tempor incididunt .</p>
+                                <div class="author-meta">
+                                    <h4 class="name">Riley Cassidy</h4>
+                                    <span class="post">Chief executive</span>
+                                </div>
+                            </div>
+                        </div><!-- //. hover -->
+                    </div><!-- //. single testimonial item -->
+                    <div class="single-testimonial-item"><!-- single testimonial item -->
+                        <img src="assets1/img/testimonial/02.png" alt="">
+                        <div class="hover"><!-- hover -->
+                            <div class="hover-inner">
+                                <div class="icon"><i class="fas fa-quote-left"></i></div>
+                                <p>They  provide innovative solutions with the best.  tempor incididunt utla bore et dolor  tempor incididunt .</p>
+                                <div class="author-meta">
+                                    <h4 class="name">Archie Tracey</h4>
+                                    <span class="post">Technician</span>
+                                </div>
+                            </div>
+                        </div><!-- //. hover -->
+                    </div><!-- //. single testimonial item -->
+                    <div class="single-testimonial-item"><!-- single testimonial item -->
+                        <img src="assets1/img/testimonial/03.png" alt="">
+                        <div class="hover"><!-- hover -->
+                            <div class="hover-inner">
+                                <div class="icon"><i class="fas fa-quote-left"></i></div>
+                                <p>They  provide innovative solutions with the best.  tempor incididunt utla bore et dolor  tempor incididunt .</p>
+                                <div class="author-meta">
+                                    <h4 class="name">Brodie Hopley</h4>
+                                    <span class="post">Chief Elevator</span>
+                                </div>
+                            </div>
+                        </div><!-- //. hover -->
+                    </div><!-- //. single testimonial item -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- testimonial area end -->
+
+<!-- price plan area start -->
+<section class="pricing-plan-area dark-bg" id="pricing">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">Pricing plans</span>
+                    <h3 class="title extra">Choose your pricing</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="single-price-plan-01 white slideInUp wow"><!-- single price plan one -->
+                    <div class="price-header">
+                        <h4 class="name">Primary Plan</h4>
+                        <div class="price-wrap">
+                            <span class="price">$250</span>
+                            <span class="month">/Mo</span>
+                        </div>
+                    </div>
+                    <div class="price-body">
+                        <ul>
+                            <li>5 Analyzer</li>
+                            <li>3 Month Support</li>
+                            <li>10 Sessions</li>
+                            <li>No Risk Garrunty</li>
+                        </ul>
+                    </div>
+                    <div class="price-footer">
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-2">Get Started</a>
+                    </div>
+                </div><!-- //. single price plan one -->
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-price-plan-01 white slideInUp wow"><!-- single price plan one -->
+                    <div class="price-header">
+                        <h4 class="name">Basic Plan</h4>
+                        <div class="price-wrap">
+                            <span class="price">$350</span>
+                            <span class="month">/Mo</span>
+                        </div>
+                    </div>
+                    <div class="price-body">
+                        <ul>
+                            <li>5 Analyzer</li>
+                            <li>3 Month Support</li>
+                            <li>10 Sessions</li>
+                            <li>No Risk Garrunty</li>
+                        </ul>
+                    </div>
+                    <div class="price-footer">
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-2">Get Started</a>
+                    </div>
+                </div><!-- //. single price plan one -->
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-price-plan-01 white slideInUp wow"><!-- single price plan one -->
+                    <div class="price-header">
+                        <h4 class="name">Advance Plan</h4>
+                        <div class="price-wrap">
+                            <span class="price">$150</span>
+                            <span class="month">/Mo</span>
+                        </div>
+                    </div>
+                    <div class="price-body">
+                        <ul>
+                            <li>5 Analyzer</li>
+                            <li>3 Month Support</li>
+                            <li>10 Sessions</li>
+                            <li>No Risk Garrunty</li>
+                        </ul>
+                    </div>
+                    <div class="price-footer">
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-2">Get Started</a>
+                    </div>
+                </div><!-- //. single price plan one -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- price plan area end -->
+
+<!-- team member area start -->
+<section class="team-member-area dark-bg" id="team">
+    <div class="bg-shape-1">
+        <img src="assets1/img/bg/team-shape-dark.png" alt="">
+    </div>
+    <div class="bg-shape-2">
+        <img src="assets1/img/bg/contact-map-bg-dark.png" alt="">
+    </div>
+    <div class="bg-shape-3 fadeInLeft wow">
+        <img src="assets1/img/bg/contact-mobile-bg.png" alt="">
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="section-title white"><!-- section title -->
+                    <span class="subtitle">Our Team</span>
+                    <h3 class="title">Meet The Team</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                </div><!-- //. section title -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="team-carousel"><!-- team carousel -->
+                    <div class="single-team-member white"><!-- single team member -->
+                        <div class="thumb">
+                            <img src="assets1/img/team-member/01.jpg" alt="team member image">
+                            <div class="hover">
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Eiusmod Tempor</h4>
+                            <span class="post">CEO, Appside</span>
+                        </div>
+                    </div><!-- //. single team member -->
+                    <div class="single-team-member white"><!-- single team member -->
+                        <div class="thumb">
+                            <img src="assets1/img/team-member/02.jpg" alt="team member image">
+                            <div class="hover">
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Maria Hexa</h4>
+                            <span class="post">CEO, Appside</span>
+                        </div>
+                    </div><!-- //. single team member -->
+                    <div class="single-team-member white"><!-- single team member -->
+                        <div class="thumb">
+                            <img src="assets1/img/team-member/03.jpg" alt="team member image">
+                            <div class="hover">
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Scotty Hedge</h4>
+                            <span class="post">Creative Designer</span>
+                        </div>
+                    </div><!-- //. single team member -->
+                    <div class="single-team-member white"><!-- single team member -->
+                        <div class="thumb">
+                            <img src="assets1/img/team-member/04.jpg" alt="team member image">
+                            <div class="hover">
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Lara Croft</h4>
+                            <span class="post">CEO, Appside</span>
+                        </div>
+                    </div><!-- //. single team member -->
+                    <div class="single-team-member white"><!-- single team member -->
+                        <div class="thumb">
+                            <img src="assets1/img/team-member/05.jpg" alt="team member image">
+                            <div class="hover">
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Eiusmoy Smith</h4>
+                            <span class="post">Developer</span>
+                        </div>
+                    </div><!-- //. single team member -->
+                </div><!-- //. team carousel -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="download-area-wrapper white margin-top-120"><!-- download area wrapper -->
+                    <span class="subtitle">Download now</span>
+                    <h3 class="title">Available for all device</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                    <div class="btn-wrapper">
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-1"><i class="flaticon-apple-1"></i> App Store</a>
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-2"><i class="flaticon-android-logo"></i> Play Store</a>
+                        <a href="#" class="boxed-btn btn-rounded gd-bg-3"><i class="flaticon-windows"></i> Windows</a>
+                    </div>
+                </div><!-- //. download area wrapper -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="contact-area-wrapper white" id="contact"><!-- contact area wrapper -->
+                    <span class="subtitle">Contact us</span>
+                    <h3 class="title">Get In Touch</h3>
+                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                    <form action="index.html" class="contact-form sec-margin">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Your Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Your Email">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group textarea">
+                                    <textarea name="message" id="message" class="form-control" cols="30" rows="10" placeholder="Message"></textarea>
+                                </div>
+                                <button class="submit-btn  btn-rounded gd-bg-1" type="submit">Submit Now</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- //. contact area wrapper -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- team member area end -->
+
+<!-- footer area start -->
+<footer class="footer-area">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget about_widget">
+                        <a href="index.html" class="footer-logo"><img class="img img-thumbnail" src="assets/images/logo_small.png" alt="logo"></a>
+                        <p>Within coming figure sex things are. Pretended concluded did repulsive education smallness yet yet described. Had country man his pressed shewing. </p>
+                        <ul class="social-icon">
+                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget nav_menus_widget">
+                        <h4 class="widget-title">Useful Links</h4>
+                        <ul>
+                            <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Service</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                            @if (Route::has('login'))
+                                @auth
+                                    <li><a href="{{ url('/home') }}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                                @else
+                                    <li><a href="{{ route('login') }}"><i class="fas fa-chevron-right"></i> Login</a></li>
+
+                                    @if (Route::has('register'))
+                                        <li><a href="{{ route('register') }}"><i class="fas fa-chevron-right"></i> Register</a></li>
+                                    @endif
+                                @endauth
+                            @endif
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget nav_menus_widget">
+                        <h4 class="widget-title">Need Help?</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Faqs</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Policy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Temrs</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-widget nav_menus_widget">
+                        <h4 class="widget-title">Download</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> For IOS</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> For Android</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> For Mac</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> For Window</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> For Linax</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright-area"><!-- copyright area -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="copyright-inner"><!-- copyright inner wrapper -->
+                        <div class="left-content-area"><!-- left content area -->
+                            &copy; Copyrights 2019 Dynamic Centre All rights reserved.
+                        </div><!-- //. left content aera -->
+                        <div class="right-content-area"><!-- right content area -->
+                            Designed by <strong>5Star Company</strong>
+                        </div><!-- //. right content area -->
+                    </div><!-- //.copyright inner wrapper -->
+                </div>
+            </div>
+        </div>
+    </div><!-- //. copyright area -->
+</footer>
+<!-- footer area end -->
+
+<!-- preloader area start -->
+<div class="preloader-wrapper" id="preloader">
+    <div class="preloader" >
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
+</div>
+
+<!-- preloader area end -->
+
+<!-- back to top area start -->
+<div class="back-to-top">
+    <i class="fas fa-angle-up"></i>
+</div>
+<!-- back to top area end -->
+
+<!-- jquery -->
+<script src="assets1/js/jquery.js"></script>
+<!-- popper -->
+<script src="assets1/js/popper.min.js"></script>
+<!-- bootstrap -->
+<script src="assets1/js/bootstrap.min.js"></script>
+<!-- owl carousel -->
+<script src="assets1/js/owl.carousel.min.js"></script>
+<!-- magnific popup -->
+<script src="assets1/js/jquery.magnific-popup.js"></script>
+<!-- contact js-->
+<script src="assets1/js/contact.js"></script>
+<!-- wow js-->
+<script src="assets1/js/wow.min.js"></script>
+<!-- way points js-->
+<script src="assets1/js/waypoints.min.js"></script>
+<!-- counterup js-->
+<script src="assets1/js/jquery.counterup.min.js"></script>
+<!-- main -->
+<script src="assets1/js/main.js"></script>
+</body>
+
 </html>

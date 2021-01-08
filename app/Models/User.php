@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRolesAndAbilities;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +37,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'updated_at', 'created_at', 'email_verified_at', 'stripe_id', 'paystack_id', 'trials_ends_at', 'api_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];

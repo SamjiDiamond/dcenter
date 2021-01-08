@@ -1,0 +1,80 @@
+
+/*
+ Template Name: Zinzer - Responsive Bootstrap 4 Admin Dashboard
+ Author: Themesdesign
+ Website: www.themesdesign.in
+ File: Dashboard js
+ */
+
+!function ($) {
+    "use strict";
+
+    var Dashboard = function () {
+    };
+
+    //creates line chart
+    Dashboard.prototype.createLineChart = function(element, data, xkey, ykeys, labels, lineColors) {
+        Morris.Line({
+          element: element,
+          data: data,
+          xkey: xkey,
+          ykeys: ykeys,
+          labels: labels,
+          hideHover: 'auto',
+          gridLineColor: '#223d71',
+          resize: true, //defaulted to true
+          lineColors: lineColors
+        });
+    },
+
+    //creates Donut chart
+    Dashboard.prototype.createDonutChart = function(element, data, colors) {
+        Morris.Donut({
+            element: element,
+            data: data,
+            resize: true,
+            labelColor: '#fff',
+            backgroundColor: '#13274e',
+            colors: colors
+        });
+    },
+
+
+
+
+    Dashboard.prototype.init = function () {
+
+        //create line chart
+        var $data  = [
+            { y: '2012', a: 45, b: 65 },
+            { y: '2013', a: 75,  b: 95 },
+            { y: '2014', a: 50,  b: 40 },
+            { y: '2015', a: 95,  b: 65 },
+            { y: '2016', a: 50,  b: 40 },
+            { y: '2017', a: 65,  b: 75 },
+            { y: '2018', a: 80, b: 90 }
+          ];
+        this.createLineChart('morris-line-example', $data, 'y', ['a', 'b'], ['Series A', 'Series B'], ['#5985ee', '#46cd93']);
+
+        //creating donut chart
+        var $donutData = [
+            {label: "Data Sales", value: 12},
+            {label: "Airtime Sales", value: 30},
+            {label: "TV Subscription Sales", value: 20},
+            {label: "Electricity Sales", value: 20},
+            {label: "Wallet Transfer", value: 20},
+            {label: "Bank Transfer", value: 20}
+        ];
+        this.createDonutChart('morris-donut-example', $donutData, ['#4bbbce', '#5985ee', '#46cd93', '#926203', '#339437', '#46c203' ]);
+
+    },
+
+        //init
+        $.Dashboard = new Dashboard, $.Dashboard.Constructor = Dashboard
+}(window.jQuery),
+
+//initializing
+    function ($) {
+        "use strict";
+        $.Dashboard.init();
+    }(window.jQuery);

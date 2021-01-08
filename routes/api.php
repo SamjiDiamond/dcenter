@@ -24,9 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('signup', [AuthenticateController::class, 'signup'])->name('signup');
-Route::post('login', [AuthenticateController::class, 'login'])->name('login');
-Route::post('resetpassword', [AuthenticateController::class, 'resetpassword'])->name('resetpassword');
+Route::post('signup', [AuthenticateController::class, 'signup']);
+Route::post('login', [AuthenticateController::class, 'login']);
+Route::post('resetpassword', [AuthenticateController::class, 'resetpassword']);
 
 Route::get('companys', [CompanyController::class, 'index'])->name('companys');
 

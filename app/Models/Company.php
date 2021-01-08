@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Wisdomanthoni\Cashier\Billable;
 
 class Company extends Model
 {
     use HasFactory;
+    use Billable;
 
     protected $table= 'company';
     protected $fillable = [
