@@ -4,18 +4,15 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Company;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use Bouncer;
 use DB;
 use Hash;
-use Stripe\Stripe;
-use Bouncer;
-use Silber\Bouncer\Database\Ability;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Silber\Bouncer\Database\Role;
+use Stripe\Stripe;
 
 
 class UserController extends Controller
@@ -52,8 +49,6 @@ class UserController extends Controller
         }
 
 
-
-
         return view('admins', ['users' => $users, 'roles' =>$roles, 'i'=>1]);
     }
 
@@ -81,8 +76,8 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -105,150 +100,36 @@ class UserController extends Controller
 
         if ($validator->passes()) {
             try {
-            DB::beginTransaction();
 
                 $input = $request->all();
-                $input['company_id'] = auth()->user()->company_id;
-                $input['account_type'] = "admin";
-//                $input['trial_ends_at'] = now()->addDays(1);
+                $nu['company_id'] = auth()->user()->company_id;
+                $nu['account_type'] = "admin";
+                $nu['last_name'] = $input['last_name'];
+                $nu['first_name'] = $input['first_name'];
+                $nu['email'] = $input['email'];
+                $nu['phoneno'] = $input['phoneno'];
 
-                $company=Company::where('id', '=', $input['company_id'])->first();
-
-                $u=User::where('email','=', $input['email'])->exists();
-                if($u){
-                    $user=User::where('email','=', $input['email'])->first();
-                    if($user->acount_type!=$input['account_type']){
+                $u = User::where('email', '=', $input['email'])->exists();
+                if ($u) {
+                    $user = User::where('email', '=', $input['email'])->first();
+                    if ($user->acount_type != $input['account_type']) {
                         $user->update($input);
-                    }else{
-                        return redirect()->route('admin.list')->with('error','Admin already exist');
+                    } else {
+                        return redirect()->route('admin.list')->with('error', 'Admin already exist');
                     }
 
-                }else{
-                    $input['password'] = Hash::make("12345");
-                    $user = User::create($input);
-
-
-                    $curl = curl_init();
-
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => env('MONNIFY_url')."/api/v1/auth/login",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "POST",
-                        CURLOPT_HTTPHEADER => array(
-                            "Authorization: Basic ".env('MONNIFY_basicAuth')
-                        ),
-                    ));
-
-                    $response = curl_exec($curl);
-
-                    curl_close($curl);
-//                    echo "<br /><br />".$response;
-
-                    $respons=json_decode($response, true);
-                    $monToken=$respons['responseBody']['accessToken'];
-
-
-                    $curl = curl_init();
-
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => env('MONNIFY_url')."/api/v1/bank-transfer/reserved-accounts",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "POST",
-                        CURLOPT_POSTFIELDS =>"{ \"accountReference\": \"".env('MONNIFY_contractCode').$user->id."\", \"accountName\": \"".$input['last_name'] . $input['first_name']."\", \"currencyCode\": \"NGN\",  \"contractCode\": \"".env('MONNIFY_contractCode')."\", \"customerEmail\": \"".$input['email']."\", \"incomeSplitConfig\": [  { \"subAccountCode\": \"".$company->Monnify_subAccountCode."\", \"feePercentage\": 100,  \"splitPercentage\": 100, \"feeBearer\": true } ]}",
-                        CURLOPT_HTTPHEADER => array(
-                            "Content-Type: application/json",
-                            "Authorization: Bearer ".$monToken,
-                        ),
-                    ));
-
-                    $response = curl_exec($curl);
-
-                    curl_close($curl);
-//                    echo "<br /><br />".$response;
-
-                    $respons=json_decode($response, true);
-
-                    $user->monnify_id=$respons['responseBody']['accountReference'];
-                    $user->accountno=$respons['responseBody']['accountNumber'];
-
-//                    $user->accountno='2000003152';
-//                    $user->monnify_id='692568425636';
-
-                    $user->save();
+                }else {
+                    $nu['password'] = Hash::make("12345");
+                    $user = User::create($nu);
                 }
 
                 $user->assign($request->input('role_id'));
 
-//                Stripe::setApiKey(env('STRIPE_SECRET'));
-//
-//                $user->createAsStripeCustomer();
-
-                //create paysack account
-                /*$curl = curl_init();
-
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "https://api.paystack.co/customer",
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => "",
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS => "{\"email\": \"".$input['email']."\"}",
-                    CURLOPT_HTTPHEADER => array(
-                        "Content-Type: application/json",
-                        "Authorization: Bearer ". env('PAYSTACK_SECRET')
-                    ),
-                ));
-
-                $response = curl_exec($curl);
-
-                curl_close($curl);
-//                echo "<br /><br />".$response;
-
-                $respons=json_decode($response, true);*/
-
-                $user->paystack_id='CUS_80vqmpvqwyu3orj';
-                $user->save();
-                //end paystack creation
-
-            DB::commit();
-
-               /* return view('update-payment-method', [
-                    'intent' => $user->createSetupIntent()
-                ]);*/
-
-                // Create the Payment Method
-             /*   $paymentMethod = $user->paymentMethods()->create([
-                    'type' => 'card',
-                    'card' => [
-                        'number'    => '4242424242424242',
-                        'exp_month' => 10,
-                        'cvc'       => 314,
-                        'exp_year'  => 2025,
-                    ],
-                ]);
-
-                $user->newSubscription('prod_Giry4d4Q3treMT', 'monthly')->create($paymentMethod->id);*/
-
                 return redirect()->route('admin.list')->with('success','Admin created successfully');
             }catch(\Exception $e){
-                DB::rollback();
                 return redirect()->route('admin.list')->with('error','Error creating Admin');
             }
         }else{
-            DB::rollback();
             return redirect()->route('admin.list')->with('error','Error creating Admin, check your input and try again');
         }
 
@@ -257,8 +138,8 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {

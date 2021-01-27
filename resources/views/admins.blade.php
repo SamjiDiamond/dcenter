@@ -125,17 +125,30 @@
                                                                             <div class="modal-dialog modal-sm">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
-                                                                                        <h5 class="modal-title mt-0" id="mySmallModalLabel">{{ ucfirst($user->first_name) }} Details</h5>
-                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                        <h5 class="modal-title mt-0"
+                                                                                            id="mySmallModalLabel">{{ ucfirst($user->first_name) }}
+                                                                                            Details</h5>
+                                                                                        <button type="button"
+                                                                                                class="close"
+                                                                                                data-dismiss="modal"
+                                                                                                aria-label="Close">
                                                                                             <span aria-hidden="true">&times;</span>
                                                                                         </button>
                                                                                     </div>
                                                                                     <div class="modal-body">
-                                                                                        <p>Last Name: {{ $user->last_name }}</p>
-                                                                                        <p>First Name: {{ $user->first_name }}</p>
-                                                                                        <p>Status: {{ $user->status }}</p>
-                                                                                        <p>Gender: {{ $user->gender }}</p>
-                                                                                        <p>Address: {{ $user->address }}</p>
+                                                                                        <p>Last
+                                                                                            Name: {{ $user->last_name }}</p>
+                                                                                        <p>First
+                                                                                            Name: {{ $user->first_name }}</p>
+                                                                                        <p>Email: {{$user->email}}</p>
+                                                                                        <p>Phone
+                                                                                            Number: {{$user->phoneno}}</p>
+                                                                                        <p>
+                                                                                            Status: {{ $user->status }}</p>
+                                                                                        <p>
+                                                                                            Gender: {{ $user->gender }}</p>
+                                                                                        <p>
+                                                                                            Address: {{ $user->address }}</p>
 
                                                                                     </div>
                                                                                 </div><!-- /.modal-content -->

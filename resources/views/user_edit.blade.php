@@ -1,4 +1,4 @@
-@extends('layouts.layouts')
+@extends('layouts.layout')
 
 @section('title',$user->last_name." ".$user->first_name)
 @section('content')

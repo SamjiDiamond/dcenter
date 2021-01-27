@@ -4,12 +4,11 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-use App\Models\Company;
-use http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Wisdomanthoni\Cashier\Hello;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,21 +81,21 @@ Route::group(['middleware' => 'auth:sanctum', 'verified'], function() {
     Route::post('/admin-create', [UserController::class, 'store'])->name('admin.create');
 
     Route::get('/services', [ServicesController::class, 'index'])->name('services.list');
-    Route::get('/services-airtime-edit/{id}', [ServicesController::class, 'airtimeedit'])->name('Edit airtime services');
+    Route::get('/services-airtime-edit/{id}', [ServicesController::class, 'airtimeedit'])->name('Edit airtime services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-airtime-update/{id}', [ServicesController::class, 'airtimeupdate'])->name('Update airtime services');
     Route::get('/services-airtime-sync', [ServicesController::class, 'synair'])->name('airtime.services.sync');
     Route::get('/services-data-edit/{id}', [ServicesController::class, 'dataedit'])->name('Edit data services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-data-update/{id}', [ServicesController::class, 'dataupdate'])->name('Update data services');
     Route::get('/services-data-sync', [ServicesController::class, 'syndata'])->name('data.services.sync');
-    Route::get('/services-tv-edit/{id}', [ServicesController::class, 'tvedit'])->name('Edit tv services');
+    Route::get('/services-tv-edit/{id}', [ServicesController::class, 'tvedit'])->name('Edit tv services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-tv-update/{id}', [ServicesController::class, 'tvupdate'])->name('Update tv services');
     Route::get('/services-tv-sync', [ServicesController::class, 'syntv'])->name('tv.services.sync');
-    Route::get('/services-electricity-edit/{id}', [ServicesController::class, 'electedit'])->name('Edit elect services');
+    Route::get('/services-electricity-edit/{id}', [ServicesController::class, 'electedit'])->name('Edit elect services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-electricity-update/{id}', [ServicesController::class, 'electupdate'])->name('Update elect services');
     Route::get('/services-electricity-sync', [ServicesController::class, 'synelec'])->name('elec.services.sync');
-    Route::get('/services-transfer-edit/{id}', [ServicesController::class, 'transferedit'])->name('Edit transfer services');
+    Route::get('/services-transfer-edit/{id}', [ServicesController::class, 'transferedit'])->name('Edit transfer services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-transfer-update/{id}', [ServicesController::class, 'transferupdate'])->name('Update transfer services');
-    Route::get('/services-transfer-sync', [ServicesController::class, 'synctran'])->name('transfer.services.sync');
+    Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
 
     Route::get('/billing', [BillingController::class, 'index'])->name('plans');
     Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
@@ -114,7 +113,7 @@ Route::group(['middleware' => 'auth:sanctum', 'verified'], function() {
     Route::get('/fundwallet', function () {
         return view('fund_wallet');
     });
-    Route::post('/fundwallet', 'TransactionController@fund_wallet')->name('user.fundwallet');
+    Route::post('/fundwallet', [TransactionController::class, 'fund_wallet'])->name('user.fundwallet');
     Route::get('/chargecustomer', function () {
         return view('charge_customer');
     });

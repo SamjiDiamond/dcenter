@@ -1,4 +1,4 @@
-@extends('layouts.layouts')
+@extends('layouts.layout')
 
 @section('title','User')
 @section('content')
@@ -119,9 +119,9 @@
         <div class="col-xl-9">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Latest Trasaction</h4>
+                    <h4 class="mt-0 header-title mb-4">Latest Transaction</h4>
                     <div class="table-responsive">
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive" >
+                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive">
                             <thead>
                             <tr>
                                 <th scope="col">ID No.</th>

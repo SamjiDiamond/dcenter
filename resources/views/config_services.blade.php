@@ -104,8 +104,8 @@
                                                         <thead>
                                                         <tr>
                                                             <th>Network</th>
-                                                            <th data-priority="1">Discount</th>
-                                                            <th data-priority="1">Default Discount</th>
+                                                            <th data-priority="1">Discount(%)</th>
+                                                            <th data-priority="1">Default Discount(%)</th>
                                                             <th data-priority="6">Description</th>
                                                             <th data-priority="1">Status</th>
                                                             <th data-priority="1">Company</th>
@@ -234,8 +234,9 @@
                                         <thead>
                                         <tr>
                                             <th>Network</th>
-                                            <th data-priority="1">Discount</th>
-                                            <th data-priority="6">Default Discount</th>
+                                            <th data-priority="1">Discount(%)</th>
+                                            <th data-priority="1">Default Discount(%)</th>
+                                            <th data-priority="6">Description</th>
                                             <th data-priority="1">Status</th>
                                             <th data-priority="1">Company</th>
                                             <th data-priority="1">Action</th>
@@ -274,10 +275,12 @@
                                     <table id="tech-companies-1" class="table  table-striped">
                                         <thead>
                                         <tr>
-                                            <th>Network</th>
+                                            <th>Type</th>
                                             <th data-priority="1">Charges</th>
+                                            <th data-priority="1">Default Charges</th>
                                             <th data-priority="6">Description</th>
                                             <th data-priority="1">Status</th>
+                                            <th data-priority="1">Company</th>
                                             <th data-priority="1">Action</th>
                                         </tr>
                                         </thead>
@@ -286,10 +289,13 @@
                                             <tr>
                                                 <th><span class="co-name">{{$trans->code}}</span></th>
                                                 <td>{{$trans->price}}</td>
+                                                <td>{{$trans->defaultprice}}</td>
                                                 <td>{{$trans->desc}}</td>
                                                 <td>@if($trans->status==1)  active @else disable @endif </td>
                                                 <td>{{$trans->company}}</td>
-                                                <td><a href="/services-transfer-edit/{{ $trans->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a></td>
+                                                <td><a href="/services-transfer-edit/{{ $trans->id }}" type="button"
+                                                       class="btn btn-info waves-effect waves-light"><i
+                                                            class="fas fas fa-user-edit"></i>Edit</a></td>
                                             </tr>
                                         @endforeach
 

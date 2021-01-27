@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\FundwalletJob;
-use App\Model\Company;
-use App\Model\SmsPayment;
-use App\Model\Transaction;
-use App\User;
+use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
-    public function fund_wallet(Request $request){
+    public function fund_wallet(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -43,7 +42,8 @@ class TransactionController extends Controller
                     return redirect('fundwallet')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $input['company_id']=$user->company_id;
+            $input['reference_id'] = Auth::user()->company_id . "c" . date('ymd') . rand();
+            $input['company_id'] = $user->company_id;
                 $input['user_id']=$user->id;
                 $input['i_wallet']=$user->wallet;
                 $input['f_wallet']=$user->wallet + $input['amount'];
