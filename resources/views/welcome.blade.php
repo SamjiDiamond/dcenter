@@ -94,7 +94,7 @@
             <div class="col-lg-7">
                 <div class="header-inner">
                     <h1 class="title wow fadeInDown">Dynamic Centre</h1>
-                    <p>Dynamic Centre is the best platform for Data, Airtime, Tv Subscriptions, Fund Transfer in the best possible manner.</p>
+                    <p>We keep you regularly Connected without hassle!</p>
                     <div class="btn-wrapper wow fadeInUp">
                         <a href="#" class="boxed-btn btn-rounded">Download now</a>
                         <a href="#" class="boxed-btn btn-rounded blank">Learn More</a>
@@ -117,7 +117,29 @@
                 <div class="section-title white"><!-- section title -->
                     <span class="subtitle">About Dynamic Centre</span>
                     <h3 class="title extra">Bulit for everybody with unlimited unique features</h3>
-                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                    <p class="text-left mb-5">
+                        Dynamic Centre  is a Nigerian company duly registered with the Corporate Affairs Commission. <br/>
+
+                        Dynamic Centre is the best platform for Data, Airtime, TV subscriptions, Funds transfer in the best possible manner! <br/>
+
+                        Do you wish to start data and airtime business online? Dynamic Centre Website/App is offers the best possible price <br/>
+
+                        Our platform is well structured with Timely Speed and Accuracy in Delivering superb  services. <br/>
+
+                        Make Cool Cash Everyday As Airtime/Data Reseller in Nigeria <br/>
+                    </p>
+
+                    <p class="text-left mb-5">
+                        Buy Airtime and Cheap Data online<br/>
+                        Instant DSTV subscription, GOTV subscription and Star time subscription.<br/>
+                        Get 2-6% discount on airtime recharge<br/>
+                        Convert Airtime to Cash<br/>
+                        Send Bulk SMS with Virtual top up service<br/>
+                        Buy WAEC/NECO scratch card<br/>
+                        Buy WAEC/NECO scratch card<br/>
+                    </p>
+
+                    <p class="text-left">Carry Out Transactions  Conveniently without hassle. Our product and services are available 24/7</p>
                 </div><!-- //. section title -->
             </div>
         </div>
@@ -536,7 +558,8 @@
                 <div class="section-title white"><!-- section title -->
                     <span class="subtitle">Pricing plans</span>
                     <h3 class="title extra">Choose your pricing</h3>
-                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
+                    <p>Our product Pricing model is unique! <br />
+                        We offer the best possible price in Nigeria</p>
                 </div><!-- //. section title -->
             </div>
         </div>

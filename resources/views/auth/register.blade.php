@@ -77,7 +77,7 @@
 
                                     <div class="form-group row">
                                         <div class="col-12">
-                                            <input class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" type="email" placeholder="Email">
+                                            <input class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" type="email" placeholder="Personal Email Address">
                                         </div>
                                         @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -88,7 +88,7 @@
 
                                     <div class="form-group row">
                                         <div class="col-12">
-                                            <input class="form-control @error('phoneno') is-invalid @enderror" name="phoneno" value="{{ old('phoneno') }}" required autocomplete="phone" type="tel" placeholder="Mobile Phone number" min="11" max="11">
+                                            <input class="form-control @error('phoneno') is-invalid @enderror" name="phoneno" value="{{ old('phoneno') }}" required autocomplete="phone" type="tel" placeholder="Personal Phone number" min="11" max="11">
                                         </div>
                                         @error('phoneno')
                                         <span class="invalid-feedback" role="alert">
