@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\BouncerRoleModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -72,7 +73,7 @@ class RoleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -93,11 +94,12 @@ class RoleController extends Controller
         {
             try
             {
-                $rol=Role::where([['name','=',$request->input('name')], ['company_id', '=', auth()->user()->company_id]])->exists();
+                $rol=BouncerRoleModel::where([['name','=',$request->input('name')], ['company_id', '=', auth()->user()->company_id]])->exists();
                 if($rol) {
                     return redirect()->route('role.list')->with('error','Role already exist');
                 }
 
+                Bouncer::useRoleModel(BouncerRoleModel::class);
                 $role = Bouncer::role()->firstOrCreate([
                     'name' => $request->input('name'),
                     'title' => $request->input('description'),
@@ -106,14 +108,11 @@ class RoleController extends Controller
 
                 $role->allow($request->input('permission'));
 
-                return redirect()->route('role.list')
-            ->with('success','Role created successfully');
+                return redirect()->route('role.list')->with('success','Role created successfully');
             }catch(\Exception $e){
-                DB::rollback();
                 return redirect()->route('role.list')->with('error','Error creating Role');
             }
         }else{
-            DB::rollback();
             return redirect('/roles')
                 ->withErrors($validator)
                 ->withInput();

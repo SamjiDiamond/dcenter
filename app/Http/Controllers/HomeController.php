@@ -7,6 +7,8 @@ use App\Models\CompanyWallet;
 use App\Models\SMSLog;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Verification;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -30,19 +32,24 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        return view('home');
+        $data['month_order']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m").'%'], ['company_id','=',auth()->user()->company_id]])->count();
+        $data['today_order']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m-d").'%'], ['company_id','=',auth()->user()->company_id]])->count();
 
-//        $total_order=Transaction::where([['company_id','=',auth()->user()->company_id], ['type', '=', 'order']]);
-//        $today_order=Transaction::where([['created_at', '=', Date::today()], ['company_id','=',auth()->user()->company_id], ['type', '=', 'order']]);
-//        $yesterday_order=Transaction::where([['created_at', '=', Date::yesterday()], ['company_id','=',auth()->user()->company_id], ['type', '=', 'order']]);
+        $data['month_user']=User::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m").'%'], ['company_id','=',auth()->user()->company_id]])->count();
+        $data['today_user']=User::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m-d").'%'], ['company_id','=',auth()->user()->company_id]])->count();
+
+        $data['month_funding']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m").'%'], ['company_id','=',auth()->user()->company_id], ['code', '=', 'fund_wallet']])->sum('amount');
+        $data['today_funding']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m-d").'%'], ['company_id','=',auth()->user()->company_id], ['code', '=', 'fund_wallet']])->sum('amount');
+
+        $data['month_consume']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m").'%'], ['company_id','=',auth()->user()->company_id], ['type','=','debit']])->sum('amount');
+        $data['today_consume']=Transaction::where([['created_at', 'LIKE', '%'.Carbon::now()->format("y-m-d").'%'], ['company_id','=',auth()->user()->company_id], ['type','=','debit']])->sum('amount');
+
+        $data['transactions']=Transaction::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(10)->get();
+
+        $data['verifications']=Verification::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
+
 //
-//        $total_funding=Transaction::where([['company_id','=',auth()->user()->company_id], ['type', '=', 'funding']]);
-//        $today_funding=Transaction::where([['created_at', '=', Date::today()], ['company_id','=',auth()->user()->company_id], ['type', '=', 'funding']]);
-//        $yesterday_funding=Transaction::where([['created_at', '=', Date::yesterday()], ['company_id','=',auth()->user()->company_id], ['type', '=', 'funding']]);
-//
-//        $total_user=User::where([['company_id','=',auth()->user()->company_id]]);
-//        $today_user=User::where([['created_at', '=', Date::today()], ['company_id','=',auth()->user()->company_id]]);
-//        $yesterday_user=User::where([['created_at', '=', Date::yesterday()], ['company_id','=',auth()->user()->company_id]]);
+
 //
 //        $total_wallet_funding=CompanyWallet::where([['type', '=', 'funding'], ['company_id','=',auth()->user()->company_id]]);
 //        $current_revenue=Company::where([['company_id','=',auth()->user()->company_id]]);
@@ -76,6 +83,6 @@ class HomeController extends Controller
 //            $gt=$gt+$gs;
 //        }
 
-        return view('dashboard');
+        return view('dashboard', $data);
     }
 }

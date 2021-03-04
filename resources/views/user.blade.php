@@ -59,7 +59,7 @@
                         <dd class="col-sm-9">{{$user->status}}</dd>
 
                         <dt class="col-sm-3">Company</dt>
-                        <dd class="col-sm-9">{{$user->company}}</dd>
+                        <dd class="col-sm-9">{{$user->company->name}}</dd>
 
                         <dt class="col-sm-3">Account Type</dt>
                         <dd class="col-sm-9">{{$user->account_type}}</dd>
@@ -98,13 +98,7 @@
                             </dl>
                         </dd>
 
-                        <dt class="col-sm-3">StripeId: </dt>
-                        <dd class="col-sm-9">7382494</dd>
-
-                        <dt class="col-sm-3">PaystackId: </dt>
-                        <dd class="col-sm-9">7382494</dd>
-
-                        <dt class="col-sm-3">SubscriptionId: </dt>
+                        <dt class="col-sm-3">Virtual Account </dt>
                         <dd class="col-sm-9">7382494</dd>
 
                     </dl>

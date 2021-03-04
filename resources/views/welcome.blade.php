@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noarchive">
-    <title> Dynamic Centre | App Showcase </title>
+    <title> Dynamic Center | Landing Page </title>
     <!-- favicon -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <!-- bootstrap -->
@@ -35,7 +35,7 @@
         <div class="responsive-mobile-menu">
             <div class="logo-wrapper">
                 <a href="index.html" class="logo">
-                    <img class="img img-thumbnail" src="assets/images/logo_small.png" alt="logo">
+                    <img class="img img-thumbnail mt-2" src="images/logo.jpg" alt="logo">
                 </a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#appside_main_menu"
@@ -50,28 +50,29 @@
                 </li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#team">Team</a></li>
-                <li class="menu-item-has-children">
-                    <a href="#">Blog</a>
-                    <ul class="sub-menu">
-                        <li><a href="blog.html">Blog 01</a></li>
-                        <li><a href="blog-details.html">Blog Details</a></li>
-                    </ul>
-                </li>
-                <li class="menu-item-has-children">
-                    <a href="#">Authentication</a>
-                    <ul class="sub-menu">
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/register">Signup</a></li>
-                    </ul>
-                </li>
                 <li><a href="#contact">Contact</a></li>
+                <li class="menu-item-has-children">
+                    <a href="#">Download</a>
+                    <ul class="sub-menu">
+                        <li><a href="">Android</a></li>
+                        <li><a href="">IOS</a></li>
+                        <li><a href="">Window</a></li>
+                        <li><a href="">Mac</a></li>
+                    </ul>
+                </li>
+                @if(!\Illuminate\Support\Facades\Auth::user())
+                    <li><a href="{{route('login')}}">Login</a></li>
+                @endif
             </ul>
         </div>
         <div class="nav-right-content">
             <ul>
                 <li class="button-wrapper">
-                    <a href="#" class="boxed-btn btn-rounded">Download</a>
+                    @if(\Illuminate\Support\Facades\Auth::user())
+                        <a href="{{route('dashboard')}}" class="boxed-btn btn-rounded">Dashboard</a>
+                    @else
+                        <a href="{{route('register')}}" class="boxed-btn btn-rounded">Register Now</a>
+                    @endif
                 </li>
             </ul>
         </div>
@@ -93,7 +94,7 @@
         <div class="row">
             <div class="col-lg-7">
                 <div class="header-inner">
-                    <h1 class="title wow fadeInDown">Dynamic Centre</h1>
+                    <h1 class="title wow fadeInDown">Dynamic Center</h1>
                     <p>We keep you regularly Connected without hassle!</p>
                     <div class="btn-wrapper wow fadeInUp">
                         <a href="#" class="boxed-btn btn-rounded">Download now</a>
@@ -115,14 +116,14 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="section-title white"><!-- section title -->
-                    <span class="subtitle">About Dynamic Centre</span>
+                    <span class="subtitle">About Dynamic Center</span>
                     <h3 class="title extra">Bulit for everybody with unlimited unique features</h3>
                     <p class="text-left mb-5">
-                        Dynamic Centre  is a Nigerian company duly registered with the Corporate Affairs Commission. <br/>
+                        Dynamic Center  is a Nigerian company duly registered with the Corporate Affairs Commission. <br/>
 
-                        Dynamic Centre is the best platform for Data, Airtime, TV subscriptions, Funds transfer in the best possible manner! <br/>
+                        Dynamic Center is the best platform for Data, Airtime, TV subscriptions, Funds transfer in the best possible manner! <br/>
 
-                        Do you wish to start data and airtime business online? Dynamic Centre Website/App is offers the best possible price <br/>
+                        Do you wish to start data and airtime business online? Dynamic Center Website/App is offers the best possible price <br/>
 
                         Our platform is well structured with Timely Speed and Accuracy in Delivering superb  services. <br/>
 
@@ -635,160 +636,6 @@
 </section>
 <!-- price plan area end -->
 
-<!-- team member area start -->
-<section class="team-member-area dark-bg" id="team">
-    <div class="bg-shape-1">
-        <img src="assets1/img/bg/team-shape-dark.png" alt="">
-    </div>
-    <div class="bg-shape-2">
-        <img src="assets1/img/bg/contact-map-bg-dark.png" alt="">
-    </div>
-    <div class="bg-shape-3 fadeInLeft wow">
-        <img src="assets1/img/bg/contact-mobile-bg.png" alt="">
-    </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="section-title white"><!-- section title -->
-                    <span class="subtitle">Our Team</span>
-                    <h3 class="title">Meet The Team</h3>
-                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
-                </div><!-- //. section title -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="team-carousel"><!-- team carousel -->
-                    <div class="single-team-member white"><!-- single team member -->
-                        <div class="thumb">
-                            <img src="assets1/img/team-member/01.jpg" alt="team member image">
-                            <div class="hover">
-                                <ul class="social-icon">
-                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4 class="title">Eiusmod Tempor</h4>
-                            <span class="post">CEO, Appside</span>
-                        </div>
-                    </div><!-- //. single team member -->
-                    <div class="single-team-member white"><!-- single team member -->
-                        <div class="thumb">
-                            <img src="assets1/img/team-member/02.jpg" alt="team member image">
-                            <div class="hover">
-                                <ul class="social-icon">
-                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4 class="title">Maria Hexa</h4>
-                            <span class="post">CEO, Appside</span>
-                        </div>
-                    </div><!-- //. single team member -->
-                    <div class="single-team-member white"><!-- single team member -->
-                        <div class="thumb">
-                            <img src="assets1/img/team-member/03.jpg" alt="team member image">
-                            <div class="hover">
-                                <ul class="social-icon">
-                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4 class="title">Scotty Hedge</h4>
-                            <span class="post">Creative Designer</span>
-                        </div>
-                    </div><!-- //. single team member -->
-                    <div class="single-team-member white"><!-- single team member -->
-                        <div class="thumb">
-                            <img src="assets1/img/team-member/04.jpg" alt="team member image">
-                            <div class="hover">
-                                <ul class="social-icon">
-                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4 class="title">Lara Croft</h4>
-                            <span class="post">CEO, Appside</span>
-                        </div>
-                    </div><!-- //. single team member -->
-                    <div class="single-team-member white"><!-- single team member -->
-                        <div class="thumb">
-                            <img src="assets1/img/team-member/05.jpg" alt="team member image">
-                            <div class="hover">
-                                <ul class="social-icon">
-                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h4 class="title">Eiusmoy Smith</h4>
-                            <span class="post">Developer</span>
-                        </div>
-                    </div><!-- //. single team member -->
-                </div><!-- //. team carousel -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="download-area-wrapper white margin-top-120"><!-- download area wrapper -->
-                    <span class="subtitle">Download now</span>
-                    <h3 class="title">Available for all device</h3>
-                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
-                    <div class="btn-wrapper">
-                        <a href="#" class="boxed-btn btn-rounded gd-bg-1"><i class="flaticon-apple-1"></i> App Store</a>
-                        <a href="#" class="boxed-btn btn-rounded gd-bg-2"><i class="flaticon-android-logo"></i> Play Store</a>
-                        <a href="#" class="boxed-btn btn-rounded gd-bg-3"><i class="flaticon-windows"></i> Windows</a>
-                    </div>
-                </div><!-- //. download area wrapper -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="contact-area-wrapper white" id="contact"><!-- contact area wrapper -->
-                    <span class="subtitle">Contact us</span>
-                    <h3 class="title">Get In Touch</h3>
-                    <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor  tempor incididunt ut labore dolore magna.</p>
-                    <form action="index.html" class="contact-form sec-margin">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your Name">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your Email">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group textarea">
-                                    <textarea name="message" id="message" class="form-control" cols="30" rows="10" placeholder="Message"></textarea>
-                                </div>
-                                <button class="submit-btn  btn-rounded gd-bg-1" type="submit">Submit Now</button>
-                            </div>
-                        </div>
-                    </form>
-                </div><!-- //. contact area wrapper -->
-            </div>
-        </div>
-    </div>
-</section>
-<!-- team member area end -->
-
 <!-- footer area start -->
 <footer class="footer-area">
     <div class="footer-top">
@@ -863,7 +710,7 @@
                 <div class="col-lg-12">
                     <div class="copyright-inner"><!-- copyright inner wrapper -->
                         <div class="left-content-area"><!-- left content area -->
-                            &copy; Copyrights 2019 Dynamic Centre All rights reserved.
+                            &copy; Copyrights 2019 Dynamic Center All rights reserved.
                         </div><!-- //. left content aera -->
                         <div class="right-content-area"><!-- right content area -->
                             Designed by <strong>5Star Company</strong>

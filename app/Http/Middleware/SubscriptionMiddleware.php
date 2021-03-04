@@ -20,7 +20,7 @@ class SubscriptionMiddleware
     {
 
         $comp=Company::find(Auth::user()->company_id);
-        if ($request->user() && ! $comp->subscribed('standard')) {
+        if ($request->user() && ! $comp->subscribed('main') && !$comp->onGenericTrial()) {
             // This user is not a paying customer...
             return redirect('billing');
         }

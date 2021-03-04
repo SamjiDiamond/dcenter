@@ -7,19 +7,15 @@
             <div class="card bg-primary mini-stat">
                 <div class="p-3 mini-stat-desc">
                     <div class="clearfix">
-                        <h6 class="text-uppercase mt-0 float-left text-white-50">Orders</h6>
-                        <h4 class="mb-3 mt-0 float-right">1,587</h4>
+                        <h6 class="text-uppercase mt-0 float-left text-white-50">Transactions</h6>
+                        <h4 class="mb-3 mt-0 float-right"><span class="badge badge-dark font-12">Today</span> {{$today_order}}</h4>
                     </div>
-                    <div>
-                        <span class="badge badge-light text-info"> +11% </span> <span class="ml-2">From previous period</span>
-                    </div>
-
                 </div>
                 <div class="p-3">
                     <div class="float-right">
                         <a href="#" class="text-white-50"><i class="mdi mdi-cube-outline h5"></i></a>
                     </div>
-                    <p class="font-14 m-0">Last : 1447</p>
+                    <p class="font-14 m-0">This Month : {{$month_order}}</p>
                 </div>
             </div>
         </div>
@@ -28,18 +24,15 @@
             <div class="card bg-info mini-stat">
                 <div class="p-3 mini-stat-desc">
                     <div class="clearfix">
-                        <h6 class="text-uppercase mt-0 float-left text-white-50">Revenue</h6>
-                        <h4 class="mb-3 mt-0 float-right">$46,785</h4>
-                    </div>
-                    <div>
-                        <span class="badge badge-light text-danger"> -29% </span> <span class="ml-2">From previous period</span>
+                        <h6 class="text-uppercase mt-0 float-left text-white-50">Users</h6>
+                        <h4 class="mb-3 mt-0 float-right"><span class="badge badge-dark font-12">Today</span> {{$today_user}}</h4>
                     </div>
                 </div>
                 <div class="p-3">
                     <div class="float-right">
                         <a href="#" class="text-white-50"><i class="mdi mdi-buffer h5"></i></a>
                     </div>
-                    <p class="font-14 m-0">Last : $47,596</p>
+                    <p class="font-14 m-0">This Month : {{$month_user}}</p>
                 </div>
             </div>
         </div>
@@ -47,18 +40,15 @@
             <div class="card bg-pink mini-stat">
                 <div class="p-3 mini-stat-desc">
                     <div class="clearfix">
-                        <h6 class="text-uppercase mt-0 float-left text-white-50">Average Price</h6>
-                        <h4 class="mb-3 mt-0 float-right">15.9</h4>
-                    </div>
-                    <div>
-                        <span class="badge badge-light text-primary"> 0% </span> <span class="ml-2">From previous period</span>
+                        <h6 class="text-uppercase mt-0 float-left text-white-50">Deposit</h6>
+                        <h4 class="mb-3 mt-0 float-right"><span class="badge badge-dark font-12">Today</span> {{$today_funding}}</h4>
                     </div>
                 </div>
                 <div class="p-3">
                     <div class="float-right">
                         <a href="#" class="text-white-50"><i class="mdi mdi-tag-text-outline h5"></i></a>
                     </div>
-                    <p class="font-14 m-0">Last : 15.8</p>
+                    <p class="font-14 m-0">This Month : {{$month_funding}}</p>
                 </div>
             </div>
         </div>
@@ -68,17 +58,14 @@
                 <div class="p-3 mini-stat-desc">
                     <div class="clearfix">
                         <h6 class="text-uppercase mt-0 float-left text-white-50">Product Sold</h6>
-                        <h4 class="mb-3 mt-0 float-right">1890</h4>
-                    </div>
-                    <div>
-                        <span class="badge badge-light text-info"> +89% </span> <span class="ml-2">From previous period</span>
+                        <h4 class="mb-3 mt-0 float-right"><span class="badge badge-dark font-12">Today</span> {{$today_consume}}</h4>
                     </div>
                 </div>
                 <div class="p-3">
                     <div class="float-right">
                         <a href="#" class="text-white-50"><i class="mdi mdi-briefcase-check h5"></i></a>
                     </div>
-                    <p class="font-14 m-0">Last : 1776</p>
+                    <p class="font-14 m-0">This Month : {{$month_funding}}</p>
                 </div>
             </div>
         </div>
@@ -294,86 +281,49 @@
         <div class="col-xl-9">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Latest Trasaction</h4>
+                    <h4 class="mt-0 header-title mb-4">Latest Transaction</h4>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th scope="col">ID No.</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Status</th>
                                 <th scope="col">Amount</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Date</th>
                             </tr>
                             </thead>
                             <tbody>
+                            @foreach($transactions as $tran)
                             <tr>
-                                <th scope="row">#14567</th>
-                                <td>Michael Mitchell</td>
-                                <td>14 Jan</td>
-                                <td>$74</td>
-                                <td>2</td>
+                                <th scope="row">#{{$tran->reference_id}}</th>
+                                <td>{{$tran->user->first_name}} {{$tran->user->last_name}}</td>
+                                <td>&#x20A6;{{number_format($tran->amount)}}</td>
+                                <td>{{$tran->description}}</td>
+                                @if($tran->status=="successful")
                                 <td>
                                     <div class="progress" style="height: 5px;">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 89%;" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
-                                <td>$148</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">#14568</th>
-                                <td>Dennis Cervantes</td>
-                                <td>15 Jan</td>
-                                <td>$72</td>
-                                <td>2</td>
+                                @elseif($tran->status=="pending")
                                 <td>
                                     <div class="progress" style="height: 5px;">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 64%;" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
-                                <td>$144</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">#14569</th>
-                                <td>Bernard Moats</td>
-                                <td>16 Jan</td>
-                                <td>$86</td>
-                                <td>1</td>
+                                @else
                                 <td>
                                     <div class="progress" style="height: 5px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 1%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
-                                <td>$86</td>
+                                @endif
+                                <td>{{\Carbon\Carbon::parse($tran->created_at)->toFormattedDateString()}}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">#14570</th>
-                                <td>Patrick Esquivel</td>
-                                <td>17 Jan</td>
-                                <td>$59</td>
-                                <td>2</td>
-                                <td>
-                                    <div class="progress" style="height: 5px;">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 64%;" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </td>
-                                <td>$118</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">#14571</th>
-                                <td>Michael Barger</td>
-                                <td>18 Jan</td>
-                                <td>$62</td>
-                                <td>2</td>
-                                <td>
-                                    <div class="progress" style="height: 5px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </td>
-                                <td>$124</td>
-                            </tr>
+                            @endforeach
+
                             </tbody>
                         </table>
                     </div>
@@ -384,53 +334,22 @@
         <div class="col-xl-3">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Document files</h4>
+                    <h4 class="mt-0 header-title mb-4">Document Verification</h4>
                     <table class="table table-striped mb-0">
                         <tbody>
+                        @foreach($verifications as $ver)
                         <tr>
                             <td><i class="far fa-file-pdf text-primary h2"></i></td>
                             <td>
-                                <h6 class="mt-0">2015</h6>
-                                <p class="text-muted mb-0">dolor sit amet</p></td>
+                                <h6 class="mt-0">{{\Carbon\Carbon::parse($ver->created_at)->toFormattedDateString()}}</h6>
+                                <p class="text-muted mb-0">{{$ver->user->first_name}} {{$ver->user->first_name}}</p></td>
                             <td>
                                 <a href="#" class="btn btn-primary btn-sm">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td><i class="far fa-file-pdf text-primary h2"></i></td>
-                            <td>
-                                <h6 class="mt-0">2016</h6>
-                                <p class="text-muted mb-0">dolor sit amet</p></td>
-                            <td>
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-file-pdf text-primary h2"></i></td>
-                            <td>
-                                <h6 class="mt-0">2017</h6>
-                                <p class="text-muted mb-0">pretium quis</p></td>
-                            <td>
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-file-pdf text-primary h2"></i></td>
-                            <td>
-                                <h6 class="mt-0">2018</h6>
-                                <p class="text-muted mb-0">ultricies nec</p></td>
-                            <td>
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @endforeach
                         </tbody>
                     </table>
 

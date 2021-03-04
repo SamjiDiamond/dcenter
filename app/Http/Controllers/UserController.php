@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\BouncerRoleModel;
 use App\Models\Transaction;
 use App\Models\User;
 use Bouncer;
@@ -25,7 +26,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -36,7 +37,7 @@ class UserController extends Controller
                 ->select('users.*', 'roles.name as role', 'company.name as company')
                 ->where('users.account_type','=','admin')
                 ->orderBy('id','DESC')->get();
-            $roles = Role::get();
+            $roles = BouncerRoleModel::get();
         }else{
             $users = User::join("assigned_roles","assigned_roles.entity_id", "=","users.id")
                 ->join("roles","roles.id", "=","assigned_roles.role_id")
@@ -45,7 +46,7 @@ class UserController extends Controller
                 ->where('users.account_type','=','admin')
                 ->where('users.company_id','=',auth()->user()->company_id)
                 ->orderBy('id','DESC')->get();
-            $roles = Role::where('company_id','=',auth()->user()->company_id)->get();
+            $roles = BouncerRoleModel::where('company_id','=',auth()->user()->company_id)->get();
         }
 
 
@@ -273,12 +274,7 @@ class UserController extends Controller
             return view('errors.404');
         }
 
-        $user = User::join("company","company.id", "=","users.company_id")
-            ->join("assigned_roles","assigned_roles.entity_id", "=","users.id")
-            ->join("roles","roles.id", "=","assigned_roles.role_id")
-//            ->join("roles", "roles.id", "=","users.role_id")
-            ->select('users.*', 'company.name as company', 'roles.name as roles')
-            ->where('users.id','=',$id)->first();
+        $user = User::find($id);
 
         if($user->company_id!=auth()->user()->company_id && auth()->user()->company_id!=1){
             return view('errors.404');

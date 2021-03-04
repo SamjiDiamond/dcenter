@@ -117,10 +117,10 @@
                                                         <tr>
                                                             <th><span class="co-name">{{$air->code}}</span></th>
                                                             <td>{{$air->price}}</td>
-                                                            <td>{{$air->defaultprice}}</td>
+                                                            <td>{{$air->default_price->price}}</td>
                                                             <td>{{$air->desc}}</td>
                                                             <td>@if($air->status==1)  active @else disable @endif </td>
-                                                            <td>{{$air->company}}</td>
+                                                            <td>{{$air->company->name}}</td>
                                                             <td><a href="/services-airtime-edit/{{ $air->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a></td>
                                                         </tr>
                                                         @endforeach
@@ -164,10 +164,10 @@
                                             <tr>
                                                 <th><span class="co-name">{{$dat->network}} {{$dat->code}}</span></th>
                                                 <td>{{$dat->price}}</td>
-                                                <td>{{$dat->defaultprice}}</td>
+                                                <td>{{$dat->default_price->price}}</td>
                                                 <td>{{$dat->desc}}</td>
                                                 <td>@if($dat->status==1)  active @else disable @endif </td>
-                                                <td>{{$dat->company}}</td>
+                                                <td>{{$dat->company->name}}</td>
                                                 <td><a href="/services-data-edit/{{ $dat->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a> </td>
                                             </tr>
                                         @endforeach
@@ -205,10 +205,10 @@
                                             <tr>
                                                 <th><span class="co-name">{{$t->code}}</span></th>
                                                 <td>{{$t->price}}</td>
-                                                <td>{{$t->defaultprice}}</td>
+                                                <td>{{$t->default_price->price}}</td>
                                                 <td>{{$t->desc}}</td>
                                                 <td>@if($t->status==1)  active @else disable @endif </td>
-                                                <td>{{$t->company}}</td>
+                                                <td>{{$t->company->name}}</td>
                                                 <td><a href="/services-tv-edit/{{ $t->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a></td>
                                             </tr>
                                         @endforeach
@@ -247,10 +247,10 @@
                                             <tr>
                                                 <th><span class="co-name">{{$elec->code}}</span></th>
                                                 <td>{{$elec->price}}</td>
-                                                <td>{{$elec->defaultprice}}</td>
+                                                <td>{{$elec->default_price->price}}</td>
                                                 <td>{{$elec->desc}}</td>
                                                 <td>@if($elec->status==1)  active @else disable @endif </td>
-                                                <td>{{$elec->company}}</td>
+                                                <td>{{$elec->company->name}}</td>
                                                 <td><a href="/services-electricity-edit/{{ $elec->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a></td>
                                             </tr>
                                         @endforeach
@@ -289,10 +289,10 @@
                                             <tr>
                                                 <th><span class="co-name">{{$trans->code}}</span></th>
                                                 <td>{{$trans->price}}</td>
-                                                <td>{{$trans->defaultprice}}</td>
+                                                <td>{{$trans->default_price->price}}</td>
                                                 <td>{{$trans->desc}}</td>
                                                 <td>@if($trans->status==1)  active @else disable @endif </td>
-                                                <td>{{$trans->company}}</td>
+                                                <td>{{$trans->company->name}}</td>
                                                 <td><a href="/services-transfer-edit/{{ $trans->id }}" type="button"
                                                        class="btn btn-info waves-effect waves-light"><i
                                                             class="fas fas fa-user-edit"></i>Edit</a></td>

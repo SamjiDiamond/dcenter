@@ -53,7 +53,7 @@ Route::post('/confirm-password', function (Request $request) {
 
 
 
-Route::group(['middleware' => 'auth:sanctum', 'verified'], function() {
+Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function() {
 
     Route::get('/dashboard', [HomeController::class, 'index'] )->name('dashboard');
     Route::get('/home', [HomeController::class, 'index'] )->name('home');

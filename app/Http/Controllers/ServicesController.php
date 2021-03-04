@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConfigAirtimeModel;
+use App\Models\ConfigDataModel;
+use App\Models\ConfigDefaultModel;
+use App\Models\ConfigElectricityModel;
+use App\Models\ConfigTransferModel;
+use App\Models\ConfigTVModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -21,75 +27,27 @@ class ServicesController extends Controller
     public function index(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
 
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->join("config_default", "config_default.id","=","config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->join("config_default", "config_default.id","=","config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->join("config_default", "config_default.id","=","config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->join("config_default", "config_default.id","=","config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
 
-        $cair=DB::table("config_airtime")
-            ->join("company", "company.id","=","config_airtime.company_id")
+        $cair=ConfigAirtimeModel::join("company", "company.id","=","config_airtime.company_id")
             ->select('config_airtime.*', 'company.name as company')
             ->where('company_id','=',auth()->user()->company_id)
             ->count();
 
-        $cdair= DB::table("config_default")
-            ->where("type","=", "airtime")
+        $cdair= ConfigDefaultModel::where("type","=", "airtime")
             ->count();
 
         if($cdair>$cair){
@@ -173,65 +131,18 @@ class ServicesController extends Controller
     public function airtimeedit(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime= DB::table("config_airtime")
-                ->join("company", "company.id", "=", "config_airtime.company_id")
-                ->join("config_default", "config_default.id", "=", "config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $data= DB::table("config_data")
-                ->join("company", "company.id", "=", "config_data.company_id")
-                ->join("config_default", "config_default.id", "=", "config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv= DB::table("config_tv")
-                ->join("company", "company.id", "=", "config_tv.company_id")
-                ->join("config_default", "config_default.id", "=", "config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity= DB::table("config_electricity")
-                ->join("company", "company.id", "=", "config_electricity.company_id")
-                ->join("config_default", "config_default.id", "=", "config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer= DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
             $editd=DB::table("config_airtime")->where([['company_id','=',auth()->user()->company_id], ['id','=', $request->id]])->first();
             $type="airtime";
@@ -271,65 +182,18 @@ class ServicesController extends Controller
     public function dataedit(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime= DB::table("config_airtime")
-                ->join("company", "company.id", "=", "config_airtime.company_id")
-                ->join("config_default", "config_default.id", "=", "config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $data= DB::table("config_data")
-                ->join("company", "company.id", "=", "config_data.company_id")
-                ->join("config_default", "config_default.id", "=", "config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv= DB::table("config_tv")
-                ->join("company", "company.id", "=", "config_tv.company_id")
-                ->join("config_default", "config_default.id", "=", "config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity= DB::table("config_electricity")
-                ->join("company", "company.id", "=", "config_electricity.company_id")
-                ->join("config_default", "config_default.id", "=", "config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer= DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
 
         $editd=DB::table("config_data")->where([['company_id','=',auth()->user()->company_id], ['id','=', $request->id]])->first();
@@ -371,65 +235,18 @@ class ServicesController extends Controller
     public function tvedit(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime= DB::table("config_airtime")
-                ->join("company", "company.id", "=", "config_airtime.company_id")
-                ->join("config_default", "config_default.id", "=", "config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $data= DB::table("config_data")
-                ->join("company", "company.id", "=", "config_data.company_id")
-                ->join("config_default", "config_default.id", "=", "config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv= DB::table("config_tv")
-                ->join("company", "company.id", "=", "config_tv.company_id")
-                ->join("config_default", "config_default.id", "=", "config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity= DB::table("config_electricity")
-                ->join("company", "company.id", "=", "config_electricity.company_id")
-                ->join("config_default", "config_default.id", "=", "config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer= DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
 
         $editd=DB::table("config_tv")->where([['company_id','=',auth()->user()->company_id], ['id','=', $request->id]])->first();
@@ -471,65 +288,18 @@ class ServicesController extends Controller
     public function electedit(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime= DB::table("config_airtime")
-                ->join("company", "company.id", "=", "config_airtime.company_id")
-                ->join("config_default", "config_default.id", "=", "config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $data= DB::table("config_data")
-                ->join("company", "company.id", "=", "config_data.company_id")
-                ->join("config_default", "config_default.id", "=", "config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv= DB::table("config_tv")
-                ->join("company", "company.id", "=", "config_tv.company_id")
-                ->join("config_default", "config_default.id", "=", "config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity= DB::table("config_electricity")
-                ->join("company", "company.id", "=", "config_electricity.company_id")
-                ->join("config_default", "config_default.id", "=", "config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer= DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
         $editd=DB::table("config_electricity")->where([['company_id','=',auth()->user()->company_id], ['id','=', $request->id]])->first();
         $type="electricity";
@@ -569,65 +339,19 @@ class ServicesController extends Controller
     public function transferedit(Request $request)
     {
         if(auth()->user()->company_id==1) {
-            $airtime=DB::table("config_airtime")
-                ->join("company", "company.id","=","config_airtime.company_id")
-                ->select('config_airtime.*', 'company.name as company')
-                ->get();
-
-            $data=DB::table("config_data")
-                ->join("company", "company.id","=","config_data.company_id")
-                ->select('config_data.*', 'company.name as company')
-                ->get();
-
-            $tv=DB::table("config_tv")
-                ->join("company", "company.id","=","config_tv.company_id")
-                ->select('config_tv.*', 'company.name as company')
-                ->get();
-
-            $electricity=DB::table("config_electricity")
-                ->join("company", "company.id","=","config_electricity.company_id")
-                ->select('config_electricity.*', 'company.name as company')
-                ->get();
-
-            $transfer=DB::table("config_transfer")
-                ->join("company", "company.id","=","config_transfer.company_id")
-                ->select('config_transfer.*', 'company.name as company')
-                ->get();
+            $airtime=ConfigAirtimeModel::get();
+            $data=ConfigDataModel::get();
+            $tv=ConfigTVModel::get();
+            $electricity=ConfigElectricityModel::get();
+            $transfer=ConfigTransferModel::get();
 
         }else{
-            $airtime= DB::table("config_airtime")
-                ->join("company", "company.id", "=", "config_airtime.company_id")
-                ->join("config_default", "config_default.id", "=", "config_airtime.default_id")
-                ->select('config_airtime.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
 
-            $data= DB::table("config_data")
-                ->join("company", "company.id", "=", "config_data.company_id")
-                ->join("config_default", "config_default.id", "=", "config_data.default_id")
-                ->select('config_data.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $tv= DB::table("config_tv")
-                ->join("company", "company.id", "=", "config_tv.company_id")
-                ->join("config_default", "config_default.id", "=", "config_tv.default_id")
-                ->select('config_tv.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-
-            $electricity= DB::table("config_electricity")
-                ->join("company", "company.id", "=", "config_electricity.company_id")
-                ->join("config_default", "config_default.id", "=", "config_electricity.default_id")
-                ->select('config_electricity.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
-            $transfer= DB::table("config_transfer")
-                ->join("company", "company.id", "=", "config_transfer.company_id")
-                ->join("config_default", "config_default.id", "=", "config_transfer.default_id")
-                ->select('config_transfer.*', 'company.name as company', 'config_default.price as defaultprice')
-                ->where('company_id','=',auth()->user()->company_id)
-                ->get();
+            $airtime=ConfigAirtimeModel::where('company_id','=',auth()->user()->company_id)->get();
+            $data=ConfigDataModel::where('company_id','=',auth()->user()->company_id)->get();
+            $tv=ConfigTVModel::where('company_id','=',auth()->user()->company_id)->get();
+            $electricity=ConfigElectricityModel::where('company_id','=',auth()->user()->company_id)->get();
+            $transfer=ConfigTransferModel::where('company_id','=',auth()->user()->company_id)->get();
         }
         $editd=DB::table("config_transfer")->where([['company_id','=',auth()->user()->company_id], ['id','=', $request->id]])->first();
         $type="transfer";

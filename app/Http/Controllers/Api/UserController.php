@@ -29,7 +29,6 @@ class UserController extends Controller
             $rules = array(
                 'first_name'   => 'required|min:3|max:20',
                 'last_name'   => 'required|min:3|max:20',
-                'phoneno' => 'required|min:11|max:11',
                 'dob' => 'required',
                 'country' => 'required',
                 'role' => 'required|min:4');
@@ -49,7 +48,7 @@ class UserController extends Controller
 
                     $input['first_name'] = ucfirst($input['first_name']);
                     $input['last_name'] = ucfirst($input['last_name']);
-                    $user=User::where(['phoneno'=> auth()->user()->phoneno])->update($input);
+                    $user=User::where(['id'=> Auth::id()])->update($input);
 
                     /*                $file_data= $request->input('image');
                                     //generating unique file name;
@@ -191,6 +190,51 @@ class UserController extends Controller
             return response()->json(['status'=> 0, 'message'=>'Error changing password', 'error' => $validator->errors()]);
         }
 
+    }
+
+    public function documentupload(Request $request){
+        $input = $request->all();
+        $rules = array(
+            'type' => 'required',
+            'image'   => 'required');
+
+        $messages = array(
+            'min' => 'Hmm, that looks short.',
+            'max' => 'Oops, that too long.',
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+
+
+        $validator = Validator::make($input, $rules, $messages);
+
+        if ($validator->passes()) {
+            if ($input['image']) {
+                $file_data = $input['image'];
+                //generating unique file name;
+                $file_name = Auth::id() ."_".time(). '.jpg';
+                @list($type, $file_data) = explode(';', $file_data);
+                @list(, $file_data) = explode(',', $file_data);
+                if ($file_data != "") {
+                    // storing image in storage/app/public Folder
+                    \Storage::disk('public')->put('users/'.$file_name, base64_decode($file_data));
+//
+//                     \File::put(storage_path('app/public'). '/' . $file_name, base64_decode($file_data));
+
+//                    $decodedImage = base64_decode("$image");
+//                    file_put_contents(storage_path("app/public/avatar/". $photo) , $decodedImage);
+
+
+                    $user=User::find(Auth::id());
+                    $user->profile_photo_path='user/image/'.$file_name;
+                    $user->save();
+
+                    return response()->json(['status'=> 1, 'message'=>'DP uploaded successfully']);
+                }
+
+                return response()->json(['status'=> 0, 'message'=>'File error', 'error' => '']);
+            }
+        }else{
+            return response()->json(['status'=> 0, 'message'=>'Error uploading file', 'error' => $validator->errors()]);
+        }
     }
 
 
