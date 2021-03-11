@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicesController;
@@ -109,6 +110,9 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
     Route::post('/smspayment', [BillingController::class, 'sms_payment'])->name('sms.payment');
     Route::get('/smspayments', [BillingController::class, 'sms_payments'])->name('sms.payments');
     Route::get('/smstransactions', [BillingController::class, 'sms_transactions'])->name('sms.transactions');
+
+    Route::get('/usertransactions', [HistoryController::class, 'usertransaction'])->name('user.transactions');
+    Route::get('/companywallethistory', [HistoryController::class, 'companywallet'])->name('company.wallet');
 
     Route::get('/fundwallet', function () {
         return view('fund_wallet');

@@ -182,6 +182,20 @@
                     </li>
 
                     <li class="has-submenu">
+                        <a href="#"><i class="dripicons-hourglass"></i> History <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                        <ul class="submenu">
+
+                            <li>
+                                <a href="{{route('user.transactions')}}">User Transactions</a>
+                            </li>
+                            <li>
+                                <a href="{{route('company.wallet')}}">Company Wallet History</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu">
                         <a href="#"><i class="dripicons-suitcase"></i> Reports <i class="mdi mdi-chevron-down mdi-drop"></i></a>
                         <ul class="submenu megamenu">
                             <li>

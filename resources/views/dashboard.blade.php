@@ -72,117 +72,64 @@
     </div>
     <!-- end row -->
 
-    <div class="row">
-        <div class="col-xl-9">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="mt-0 header-title">Sales Report</h4>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div id="morris-line-example" class="morris-chart" style="height: 300px"></div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div>
-                                <h5 class="font-14 mb-5">Yearly Sales Report</h5>
+{{--    <div class="row">--}}
+{{--        <div class="col-xl-9">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-body">--}}
+{{--                    <h4 class="mt-0 header-title">Sales Report</h4>--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col-lg-8">--}}
+{{--                            <div id="morris-line-example" class="morris-chart" style="height: 300px"></div>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-lg-4">--}}
+{{--                            <div>--}}
+{{--                                <h5 class="font-14 mb-5">Yearly Sales Report</h5>--}}
 
-                                <div>
-                                    <h5 class="mb-3">2018 : $19523</h5>
-                                    <p class="text-muted mb-4">At vero eos et accusamus et iusto odio dignissimos ducimus atque</p>
-                                    <a href="#" class="btn btn-primary btn-sm">Read more <i class="mdi mdi-chevron-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="mt-0 header-title">Sales Analytics</h4>
-                    <div id="morris-donut-example" class="morris-chart" style="height: 300px"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+{{--                                <div>--}}
+{{--                                    <h5 class="mb-3">2018 : $19523</h5>--}}
+{{--                                    <p class="text-muted mb-4">At vero eos et accusamus et iusto odio dignissimos ducimus atque</p>--}}
+{{--                                    <a href="#" class="btn btn-primary btn-sm">Read more <i class="mdi mdi-chevron-right"></i></a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-xl-3">--}}
+{{--            <div class="card">--}}
+{{--                <div class="card-body">--}}
+{{--                    <h4 class="mt-0 header-title">Sales Analytics</h4>--}}
+{{--                    <div id="morris-donut-example" class="morris-chart" style="height: 300px"></div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     <!-- end row -->
 
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Latest SMS Log</h4>
+                    <h4 class="mt-0 header-title mb-4">Latest FAQS</h4>
                     <div class="latest-massage">
+                        @foreach($faqs as $faq)
                         <a href="#" class="latest-message-list">
                             <div class="border-bottom position-relative">
                                 <div class="float-left user mr-3">
                                     <h5 class="bg-primary text-center rounded-circle text-dark mt-0">v</h5>
                                 </div>
                                 <div class="message-time">
-                                    <p class="m-0 text-muted">Just Now</p>
+                                    <p class="m-0 text-muted">{{\Carbon\Carbon::parse($faq->created_at)->toDateString()}}</p>
                                 </div>
                                 <div class="massage-desc">
-                                    <h5 class="font-14 mt-0 text-dark">Victor Zamora</h5>
-                                    <p class="text-muted">Hey! there I'm available...</p>
+                                    <h5 class="font-14 mt-0 text-dark">{{$faq->title}}</h5>
+                                    <p class="text-muted">{{$faq->content}}</p>
                                 </div>
                             </div>
                         </a>
-                        <a href="#" class="latest-message-list">
-                            <div class="border-bottom mt-3 position-relative">
-                                <div class="float-left user mr-3">
-                                    <h5 class="bg-success text-center rounded-circle text-dark mt-0">p</h5>
-                                </div>
-                                <div class="message-time">
-                                    <p class="m-0 text-muted">2 Min. ago</p>
-                                </div>
-                                <div class="massage-desc">
-                                    <h5 class="font-14 mt-0 text-dark">Patrick Beeler</h5>
-                                    <p class="text-muted">I've finished it! See you so...</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="latest-message-list">
-                            <div class="border-bottom mt-3 position-relative">
-                                <div class="float-left user mr-3">
-                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle mb-3">
-                                </div>
-                                <div class="message-time">
-                                    <p class="m-0 text-muted">6 Min. ago</p>
-                                </div>
-                                <div class="massage-desc">
-                                    <h5 class="font-14 mt-0 text-dark">Ralph Ramirez</h5>
-                                    <p class="text-muted">This theme is awesome!</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="latest-message-list">
-                            <div class="border-bottom mt-3 position-relative">
-                                <div class="float-left user mr-3">
-                                    <h5 class="bg-pink text-center rounded-circle text-dark mt-0">b</h5>
-                                </div>
-                                <div class="message-time">
-                                    <p class="m-0 text-muted">01:34 pm</p>
-                                </div>
-                                <div class="massage-desc">
-                                    <h5 class="font-14 mt-0 text-dark">Bryan Lacy</h5>
-                                    <p class="text-muted">I've finished it! See you so...</p>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="latest-message-list">
-                            <div class="mt-3 position-relative">
-                                <div class="float-left user mr-3">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle mb-3">
-                                </div>
-                                <div class="message-time">
-                                    <p class="m-0 text-muted">02:05 pm</p>
-                                </div>
-                                <div class="massage-desc">
-                                    <h5 class="font-14 mt-0 text-dark">James Sorrells</h5>
-                                    <p class="text-muted">Hey! there I'm available...</p>
-                                </div>
-                            </div>
-                        </a>
+                        @endforeach
+
                     </div>
 
                 </div>
@@ -196,30 +143,15 @@
                 <div class="card-body">
                     <h4 class="mt-0 header-title mb-4">Recent Activity</h4>
                     <ol class="activity-feed mb-0">
+
+                        @foreach($audits as $audit)
                         <li class="feed-item">
                             <div class="feed-item-list">
-                                <span class="date text-white-50">Jan 10</span>
-                                <span class="activity-text">Responded to need “Volunteer Activities”</span>
+                                <span class="date text-white-50">{{\Carbon\Carbon::parse($audit->created_at)->toFormattedDateString()}}</span>
+                                <span class="activity-text">{{$audit->type}} {{$audit->action}}</span>
                             </div>
                         </li>
-                        <li class="feed-item">
-                            <div class="feed-item-list">
-                                <span class="date text-white-50">Jan 09</span>
-                                <span class="activity-text">Added an interest “Volunteer Activities”</span>
-                            </div>
-                        </li>
-                        <li class="feed-item">
-                            <div class="feed-item-list">
-                                <span class="date text-white-50">Jan 08</span>
-                                <span class="activity-text">Joined the group “Boardsmanship Forum”</span>
-                            </div>
-                        </li>
-                        <li class="feed-item">
-                            <div class="feed-item-list">
-                                <span class="date text-white-50">Jan 07</span>
-                                <span class="activity-text">Responded to need “In-Kind Opportunity”</span>
-                            </div>
-                        </li>
+                        @endforeach
                     </ol>
 
                 </div>
@@ -230,48 +162,31 @@
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Social Source</h4>
-                    <div class="text-center">
-                        <div class="social-source-icon lg-icon mb-3">
-                            <i class="mdi mdi-facebook h2 bg-primary"></i>
-                        </div>
-                        <h5 class="font-16"><a href="#" class="text-dark">Facebook - <span class="text-muted">125 sales</span> </a></h5>
-                        <p class="text-muted">Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis tincidunt.</p>
-                        <a href="#" class="text-primary font-14">Learn more <i class="mdi mdi-chevron-right"></i></a>
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col-md-4">
-                            <div class="social-source text-center mt-3">
-                                <div class="social-source-icon mb-2">
-                                    <i class="mdi mdi-facebook h5 bg-primary"></i>
+                    <h4 class="mt-0 header-title mb-4">Latest Users</h4>
+                    <div class="latest-massage">
+                        @foreach($users as $user)
+                            <a href="#" class="latest-message-list">
+                            <div class="border-bottom position-relative">
+                                <div class="float-left user mr-3">
+                                    <h5 class="bg-primary text-center rounded-circle text-dark mt-0">v</h5>
+{{--                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle mb-3">--}}
                                 </div>
-                                <p class="font-14 text-muted mb-2">125 sales</p>
-                                <h6>Facebook</h6>
+                                <div class="message-time">
+                                    <p class="m-0 text-muted">{{\Carbon\Carbon::parse($user->created_at)->toTimeString()}}</p>
+                                </div>
+                                <div class="massage-desc">
+                                    <h5 class="font-14 mt-0 text-dark">{{$user->first_name}} {{$user->last_name}}</h5>
+                                    <p class="text-muted">{{$user->phoneno}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="social-source text-center mt-3">
-                                <div class="social-source-icon mb-2">
-                                    <i class="mdi mdi-twitter h5 bg-info"></i>
-                                </div>
-                                <p class="font-14 text-muted mb-2">112 sales</p>
-                                <h6>Twitter</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="social-source text-center mt-3">
-                                <div class="social-source-icon mb-2">
-                                    <i class="mdi mdi-instagram h5 bg-pink"></i>
-                                </div>
-                                <p class="font-14 text-muted mb-2">104 sales</p>
-                                <h6>Instagram</h6>
+                        </a>
+                        @endforeach
 
-                            </div>
-                        </div>
                     </div>
 
                 </div>
             </div>
+
         </div>
         <!-- end col -->
     </div>

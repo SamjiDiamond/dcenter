@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditTrail;
 use App\Models\Company;
 use App\Models\CompanyWallet;
+use App\Models\Faq;
 use App\Models\SMSLog;
 use App\Models\Transaction;
 use App\Models\User;
@@ -47,6 +49,12 @@ class HomeController extends Controller
         $data['transactions']=Transaction::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(10)->get();
 
         $data['verifications']=Verification::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
+
+        $data['users']=User::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
+
+        $data['audits']=AuditTrail::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
+
+        $data['faqs']=Faq::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
 
 //
 

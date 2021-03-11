@@ -1,4 +1,4 @@
-@extends('layouts.layouts')
+@extends('layouts.layout')
 
 @section('content')
     <div class="row">
@@ -71,17 +71,13 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                            <?php $u_count=0; ?>
-                                            @foreach($others as $other)
-                                                <?php $u_count++; ?>
+
                                             <tr>
-                                                <td>{{$other->first_name}} - User Subscription</td>
+                                                <td>{{$plan->name}} - Subscription</td>
                                                 <td class="text-center"></td>
                                                 <td class="text-center"></td>
                                                 <td class="text-right"></td>
                                             </tr>
-                                            @endforeach
 
                                             <tr>
                                                 <td class="thick-line"></td>
@@ -95,19 +91,17 @@
 //                                                $vat=number_format(($plan->cost * $u_count * 0.075), 2);
                                                 $vat=number_format(($plan->cost * 0.075), 2);
 
-                                                $u_dis=number_format($u_count/4, 1);
-                                                $u_discount=number_format(($u_dis * 0.015), 2);
 
                                                 $total=number_format($subtotal + $vat, 2);
                                                 ?>
-                                                <td class="thick-line text-right">${{ $subtotal }}</td>
+                                                <td class="thick-line text-right">₦{{ $subtotal }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="no-line"></td>
                                                 <td class="no-line"></td>
                                                 <td class="no-line text-center">
                                                     <strong>VAT(7.5%)</strong></td>
-                                                <td class="no-line text-right">${{ $vat }}</td>
+                                                <td class="no-line text-right">₦{{ $vat }}</td>
                                             </tr>
 {{--
                                             @if($u_count>4)
@@ -125,7 +119,7 @@
                                                 <td class="no-line"></td>
                                                 <td class="no-line text-center">
                                                     <strong>Total</strong></td>
-                                                <td class="no-line text-right"><h4 class="m-0">${{ $total }}</h4></td>
+                                                <td class="no-line text-right"><h4 class="m-0">₦{{ $total }}</h4></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -179,9 +173,9 @@
                 metadata: {
                     custom_fields: [
                         {
-                            display_name: "User Subscriptions",
-                            variable_name: "user_subscriptions",
-                            value: "{{$u_count}}"
+                            display_name: "subscription",
+                            variable_name: "subscription",
+                            value: "{{$company->name}} subscription on {{$plan->name}}"
                         }
                     ]
                 },
@@ -201,7 +195,7 @@
             var handler = PaystackPop.setup({
                 key: '{{env('PAYSTACK_PUBLIC')}}',
                 email: '{{$company->email}}',
-                amount: {{$plan->cost}},
+                amount: {{$total*100}},
                 currency: "NGN",
                 ref: "{{$orderid}}", // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
                 metadata: {
@@ -209,7 +203,7 @@
                         {
                             display_name: "Daily User Subscription",
                             variable_name: "user_subscription",
-                            value: "{{$u_count}}"
+                            value: "p"
                         }
                     ]
                 },

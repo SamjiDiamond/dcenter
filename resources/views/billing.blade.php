@@ -29,7 +29,7 @@
                     <h5 class="mt-0">{{ $plan->name }}</h5>
                 </div>
                 <div class="pt-3 pb-4">
-                    <h1 class="price font-weight-normal"><sup><small>#</small></sup>{{ number_format($plan->cost, 2) }}</h1>
+                    <h1 class="price font-weight-normal"><sup><small>₦</small></sup>{{ number_format($plan->cost, 2) }}</h1>
                 </div>
                 <div class="plan-features mb-4">
                     <?php $desc=explode(',', $plan->description)?>

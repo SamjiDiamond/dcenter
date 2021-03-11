@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
+use Paystack;
 
 class BillingController extends Controller
 {
@@ -65,6 +66,9 @@ class BillingController extends Controller
 
         $plan = Plan::find($input['plan']);
         $company = Company::find($input['company']);
+
+
+        return Paystack::getAuthorizationResponse($input['reference']);
 
 //        if($company->subscribedToPlan($plan->stripe_plan, 'user_sub')) {
 //            return redirect()->route('home')->with('success', 'You have already subscribed to this plan');
