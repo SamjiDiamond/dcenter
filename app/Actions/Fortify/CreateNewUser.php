@@ -78,8 +78,8 @@ class CreateNewUser implements CreatesNewUsers
 
             $rep=json_decode($response, true);
 
-            if($rep->responseCode==0) {
-                $input['Monnify_subAccountCode'] = $rep->responseBody[0]->subAccountCode;
+            if($rep['responseCode']==0) {
+                $input['Monnify_subAccountCode'] = $rep['responseBody'][0]['subAccountCode'];
             }else{
                 return back()->with(['error'=>'Error with account details']);
             }
