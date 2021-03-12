@@ -61,7 +61,7 @@ class CreateNewUser implements CreatesNewUsers
         "currencyCode": "NGN",
         "bankCode": "' . $input['bank_code'] . '",
         "accountNumber": "' . $input['bank_account'] . '",
-        "email": "' . env('adminemail') . '",
+        "email": "' . env('ADMINEmail') . '",
         "defaultSplitPercentage": "100"
     }
 ]',
