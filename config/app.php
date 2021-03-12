@@ -177,6 +177,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
 
     ],
 
@@ -230,6 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
 
     ],
 
