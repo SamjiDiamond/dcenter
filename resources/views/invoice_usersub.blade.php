@@ -134,12 +134,17 @@
                                                     <div class="card-body">
 
                                                         <input type="hidden" name="email" value="{{$company->email}}">
+                                                        <input type="hidden" name="first_name" value="{{$company->name}}">
+                                                        <input type="hidden" name="last_name" value="dcenter">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
                                                         <input type="hidden" name="amount" value="{{ $total }}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
                                                         <input type="hidden" name="metadata"
-                                                               value="{{ json_encode($array = ['Billed to' => "$company->name",]) }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
+                                                               value="{{ json_encode([ 'custom_fields' => [
+                                   ['display_name' => "Billed to", "variable_name" => "Billedto", "value" => $company->name],
+                                   ['display_name' => "Payed By", "variable_name" => "payby", "value" => \Illuminate\Support\Facades\Auth::user()->email],
+                                  ]] }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
                                                         <input type="hidden" name="reference"
                                                                value="{{ Paystack::genTranxRef() }}">
 
