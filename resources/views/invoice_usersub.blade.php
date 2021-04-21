@@ -135,17 +135,23 @@
 
                                                         <input type="hidden" name="email" value="{{$company->email}}">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
-                                                        <input type="hidden" name="plan" value="{{ $plan->paystack_plan }}">
+                                                        <input type="hidden" name="amount" value="{{ $total }}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
-                                                        <input type="hidden" name="metadata" value="{{ json_encode($array = ['Billed to' => "$company->name",]) }}" > {{-- For other necessary things you want to add to your payload. it is optional though --}}
-                                                        <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
+                                                        <input type="hidden" name="metadata"
+                                                               value="{{ json_encode($array = ['Billed to' => "$company->name",]) }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
+                                                        <input type="hidden" name="reference"
+                                                               value="{{ Paystack::genTranxRef() }}">
 
                                                     </div>
                                                 </div>
                                                 <div class="card-footer">
-                                                    <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
-                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Pay</button>
+                                                    <a href="javascript:window.print()"
+                                                       class="btn btn-success waves-effect waves-light"><i
+                                                            class="fa fa-print"></i></a>
+                                                    <button type="submit"
+                                                            class="btn btn-primary waves-effect waves-light">Pay
+                                                    </button>
                                                     {{--                                            @if($plan->slug=='daily')--}}
 {{--                                                    <button onclick="payWithPaystackSingle()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
                                                     {{--                                            @else--}}
