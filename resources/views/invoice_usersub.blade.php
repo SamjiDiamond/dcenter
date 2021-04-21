@@ -144,7 +144,7 @@
                                                                value="{{ json_encode([ 'custom_fields' => [
                                    ['display_name' => "Billed to", "variable_name" => "Billedto", "value" => $company->name],
                                    ['display_name' => "Payed By", "variable_name" => "payby", "value" => \Illuminate\Support\Facades\Auth::user()->email],
-                                  ]] }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
+                                  ]]) }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
                                                         <input type="hidden" name="reference"
                                                                value="{{ Paystack::genTranxRef() }}">
 
