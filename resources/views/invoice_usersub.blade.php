@@ -137,7 +137,7 @@
                                                         <input type="hidden" name="first_name" value="{{$company->name}}">
                                                         <input type="hidden" name="last_name" value="dcenter">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
-                                                        <input type="hidden" name="amount" value="{{ $total }}">
+                                                        <input type="hidden" name="amount" value="{{ $total * 100 }}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
                                                         <input type="hidden" name="metadata"
