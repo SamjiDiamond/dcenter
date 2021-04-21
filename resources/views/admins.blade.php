@@ -213,7 +213,7 @@
                                                                 <div>
                                                                     <select class="form-control" name="role_id">
                                                                         @foreach($roles as $role)
-                                                                        <option value="{{$role->id}}">{{$role->name}} @if(\Illuminate\Support\Facades\Auth::user()->company_id==1) - {{$role->company->name}}@endif</option>
+                                                                        <option value="{{$role->id}}">{{$role->name}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>

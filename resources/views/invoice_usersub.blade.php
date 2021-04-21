@@ -127,12 +127,33 @@
 
                                     <div class="d-print-none mo-mt-2">
                                         <div class="float-right">
-                                            <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
-{{--                                            @if($plan->slug=='daily')--}}
-                                                <button onclick="payWithPaystackSingle()" class="btn btn-primary waves-effect waves-light">Pay</button>
-{{--                                            @else--}}
-{{--                                                <button onclick="payWithPaystack()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
-{{--                                            @endif--}}
+
+                                            <form action="{{ route('pay') }}" method="POST" id="payment-form">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <div class="card-body">
+
+                                                        <input type="hidden" name="email" value="{{$company->email}}">
+                                                        <input type="hidden" name="orderID" value="{{$orderid}}">
+                                                        <input type="hidden" name="plan" value="{{ $plan->paystack_plan }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <input type="hidden" name="currency" value="NGN">
+                                                        <input type="hidden" name="metadata" value="{{ json_encode($array = ['Billed to' => "$company->name",]) }}" > {{-- For other necessary things you want to add to your payload. it is optional though --}}
+                                                        <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
+
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light"><i class="fa fa-print"></i></a>
+                                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Pay</button>
+                                                    {{--                                            @if($plan->slug=='daily')--}}
+{{--                                                    <button onclick="payWithPaystackSingle()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
+                                                    {{--                                            @else--}}
+                                                    {{--                                                <button onclick="payWithPaystack()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
+                                                    {{--                                            @endif--}}
+                                                </div>
+                                            </form>
+
 
                                         </div>
                                     </div>
@@ -147,18 +168,6 @@
         </div> <!-- end col -->
     </div> <!-- end row -->
 
-    <form action="{{ route('subscription.create') }}" method="POST" id="payment-form">
-        @csrf
-        <div class="form-group">
-            <div class="card-body">
-                <input type="hidden" name="plan" value="{{ $plan->id }}" />
-                <input type="hidden" name="company" value="{{ $company->id }}" />
-            </div>
-        </div>
-{{--        <div class="card-footer">--}}
-{{--            <button class="btn btn-dark" type="submit">Pay</button>--}}
-{{--        </div>--}}
-    </form>
 
 @endsection
 

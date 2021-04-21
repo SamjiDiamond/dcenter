@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
 use Paystack;
@@ -60,6 +61,33 @@ class BillingController extends Controller
         return view('invoice_usersub', compact('plan', 'company', 'others'));
     }
 
+    /**
+     * Redirect the User to Paystack Payment Page
+     * @return Url
+     */
+    public function redirectToGateway()
+    {
+//        try{
+            return Paystack::getAuthorizationUrl()->redirectNow();
+//        }catch(\Exception $e) {
+//            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+//        }
+    }
+
+    /**
+     * Obtain Paystack payment information
+     * @return void
+     */
+    public function handleGatewayCallback()
+    {
+        $paymentDetails = Paystack::getPaymentData();
+
+        dd($paymentDetails);
+        // Now you have the payment details,
+        // you can store the authorization_code in your db to allow for recurrent subscriptions
+        // you can then redirect or do whatever you want
+    }
+
     public function create(Request $request)
     {
         $input = $request->all();
@@ -67,8 +95,37 @@ class BillingController extends Controller
         $plan = Plan::find($input['plan']);
         $company = Company::find($input['company']);
 
+        Paystack::getAuthorizationUrl()->redirectNow();
 
-        return Paystack::getAuthorizationResponse($input['reference']);
+        return true;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.paystack.co/transaction/verify/".$input['reference'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bearer ".env("PAYSTACK_SECRET_KEY"),
+                "Cache-Control: no-cache",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+
+        return;
 
 //        if($company->subscribedToPlan($plan->stripe_plan, 'user_sub')) {
 //            return redirect()->route('home')->with('success', 'You have already subscribed to this plan');

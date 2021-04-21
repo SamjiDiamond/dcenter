@@ -98,6 +98,9 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
     Route::post('/services-transfer-update/{id}', [ServicesController::class, 'transferupdate'])->name('Update transfer services');
     Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
 
+    Route::post('/pay', [BillingController::class, 'redirectToGateway'])->name('pay');
+    Route::get('/payment/callback', [BillingController::class,'handleGatewayCallback']);
+
     Route::get('/billing', [BillingController::class, 'index'])->name('plans');
     Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
     Route::post('/subscription', [BillingController::class, 'create'])->name('subscription.create');
