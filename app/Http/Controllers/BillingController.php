@@ -11,11 +11,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Stripe\Stripe;
 use Paystack;
+use Stripe\Stripe;
 
 class BillingController extends Controller
 {
@@ -55,8 +54,10 @@ class BillingController extends Controller
             }
         }
 
-        $company=Company::where('id', '=', Auth::user()->company_id)->first();
-        $others=User::where([['company_id', '=', Auth::user()->company_id], ])->get();
+        $company = Company::where('id', '=', Auth::user()->company_id)->first();
+        $others = User::where([['company_id', '=', Auth::user()->company_id],])->get();
+
+        session(['subplan' => $plan->paystack_plan]);
 
         return view('invoice_usersub', compact('plan', 'company', 'others'));
     }
@@ -67,11 +68,11 @@ class BillingController extends Controller
      */
     public function redirectToGateway()
     {
-//        try{
+        try {
             return Paystack::getAuthorizationUrl()->redirectNow();
-//        }catch(\Exception $e) {
-//            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
-//        }
+        } catch (\Exception $e) {
+            return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
+        }
     }
 
     /**
@@ -82,10 +83,16 @@ class BillingController extends Controller
     {
         $paymentDetails = Paystack::getPaymentData();
 
-        dd($paymentDetails);
+//        dd($paymentDetails);
         // Now you have the payment details,
         // you can store the authorization_code in your db to allow for recurrent subscriptions
         // you can then redirect or do whatever you want
+
+        if ($paymentDetails['data']['success'] == "success") {
+            $comp = Company::find(Auth::user()->company_id);
+            // Accepts an card authorization authtoken for the customer
+            $comp->newSubscription('main', session('subplan'))->create($paymentDetails['data']['authorization']['authorization_code']);
+        }
     }
 
     public function create(Request $request)
