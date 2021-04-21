@@ -77,7 +77,7 @@ class BillingController extends Controller
 
     /**
      * Obtain Paystack payment information
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function handleGatewayCallback()
     {
@@ -90,10 +90,16 @@ class BillingController extends Controller
 
         if ($paymentDetails['data']['status'] == "success") {
             $comp = Company::find(Auth::user()->company_id);
-            dd($comp);
+
             // Accepts an card authorization authtoken for the customer
-            $comp->newSubscription('main', session('subplan'))->create($paymentDetails['data']['authorization']['authorization_code']);
+//            $comp->newSubscription('main', session('subplan'))->create($paymentDetails['data']['authorization']['authorization_code']);
+            $comp->newSubscription('main', session('subplan'))
+                ->trialDays(10)
+                ->create($paymentDetails['data']['authorization']['authorization_code']);
+            return redirect()->route('plans')->with('success', 'Your subscription is successful');
         }
+
+        return redirect()->route('plans')->with('danger', 'Something is wrong with the subscription.');
     }
 
     public function create(Request $request)
