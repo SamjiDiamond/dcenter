@@ -90,6 +90,7 @@ class BillingController extends Controller
 
         if ($paymentDetails['data']['status'] == "success") {
             $comp = Company::find(Auth::user()->company_id);
+            dd($comp);
             // Accepts an card authorization authtoken for the customer
             $comp->newSubscription('main', session('subplan'))->create($paymentDetails['data']['authorization']['authorization_code']);
         }
