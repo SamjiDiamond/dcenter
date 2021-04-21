@@ -88,7 +88,7 @@ class BillingController extends Controller
         // you can store the authorization_code in your db to allow for recurrent subscriptions
         // you can then redirect or do whatever you want
 
-        if ($paymentDetails['data']['success'] == "success") {
+        if ($paymentDetails['data']['status'] == "success") {
             $comp = Company::find(Auth::user()->company_id);
             // Accepts an card authorization authtoken for the customer
             $comp->newSubscription('main', session('subplan'))->create($paymentDetails['data']['authorization']['authorization_code']);
