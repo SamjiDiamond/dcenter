@@ -41,19 +41,19 @@
                 <div class="pt-3">
                     @if($plan->id==1)
 {{--                        @if(!auth()->user()->subscribedToPlan($plan->stripe_plan, 'user_sub'))--}}
-                        @if($sub != $plan->stripe_plan)
+                        @if($sub != $plan->paystack_plan)
                             <a href="{{ route('planshow', $plan->slug) }}" class="btn btn-primary btn-block">Join Now</a>
                         @endif
                     @elseif($plan->id==2)
-                        @if($sub != $plan->stripe_plan)
+                        @if($sub != $plan->paystack_plan)
                             <a href="{{ route('planshow', $plan->slug) }}" class="btn btn-success btn-block">Join Now</a>
                         @endif
                     @elseif($plan->id==3)
-                        @if($sub != $plan->stripe_plan)
+                        @if($sub != $plan->paystack_plan)
                             <a href="{{ route('planshow', $plan->slug) }}" class="btn btn-info btn-block">Join Now</a>
                         @endif
                     @elseif($plan->id==4)
-                        @if($sub != $plan->stripe_plan)
+                        @if($sub != $plan->paystack_plan)
                             <a href="{{ route('planshow', $plan->slug) }}" class="btn btn-pink btn-block">Join Now</a>
                         @endif
                     @endif

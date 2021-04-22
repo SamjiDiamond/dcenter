@@ -10,12 +10,14 @@
 
                     <h4 class="mt-0 header-title">Subscription List</h4>
 
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap"
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
                             <th>#</th>
                             <th>Name</th>
                             <th>Plan</th>
+                            <th>Trial</th>
                             <th>Status</th>
                             <th>Start date</th>
                             <th>Action</th>
@@ -25,21 +27,44 @@
 
                         <tbody>
                         @foreach($datas as $data)
-                                <tr>
-                                    <td>{{$i++}}</td>
-                                    <td>{{$data->company}}</td>
-                                    <td>{{$data->stripe_plan}}</td>
-                                    <td>{{$data->stripe_status}}</td>
-                                    <td>{{$data->created_at}}</td>
-                                    <td>
-                                        <a type="button" class="btn btn-success waves-effect waves-light" href="" style="margin: 5px"><i class="fab fa-wpexplorer"></i> View Invoice</a>
+                            <tr>
+                                <td>{{$i++}}</td>
+                                <td>{{$data->company->name}}</td>
+                                <td>{{$data->plan->name}}</td>
+                                <td>
+                                    @if($data->trial_ends_at!=null)
+                                        @if(\Carbon\Carbon::now()->diffInMinutes(\Carbon\Carbon::parse($data->trial_ends_at), false) < 0)
+                                            Expired
+                                        @else
+                                            Active
+                                        @endif
+                                    @endif
+                                </td>
 
-                                        <button type="button" class="btn btn-info waves-effect waves-light" style="margin: 5px"><i class="fas fas fa-user-edit"></i>Change Plan</button>
-                                        <form method="POST" action="/subscription-cancel">
-                                            @csrf
-                                            <input type="hidden" class="form-control" required data-parsley-minlength="2" value="{{$data->id}}" name="companyid"/>
+                                <td>
+                                    @if($data->ends_at!=null)
+                                        @if(\Carbon\Carbon::now()->diffInMinutes(\Carbon\Carbon::parse($data->ends_at), false) < 0)
+                                            Expired
+                                        @else
+                                            Active
+                                        @endif
+                                    @endif
+                                </td>
 
-                                            <button type="submit" class="btn btn-outline-danger waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Cancel</button>
+                                <td>{{$data->created_at}}</td>
+                                <td>
+                                    <a type="button" class="btn btn-success waves-effect waves-light" href=""
+                                       style="margin: 5px"><i class="fab fa-wpexplorer"></i> View Invoice</a>
+
+                                    <button type="button" class="btn btn-info waves-effect waves-light"
+                                            style="margin: 5px"><i class="fas fas fa-user-edit"></i>Change Plan
+                                    </button>
+                                    <form method="POST" action="/subscription-cancel">
+                                        @csrf
+                                        <input type="hidden" class="form-control" required data-parsley-minlength="2"
+                                               value="{{$data->id}}" name="companyid"/>
+
+                                        <button type="submit" class="btn btn-outline-danger waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Cancel</button>
                                         </form>
                                     </td>
 {{--                                    <td><a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $data->id }}"><i class="fab fa-wpexplorer"></i> View</a> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Cancel</button></td>--}}

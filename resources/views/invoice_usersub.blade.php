@@ -85,14 +85,14 @@
                                                 <td class="thick-line text-center">
                                                     <strong>Subtotal</strong></td>
                                                 <?php
-//                                                $subtotal=number_format($plan->cost * $u_count, 2);
-                                                $subtotal=number_format($plan->cost, 2);
+                                                //                                                $subtotal=number_format($plan->cost * $u_count, 2);
+                                                $subtotal = number_format($plan->cost, 2);
 
-//                                                $vat=number_format(($plan->cost * $u_count * 0.075), 2);
-                                                $vat=number_format(($plan->cost * 0.075), 2);
+                                                //                                                $vat=number_format(($plan->cost * $u_count * 0.075), 2);
+                                                $vat = number_format(($plan->cost * 0.075), 2);
 
 
-                                                $total=number_format($subtotal + $vat, 2);
+                                                $total = number_format($subtotal, 2);
                                                 ?>
                                                 <td class="thick-line text-right">₦{{ $subtotal }}</td>
                                             </tr>

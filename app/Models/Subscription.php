@@ -14,12 +14,21 @@ class Subscription extends Model
         'company_id',
         'user_id',
         'name',
-        'stripe_id',
-        'paystack_reference',
-        'stripe_status',
-        'stripe_plan',
+        'paystack_id',
+        'paystack_code',
+        'paystack_plan',
         'quantity',
         'trial_ends_at',
         'ends_at'
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, "paystack_plan", "paystack_plan");
+    }
 }

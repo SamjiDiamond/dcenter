@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Paystack;
 use Stripe\Stripe;
@@ -26,7 +25,7 @@ class BillingController extends Controller
 
         if($sub) {
             $sub = DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->first();
-            $sub=$sub->stripe_plan;
+            $sub = $sub->paystack_plan;
         }else{
             $sub='ntn';
         }
@@ -35,7 +34,7 @@ class BillingController extends Controller
 
     public function show(Plan $plan, Request $request)
     {
-        if($request->user()->subscribedToPlan($plan->stripe_plan, 'user_sub')) {
+        if ($request->user()->subscribedToPlan($plan->paystack_plan, 'main')) {
             return redirect()->route('home')->with('success', 'You have already subscribed the plan');
         }
         return view('show', compact('plan'));
@@ -49,7 +48,7 @@ class BillingController extends Controller
             $sub = DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->first();
 
 //        if($company->subscribedToPlan($plan, 'user_sub')) {
-            if ($plan->stripe_plan == $sub->stripe_plan) {
+            if ($plan->paystack_plan == $sub->paystack_plan) {
                 return redirect()->route('plans')->with('success', 'You have already subscribed the plan');
             }
         }
@@ -68,11 +67,11 @@ class BillingController extends Controller
      */
     public function redirectToGateway()
     {
-        try {
-            return Paystack::getAuthorizationUrl()->redirectNow();
-        } catch (\Exception $e) {
-            return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
-        }
+//        try {
+        return Paystack::getAuthorizationUrl()->redirectNow();
+//        } catch (\Exception $e) {
+//            return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
+//        }
     }
 
     /**
@@ -267,13 +266,9 @@ class BillingController extends Controller
 
     public function showsub(){
         if(auth()->user()->company_id==1) {
-            $data =Company::join("subscriptions", "company.id", "=", "subscriptions.company_id")
-                ->select('subscriptions.*', 'company.name as company' )
-                ->get();
+            $data = Subscription::get();
         }else{
-            $data =Company::join("subscriptions", "company.id", "=", "subscriptions.company_id")
-                ->select('subscriptions.*', 'company.name as company' )
-                ->where('company.id','=',auth()->user()->company_id)
+            $data = Subscription::where('company.id', '=', auth()->user()->company_id)
                 ->get();
         }
 
@@ -488,10 +483,10 @@ class BillingController extends Controller
                 ->select('smslog.*', 'company.name as company', 'users.first_name', 'users.last_name' )
                 ->get();
         }else{
-            $data =SMSLog::join("company", "company.id", "=", "smslog.company_id")
+            $data = SMSLog::join("company", "company.id", "=", "smslog.company_id")
                 ->join("users", "users.id", "=", "smslog.user_id")
-                ->select('smslog.*', 'company.name as company', 'users.first_name', 'users.last_name' )
-                ->where('company.id','=', auth()->user()->company_id)
+                ->select('smslog.*', 'company.name as company', 'users.first_name', 'users.last_name')
+                ->whrere('company.id', '=', auth()->user()->company_id)
                 ->get();
         }
 
