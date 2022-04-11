@@ -5,8 +5,8 @@
             <!-- Logo-->
             <div>
 
-                <a href="index.html" class="logo">
-                    <img src="assets/images/logo.png" alt="" height="26">
+                <a href="{{route('dashboard')}}" class="logo">
+                    <img src="/assets/images/logo.png" alt="" height="26">
                 </a>
 
             </div>
@@ -16,7 +16,8 @@
 
                 <ul class="list-inline d-none d-lg-block mb-0">
                     <li class="list-inline-item dropdown notification-list">
-                        <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
+                        <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#"
+                           role="button"
                            aria-haspopup="false" aria-expanded="false">
                             Create New <i class="mdi mdi-plus"></i>
                         </a>
@@ -195,97 +196,100 @@
                         </ul>
                     </li>
 
-{{--                    <li class="has-submenu">--}}
-{{--                        <a href="#"><i class="dripicons-suitcase"></i> Reports <i class="mdi mdi-chevron-down mdi-drop"></i></a>--}}
-{{--                        <ul class="submenu megamenu">--}}
-{{--                            <li>--}}
-{{--                                <ul>--}}
-{{--                                    <li><a href="/new_account">New Account</a></li>--}}
-{{--                                    <li><a href="/account_ledger">Customer Account Ledger</a></li>--}}
-{{--                                    <li><a href="/report_service_charge">Service Charge</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <ul>--}}
+                    <li class="has-submenu">
+                        <a href="#"><i class="dripicons-suitcase"></i> Reports <i
+                                class="mdi mdi-chevron-down mdi-drop"></i></a>
+                        <ul class="submenu megamenu">
+                            <li>
+                                <ul>
+                                    <li><a href="/new_account">New Account</a></li>
+                                    <li><a href="/account_ledger">Customer Account Ledger</a></li>
+                                    <li><a href="/report_service_charge">Service Charge</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
 
-{{--                                    <li><a href="/report_audit_trail">Audit Trail</a></li>--}}
-{{--                                    <li><a href="/report_deposit">Customer Deposit Monitoring</a></li>--}}
-{{--                                    <li><a href="ui-tabs-accordions.html">Company Wallet Ledger</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <ul>--}}
+                                    <li><a href="/report_audit_trail">Audit Trail</a></li>
+                                    <li><a href="/report_deposit">Customer Deposit Monitoring</a></li>
+                                    <li><a href="ui-tabs-accordions.html">Company Wallet Ledger</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
 
-{{--                                    <li><a href="ui-modals.html">Customer Bank Transfer</a></li>--}}
-{{--                                    <li><a href="ui-images.html">Customer ATM payment</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
-
-{{--                    <li class="has-submenu">--}}
-{{--                        <a href="#"><i class="dripicons-help"></i> Posting <i class="mdi mdi-chevron-down mdi-drop"></i></a>--}}
-{{--                        <ul class="submenu">--}}
-{{--                            <li class="has-submenu">--}}
-{{--                                <a href="#">Reversal</a>--}}
-{{--                                <ul class="submenu">--}}
-{{--                                    <li><a href="/reversal">Post Reversal</a></li>--}}
-{{--                                    <li><a href="icons-ion.html">Reversal List</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            @can('fund_wallet')--}}
-{{--                            <li>--}}
-{{--                                <a href="/fundwallet">Fund Wallet</a>--}}
-{{--                            </li>--}}
-{{--                            @endcan--}}
-{{--                            <li class="has-submenu">--}}
-{{--                                <a href="#">Charge Customer </a>--}}
-{{--                                <ul class="submenu">--}}
-{{--                                    <li><a href="/chargecustomer">Direct Posting</a></li>--}}
-{{--                                    <li><a href="charts-chartist.html">Posting List</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li class="has-submenu">--}}
-{{--                                <a href="#">Transaction </a>--}}
-{{--                                <ul class="submenu">--}}
-{{--                                    <li><a href="/postairtimetransaction">Post Airtime Transaction</a></li>--}}
-{{--                                    <li><a href="charts-chartist.html">Transaction List</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                            <li class="has-submenu">--}}
-{{--                                <a href="#">Recharge Card </a>--}}
-{{--                                <ul class="submenu">--}}
-{{--                                    <li><a href="/rechargecard">Post Recharge Card</a></li>--}}
-{{--                                    <li><a href="charts-chartist.html">Recharge Card List</a></li>--}}
-{{--                                </ul>--}}
-{{--                            </li>--}}
-
-
-{{--                        </ul>--}}
-{{--                    </li>--}}
-
-{{--                    <li class="has-submenu">--}}
-{{--                        <a href="#"><i class="dripicons-help"></i> Email View <i class="mdi mdi-chevron-down mdi-drop"></i></a>--}}
-{{--                        <ul class="submenu">--}}
-
-{{--                            <li>--}}
-{{--                                <a href="/fundwalletmail">Fund Wallet</a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a href="/newaccountmail">Account Creation</a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a href="/newmessagemail">Message</a>--}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <a href="/newtransactionmail">Transaction</a>--}}
-{{--                            </li>--}}
-
-{{--                        </ul>--}}
-{{--                    </li>--}}
+                                    <li><a href="ui-modals.html">Customer Bank Transfer</a></li>
+                                    <li><a href="ui-images.html">Customer ATM payment</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li class="has-submenu">
-                        <a href="#"><i class="dripicons-basket"></i> Subscription <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                        <a href="#"><i class="dripicons-help"></i> Posting <i class="mdi mdi-chevron-down mdi-drop"></i></a>
+                        <ul class="submenu">
+                            <li class="has-submenu">
+                                <a href="#">Reversal</a>
+                                <ul class="submenu">
+                                    <li><a href="/reversal">Post Reversal</a></li>
+                                    <li><a href="icons-ion.html">Reversal List</a></li>
+                                </ul>
+                            </li>
+                            @can('fund_wallet')
+                                <li>
+                                    <a href="/fundwallet">Fund Wallet</a>
+                                </li>
+                            @endcan
+                            <li class="has-submenu">
+                                <a href="#">Charge Customer </a>
+                                <ul class="submenu">
+                                    <li><a href="/chargecustomer">Direct Posting</a></li>
+                                    <li><a href="charts-chartist.html">Posting List</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Transaction </a>
+                                <ul class="submenu">
+                                    <li><a href="/postairtimetransaction">Post Airtime Transaction</a></li>
+                                    <li><a href="charts-chartist.html">Transaction List</a></li>
+                                </ul>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#">Recharge Card </a>
+                                <ul class="submenu">
+                                    <li><a href="/rechargecard">Post Recharge Card</a></li>
+                                    <li><a href="charts-chartist.html">Recharge Card List</a></li>
+                                </ul>
+                            </li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu">
+                        <a href="#"><i class="dripicons-help"></i> Email View <i
+                                class="mdi mdi-chevron-down mdi-drop"></i></a>
+                        <ul class="submenu">
+
+                            <li>
+                                <a href="/fundwalletmail">Fund Wallet</a>
+                            </li>
+                            <li>
+                                <a href="/newaccountmail">Account Creation</a>
+                            </li>
+                            <li>
+                                <a href="/newmessagemail">Message</a>
+                            </li>
+                            <li>
+                                <a href="/newtransactionmail">Transaction</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li class="has-submenu">
+                        <a href="#"><i class="dripicons-basket"></i> Subscription <i
+                                class="mdi mdi-chevron-down mdi-drop"></i></a>
                         <ul class="submenu">
                             <li><a href="/billing">Make subscription</a></li>
                             <li><a href="/subscriptions">Subscriptions</a></li>
