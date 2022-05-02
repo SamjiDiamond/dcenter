@@ -16,7 +16,7 @@
                                     <div class="editable-text" style="line-height: 2;">
 										<span class="text_container">
 											<multiline>
-												This mail was sent to samji@gmail.com via :<a href="#" style="color: #303f9f;text-decoration: none;"> Ayomide Data Ventures</a>
+												This mail was sent to {{ $user->email }} via :<a href="#" style="color: #303f9f;text-decoration: none;"> Ayomide Data Ventures</a>
 											</multiline>
 										</span>
                                     </div>
@@ -71,7 +71,7 @@
                                             <!-- facebook -->
                                             <td align="center" width="30">
                                                 <a href="#" style="border-style: none !important; display: inline-block;; border: 0 !important;" class="editable-img">
-                                                    <img editable="true" mc:edit="image007" src="{{env('APP_URL')}}/images/icon-fb.png" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
+                                                    <img editable="true" mc:edit="image007" src="{{$message->embed('assets/images/logo_small.png')}}" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
                                                 </a>
                                             </td>
 
@@ -81,7 +81,7 @@
                                             <!-- twitter -->
                                             <td align="center" width="30">
                                                 <a href="#" style="border-style: none !important; display: inline-block; border: 0 !important;" class="editable-img">
-                                                    <img editable="true" mc:edit="image008" src="{{env('APP_URL')}}/images/icon-twitter.png" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
+                                                    <img editable="true" mc:edit="image008" src="{{$message->embed('assets/images/logo_small.png')}}" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
                                                 </a>
                                             </td>
 
@@ -91,7 +91,7 @@
                                             <!-- google+ -->
                                             <td align="center" width="30">
                                                 <a href="#" style="border-style: none !important; display: inline-block;; border: 0 !important;" class="editable-img">
-                                                    <img editable="true" mc:edit="image009" src="{{env('APP_URL')}}/images/icon-gp.png" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
+                                                    <img editable="true" mc:edit="image009" src="{{$message->embed('assets/images/logo_small.png')}}" width="30" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="" />
                                                 </a>
                                             </td>
                                         </tr>

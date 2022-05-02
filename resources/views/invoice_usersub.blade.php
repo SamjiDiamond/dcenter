@@ -83,17 +83,20 @@
                                                 <td class="thick-line"></td>
                                                 <td class="thick-line"></td>
                                                 <td class="thick-line text-center">
-                                                    <strong>Subtotal</strong></td>
-                                                <?php
-                                                //                                                $subtotal=number_format($plan->cost * $u_count, 2);
-                                                $subtotal = number_format($plan->cost, 2);
+                                                    <strong>Subtotal</strong>
+                                                </td>
+                                                @php
 
-                                                //                                                $vat=number_format(($plan->cost * $u_count * 0.075), 2);
-                                                $vat = number_format(($plan->cost * 0.075), 2);
+                                                    $subtotal = number_format((float)$plan->cost, 2);
+
+                                                    $vat = number_format(($plan->cost * 0.075), 2);
+
+                                                    $display_total = $subtotal;
+                                                    $total = number_format((float)$subtotal, 2);
 
 
-                                                $total = number_format($subtotal, 2);
-                                                ?>
+                                                @endphp
+
                                                 <td class="thick-line text-right">₦{{ $subtotal }}</td>
                                             </tr>
                                             <tr>
@@ -119,7 +122,7 @@
                                                 <td class="no-line"></td>
                                                 <td class="no-line text-center">
                                                     <strong>Total</strong></td>
-                                                <td class="no-line text-right"><h4 class="m-0">₦{{ $total }}</h4></td>
+                                                <td class="no-line text-right"><h4 class="m-0">₦{{ $display_total }}</h4></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -128,7 +131,7 @@
                                     <div class="d-print-none mo-mt-2">
                                         <div class="float-right">
 
-                                            <form action="{{ route('pay') }}" method="POST" id="payment-form">
+                                            <form action="{{route('pay')}}" method="POST" id="payment-form">
                                                 @csrf
                                                 <div class="form-group">
                                                     <div class="card-body">
@@ -137,7 +140,8 @@
                                                         <input type="hidden" name="first_name" value="{{$company->name}}">
                                                         <input type="hidden" name="last_name" value="dcenter">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
-                                                        <input type="hidden" name="amount" value="{{ $total * 100 }}">
+                                                        <input type="hidden" name="amount" value="{{ $total * 1000 }}">
+                                                        <input type="hidden" name="plan" value="{{ $plan->id}}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
                                                         <input type="hidden" name="metadata"
@@ -145,23 +149,19 @@
                                    ['display_name' => "Billed to", "variable_name" => "Billedto", "value" => $company->name],
                                    ['display_name' => "Payed By", "variable_name" => "payby", "value" => \Illuminate\Support\Facades\Auth::user()->email],
                                   ]]) }}"> {{-- For other necessary things you want to add to your payload. it is optional though --}}
-                                                        <input type="hidden" name="reference"
-                                                               value="{{ Paystack::genTranxRef() }}">
+
 
                                                     </div>
                                                 </div>
                                                 <div class="card-footer">
                                                     <a href="javascript:window.print()"
                                                        class="btn btn-success waves-effect waves-light"><i
-                                                            class="fa fa-print"></i></a>
+                                                            class="fa fa-print"></i>
+                                                    </a>
                                                     <button type="submit"
                                                             class="btn btn-primary waves-effect waves-light">Pay
                                                     </button>
-                                                    {{--                                            @if($plan->slug=='daily')--}}
-{{--                                                    <button onclick="payWithPaystackSingle()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
-                                                    {{--                                            @else--}}
-                                                    {{--                                                <button onclick="payWithPaystack()" class="btn btn-primary waves-effect waves-light">Pay</button>--}}
-                                                    {{--                                            @endif--}}
+                                                  
                                                 </div>
                                             </form>
 
@@ -184,7 +184,47 @@
 
 @section('after-scripts')
     <script>
-        function payWithPaystack(){
+        function payKorapay() {
+        window.Korapay.initialize({
+            key: "{{env('KORAPAY_KEY')}}", 
+            amount: {{$total*100}}, 
+            currency: "NGN",
+            customer: {
+              name: "{{$company->name}}",
+              email: "{{$company->email}}"
+            },
+
+            onClose: function () {
+              // Handle when modal is closed
+            },
+            onSuccess: function (data) {
+              // Handle when payment is successful
+
+              console.log(data['reference']);
+              $.ajax({
+                        url : '/pay',
+                        type:'GET',
+                        success: function (response){
+                            console.log(response);
+                            if(response)
+                            { $('#payment-form').prepend(
+                                `<h1 style="color: green; margin: 2px;"><strong>Trasaction Mail Sent to your Email</strong></h1>`
+                            );
+                                
+                            }
+                        }
+
+
+                    });
+              alert('Transaction Successful. transaction ref is ' + data.reference);
+            },
+            onFailed: function (data) {
+              // Handle when payment fails
+            },
+            notification_url: "https://superadmin.mcd.5starcompany.com.ng/api/hook/korapay"
+        });
+    }
+       /* function payWithPaystack(){
             var handler = PaystackPop.setup({
                 key: '{{env('PAYSTACK_PUBLIC')}}',
                 email: '{{$company->email}}',
@@ -251,11 +291,13 @@
             // Submit the form
             form.submit();
         }
+
+        */
     </script>
 @stop
 
 @section('before-styles')
-    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
 @stop
 
 

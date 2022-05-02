@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OthersController;
 use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\KorapayWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,13 @@ Route::get('/company/image/{filename}', function ($filename)
     $response->header("Content-Type", $type);
     return $response;
 });
+
+
+Route::group(['prefix' => 'hook'], function () {
+    Route::post('korapay',[KorapayWebhookController::class, 'webhookUrl']);
+
+});
+
 
 
 

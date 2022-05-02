@@ -5,21 +5,21 @@
         <tr>
             <td>
                 <!-- container -->
-                <table class="table1 editable-bg-color bg_color_303f9f" bgcolor="#303f9f" width="600" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                <table class="table editable-bg-color bg_color_303f9f" bgcolor="#303f9f" width="600" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <!-- padding-top -->
                     <tr><td height="25"></td></tr>
                     <tr>
                         <td>
                             <!-- Inner container -->
-                            <table class="table1" width="520" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                            <table class="table" width="520" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                                 <tr>
                                     <td>
                                         <!-- logo -->
-                                        <table width="50%" align="left" border="0" cellspacing="0" cellpadding="0">
+                                        <table class="table" width="50%" align="left" border="0" cellspacing="0" cellpadding="0">
                                             <tr>
                                                 <td align="left">
                                                     <a href="#" class="editable-img">
-                                                        <img editable="true" mc:edit="image001" src="images/logo-text.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
+                                                        <img editable="true" mc:edit="image001" src="{{$message->embed('assets/images/logo_small.png')}}" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -27,13 +27,13 @@
                                         </table><!-- END logo -->
 
                                         <!-- options -->
-                                        <table width="50%" align="right" border="0" cellspacing="0" cellpadding="0">
+                                        <table  class="table" width="50%" align="right" border="0" cellspacing="0" cellpadding="0">
                                             <!-- margin-top -->
                                             <tr><td height="3"></td></tr>
                                             <tr>
                                                 <td align="right">
                                                     <a href="#" style="border-style: none !important; display: block; border: 0 !important;" class="editable-img">
-                                                        <img editable="true" mc:edit="image002" src="images/options.png" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
+                                                        <img editable="true" mc:edit="image002" src="{{$message->embed('assets/images/logo_small.png')}}" width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -74,7 +74,7 @@
                                         <div class="editable-text">
 										<span class="text_container">
 											<multiline>
-												8 Dec, 2015
+                                            {{ $checkout->created_at }}
 											</multiline>
 										</span>
                                         </div>
@@ -93,19 +93,19 @@
         <tr>
             <td>
                 <!-- container -->
-                <table class="table1 editable-bg-color bg_color_ffffff" bgcolor="#ffffff" width="600" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                <table class="table editable-bg-color bg_color_ffffff" bgcolor="#ffffff" width="600" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <!-- padding-top -->
                     <tr><td height="60"></td></tr>
 
                     <tr>
                         <td>
                             <!-- inner container -->
-                            <table class="table1" width="520" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                            <table class="table" width="520" align="center" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                                 <tr>
                                     <td mc:edit="text003" align="left" class="center_content text_color_282828" style="color: #282828; font-size: 14px; font-weight: 900; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                         <div class="editable-text">
 										<span class="text_container">
-											<multiline>Hi Omar</multiline>
+											<multiline>Hi {{ $checkout->first_name }} {{ $checkout->last_name }}</multiline>
 										</span>
                                         </div>
                                     </td>
@@ -132,7 +132,7 @@
                                 <!-- table -->
                                 <tr>
                                     <td>
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-radius: 10px">
+                                        <table  class="table" width="100%" border="0" cellspacing="0" cellpadding="0" style="border-radius: 10px">
                                             <tr>
                                                 <td style="border-top: 1px solid #e6e6e6;border-right: 1px solid #e6e6e6;border-left: 1px solid #e6e6e6;border-bottom: 1px solid #e6e6e6; padding: 30px;border-top-left-radius: 5px;border-top-right-radius: 5px;">
                                                     <!-- column-1  -->
@@ -184,7 +184,7 @@
                                                             <td mc:edit="text003" align="left" class="text_color_282828" style="color: #282828; font-size: 12px; font-weight: 700; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                 <div class="editable-text">
 																<span class="text_container">
-																	<multiline>Item by CastelLab</multiline>
+																	<multiline>Item by Dynamic Center</multiline>
 																</span>
                                                                 </div>
                                                             </td>
@@ -223,7 +223,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_b0b0b0" style="color: #b0b0b0; font-size: 13px;line-height: 1.5; font-weight: 400; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>NotifcationApp - Email Notification</multiline>
+																				<multiline>Amount : {{ $checkout->amount }}</multiline>
 																			</span>
                                                                             </div>
                                                                         </td>
@@ -236,7 +236,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_282828" style="color: #282828; font-size: 12px;line-height: 1.5; font-weight: 300; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>Regular License</multiline>
+																				<multiline>Quantity : {{ $checkout->quantity }}</multiline>
 																			</span>
                                                                             </div>
                                                                         </td>
@@ -246,7 +246,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_282828" style="color: #282828;font-size: 11px;line-height: 1.5; font-weight: 100; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>6 months support <span style="color: #b0b0b0"> (expires on 03/06/2016) Purchase code: 184967815W6SOxOr</span></multiline>
+																				<multiline>24 hrs months support <span style="color: #b0b0b0"> Order ID: {{ $checkout->order_id }}</span></multiline>
 																			</span>
                                                                             </div>
                                                                         </td>
@@ -270,7 +270,7 @@
                                                                                         <div class="editable-text">
 																						<span class="text_container">
 																							<multiline>
-																								<a href="#" style="text-decoration: none; color: #ffffff;">Install $50</a>
+																								<!--<a href="#" style="text-decoration: none; color: #ffffff;">Install $50</a>-->
 																							</multiline>
 																						</span>
                                                                                         </div>
@@ -288,7 +288,7 @@
                                                                                         <div class="editable-text">
 																						<span class="text_container">
 																							<multiline>
-																								<a href="#" style="text-decoration: none; color: #ffffff;">Get Help</a>
+																								<!--<a href="#" style="text-decoration: none; color: #ffffff;">Get Help</a>-->
 																							</multiline>
 																						</span>
                                                                                         </div>

@@ -114,13 +114,14 @@
                     <li class="list-inline-item dropdown notification-list nav-user">
                         <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="false" aria-expanded="false">
-                            <img src="assets/images/users/avatar-6.jpg" alt="user" class="rounded-circle">
+                            <img src= "{{URL::to('/')}}/storage/images/{{auth()->user()->image }}"alt="profile pics" class="rounded-circle">
                             <span class="d-none d-md-inline-block ml-1">{{Auth::user()->first_name}} <i class="mdi mdi-chevron-down"></i> </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown">
                             <a class="dropdown-item" href="/user/{{Auth::user()->id}}"><i class="dripicons-user text-muted"></i> Profile</a>
                             <a class="dropdown-item" href="#"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
-                            <a class="dropdown-item" href="#"><span class="badge badge-success float-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
+                            <a class="dropdown-item" href="{{ route('admin.payout.create') }}"><i class="dripicons-wallet text-muted"></i> Payout </a>
+                            <a class="dropdown-item" href="{{ route('admin.settings.index') }}"><span class="badge badge-success float-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
                             <a class="dropdown-item" href="/password/confirm"><i class="dripicons-lock text-muted"></i> Lock screen</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();  document.getElementById('logout-form').submit();"><i class="dripicons-exit text-muted"></i> Logout

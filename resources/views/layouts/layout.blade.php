@@ -81,8 +81,18 @@
             </div>
         </div>
         <!-- end page title end breadcrumb -->
+            <div class="p-1">
+                            @if(session()->has('message'))
 
+                                <div class="alert alert-success">
+
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <div style="text-align: center">{{session()->get('message') }}</div>
+                                </div>
+                            @endif
+            </div>
             @yield('content')
+         
 
     </div> <!-- end container-fluid -->
 </div>

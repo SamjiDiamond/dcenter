@@ -18,7 +18,7 @@
                                         <tr>
                                             <td align="left">
                                                 <a href="#" class="editable-img">
-                                                    <img editable="true" mc:edit="image013" src="images/logo-text.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
+                                                    <img editable="true" mc:edit="image013" src="{{$message->embed('assets/images/logo_small.png')}}" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -31,7 +31,7 @@
                                         <tr>
                                             <td align="right">
                                                 <a href="#" style="border-style: none !important; display: block; border: 0 !important;" class="editable-img">
-                                                    <img editable="true" mc:edit="image014" src="images/options.png" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
+                                                    <img editable="true" mc:edit="image014" src="{{$message->embed('assets/images/logo_small.png')}}"  width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -53,7 +53,7 @@
                                     <div class="editable-text">
 										<span class="text_container">
 											<multiline>
-												Acconut Created
+												Account Created
 											</multiline>
 										</span>
                                     </div>
@@ -63,17 +63,17 @@
                             <!-- horizontal gap -->
                             <tr><td height="30"></td></tr>
 
-                            <tr>
+                           <!-- <tr>
                                 <td mc:edit="text023" align="center" class="text_color_ffffff" style="color: #ffffff; font-size: 12px; font-weight: 300; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                     <div class="editable-text">
 										<span class="text_container">
 											<multiline>
-												8 Dec, 2015
+												
 											</multiline>
 										</span>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr>-->
                         </table><!-- END inner container -->
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
                                     <div class="editable-text" style="line-height: 2;">
 										<span class="text_container">
 											<multiline>
-												Your account has been created successfully and is ready to use Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+												Your account has been created successfully and is ready to use.
 											</multiline>
 										</span>
                                     </div>
@@ -133,7 +133,7 @@
                                     <div class="editable-text">
 										<span class="text_container">
 											<multiline>
-												What you must to do !
+                                                {{ $user->created_at }}
 											</multiline>
 										</span>
                                     </div>
@@ -199,7 +199,7 @@
                                     <div class="editable-text" style="line-height: 2;">
 										<span class="text_container">
 											<multiline>
-												Envato team
+												Dynamic Center
 											</multiline>
 										</span>
                                     </div>

@@ -7,6 +7,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -72,7 +75,7 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
     Route::get('/user-disable/{id}', [UserController::class, 'userdisable'])->name('user.disable');
     Route::get('/user-enable/{id}', [UserController::class, 'userenable'])->name('user.enable');
     Route::post('/user-update/{id}', [UserController::class, 'userupdate'])->name('user.update');
-
+    Route::post('/upload-image', [UserController::class, 'uploadImage'])->name('user.uploadImage');
 
     Route::get('/admin', [UserController::class, 'index'])->name('admin.list');
     Route::get('/admin-disable/{id}', [UserController::class, 'disable'])->name('admin.disable');
@@ -99,7 +102,8 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
     Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
 
     Route::post('/pay', [BillingController::class, 'redirectToGateway'])->name('pay');
-    Route::get('/payment/callback', [BillingController::class,'handleGatewayCallback']);
+    Route::get('/verify/{reference_id}', [BillingController::class, 'verifyPayment'])->name('verify.payment');
+    Route::get('/payment/callback/{id}', [BillingController::class,'handleGatewayCallback']);
 
     Route::get('/billing', [BillingController::class, 'index'])->name('plans');
     Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
@@ -222,3 +226,11 @@ Route::get('/newtransactionmail', function () {
     return (new App\Mail\NewtransactionMail())->render();
 });
 
+
+Route::get('/payout', [PayoutController::class, 'create'])->name('admin.payout.create');
+Route::post('/store', [PayoutController::class, 'store'])->name('admin.payment.store');
+
+
+Route::get('checkout', [CheckoutController::class, 'create'])->name('admin.checkout.create');
+
+Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');

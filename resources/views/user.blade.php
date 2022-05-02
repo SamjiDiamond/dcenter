@@ -4,10 +4,15 @@
 @section('content')
     <div class="row">
         <div class="col-md-6">
-
+        <p>Upload Profile Picture</p>
+            <form action="{{route('user.uploadImage')}}" method="post" enctype="multipart/form-data" class="">
+                @csrf
+                <input  type="file" id="formFileDisabled" name="image"/>
+                <input type="submit" value="upload" class="btn btn-primary" />
+            </form>
             <!-- Simple card -->
             <div class="card m-b-30">
-                <img class="card-img-top img-fluid" src="../assets/images/small/img-1.jpg" alt="Card image cap">
+                <img class="card-img-top img-fluid" src= "{{URL::to('/')}}/storage/images/{{auth()->user()->image }}" alt="profile image">
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">{{$user->last_name}} {{$user->first_name}}</h4>
                     <p class="card-text">Wallet Balance: {{$user->wallet}}</p>

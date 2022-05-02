@@ -367,4 +367,38 @@ class UserController extends Controller
             ->with('success', $input['last_name'].' profile updated successfully');
     }
 
+    public function uploadImage(Request $request)
+    {
+        $this->validate($request, [
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
+        ]);
+        
+       if( $request->hasFile('image') && $request->file('image')->isValid()) 
+       {
+        $image = $request->file('image');
+
+        $filename = $request->file('image')->getClientOriginalName();
+        $path = $request->file('image')->store('public/images');
+        
+        $avatar = substr($path, 14);
+
+        $user = auth()->user();
+        $prevImage = $user->image;
+        if($prevImage){
+            $path = $_SERVER['DOCUMENT_ROOT']. '\storage\images\\' . $prevImage; 
+            unlink($path);
+        }
+        $user->image = $avatar;
+
+        if($user->save()){
+         
+            return redirect()->back()->with('success', 'Image uploaded successfully');
+        }
+       
+        }
+
+    }
+
+
+
 }

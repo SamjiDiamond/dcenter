@@ -83,6 +83,17 @@
 
             @yield('content')
 
+            <div class="p-3">
+                            @if(session()->has('message'))
+
+                                <div class="alert alert-success">
+
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <div style="text-align: center">{{session()->get('message') }}</div>
+                                </div>
+                            @endif
+            </div>
+
     </div> <!-- end container-fluid -->
 </div>
 <!-- end wrapper -->

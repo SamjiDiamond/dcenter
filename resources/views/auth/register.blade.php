@@ -152,6 +152,7 @@
                                         @enderror
                                     </div>
 
+
                                     <div class="form-group">
                                         <div>
                                             <select class="form-control" name="bank_code">
@@ -161,6 +162,17 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <input class="form-control @error('bvn') is-invalid @enderror" name="bvn" value="{{ old('bvn') }}" required autocomplete="bvn" type="text" placeholder="Enter bvn" min="11" max="11" maxlength="11">
+                                        </div>
+                                        @error('bvn')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group row">

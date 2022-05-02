@@ -8,12 +8,15 @@ use App\Models\SMSLog;
 use App\Models\SmsPayment;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Models\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Paystack;
 use Stripe\Stripe;
+use App\Mail\transactionMail;
+use Illuminate\Support\Facades\Mail;
 
 class BillingController extends Controller
 {
@@ -42,6 +45,7 @@ class BillingController extends Controller
 
     public function invoice(Plan $plan, Request $request)
     {
+        $reference = substr(md5(time()), 0, 10);
         $sub=DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->exists();
 
         if($sub) {
@@ -58,21 +62,131 @@ class BillingController extends Controller
 
         session(['subplan' => $plan->paystack_plan]);
 
-        return view('invoice_usersub', compact('plan', 'company', 'others'));
+        
+        return view('invoice_usersub', compact('plan', 'company', 'others', 'reference'));
     }
 
     /**
      * Redirect the User to Paystack Payment Page
      * @return Url
      */
-    public function redirectToGateway()
+    public function redirectToGateway(Request $request)
     {
+        $reference = substr(md5(time()), 0, 10);
+
+        $request->all();
+    
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.korapay.com/merchant/api/v1/charges/initialize',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "reference": "' . $reference . '",
+            "amount": "'. $request->amount . '",
+            "currency": "NGN",
+            "redirect_url": "http://localhost:8000/verify/'.$reference .'",
+                "customer": {
+                    "name": "'. $request->first_name .' ' .$request->last_name . '",
+                    "email": "' .$request->email .'"
+                }
+            }',
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . env('KORAPAY_SECRET'),
+              ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $rep=json_decode($response, true);
+        if($rep['status']== true) {
+            $payout_link = $rep['data']['checkout_url'];
+                //save details to virtual_account table
+                $checkout = new Checkout();
+                $checkout->first_name = $request->first_name;
+                $checkout->last_name = $request->last_name;
+                $checkout->email = $request->email;
+                $checkout->reference_id = $rep['data']['reference'];
+                $checkout->plan_id = $request->plan;
+                $checkout->order_id = $request->orderID;
+                $checkout->amount = $request->amount;
+                $checkout->quantity = $request->quantity;
+                $checkout->currency = $request->currency;
+                $checkout->status =  $rep['status'];
+                $checkout->save();  
+
+                $user = auth()->user();
+
+                Mail::to($user)->send(new transactionMail($user, $checkout));
+
+                return redirect($payout_link);
+
+        }else{
+            return redirect()->back()->with(['erorr' => 'error occued! Payment not successful! ']);
+        }
+
+       
+        
 //        try {
-        return Paystack::getAuthorizationUrl()->redirectNow();
+        //return dd($)
+        //Paystack::getAuthorizationUrl()->redirectNow();
 //        } catch (\Exception $e) {
 //            return Redirect::back()->withMessage(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
 //        }
     }
+
+     /**
+     * Verify Payment
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function VerifyPayment($ref){
+        if(Auth::check()){
+            $curl = curl_init();
+       
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://api.korapay.com/merchant/api/v1/charges/$ref",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'GET',
+              CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . env('KORAPAY_SECRET'),
+                 ),
+            ));
+            
+            $response = curl_exec($curl);
+     
+             curl_close($curl);
+             $rep=json_decode($response, true);
+     
+             if($rep['status']== true) {
+                 $checkout = Checkout::where('reference_id', $rep['data']['reference']);
+                 $checkout->update([
+                     'status' => $rep['data']['status']
+                 ]);
+     
+                 return redirect('/dashboard')->with('message', 'Subscription Successful!');
+             }
+            
+        }
+       // dd($reference);
+     
+
+
+    }
+
+
 
     /**
      * Obtain Paystack payment information
@@ -80,7 +194,7 @@ class BillingController extends Controller
      */
     public function handleGatewayCallback()
     {
-        $paymentDetails = Paystack::getPaymentData();
+        //$paymentDetails = Paystack::getPaymentData();
 
 //        dd($paymentDetails);
         // Now you have the payment details,
