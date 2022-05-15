@@ -203,7 +203,7 @@
                                                         <div class="custom-control custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input" id="customCheck3" data-parsley-multiple="groups"
                                                                    data-parsley-mincheck="2">
-                                                            <label class="custom-control-label" for="customCheck3">Edit user</label>
+                                                            <label class="custom-control-label" for="customCheck3">Edit Customer</label>
                                                         </div>--}}
 
                                                     </div>

@@ -24,7 +24,7 @@
             <div class="card bg-info mini-stat">
                 <div class="p-3 mini-stat-desc">
                     <div class="clearfix">
-                        <h6 class="text-uppercase mt-0 float-left text-white-50">Users</h6>
+                        <h6 class="text-uppercase mt-0 float-left text-white-50">Customers</h6>
                         <h4 class="mb-3 mt-0 float-right"><span class="badge badge-dark font-12">Today</span> {{$today_user}}</h4>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mt-0 header-title mb-4">Latest Users</h4>
+                    <h4 class="mt-0 header-title mb-4">Latest Customers</h4>
                     <div class="latest-massage">
                         @foreach($users as $user)
                             <a href="#" class="latest-message-list">

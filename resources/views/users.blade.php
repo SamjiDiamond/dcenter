@@ -25,7 +25,7 @@
                         </div>
                     @endif
 
-                    <h4 class="mt-0 header-title">User List</h4>
+                    <h4 class="mt-0 header-title">Customer List</h4>
 
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>

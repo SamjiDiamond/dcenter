@@ -180,7 +180,7 @@
                     </li>
 
                     <li class="has-submenu">
-                        <a href="/users"><i class="dripicons-user"></i> User</a>
+                        <a href="/users"><i class="dripicons-user"></i> Customer</a>
                     </li>
 
                     <li class="has-submenu">
@@ -188,7 +188,7 @@
                         <ul class="submenu">
 
                             <li>
-                                <a href="{{route('user.transactions')}}">User Transactions</a>
+                                <a href="{{route('user.transactions')}}">Customer Transactions</a>
                             </li>
                             <li>
                                 <a href="{{route('company.wallet')}}">Company Wallet History</a>

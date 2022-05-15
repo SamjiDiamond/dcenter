@@ -57,7 +57,7 @@ Route::post('/confirm-password', function (Request $request) {
 
 
 
-Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function() {
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function() {
 
     Route::get('/dashboard', [HomeController::class, 'index'] )->name('dashboard');
     Route::get('/home', [HomeController::class, 'index'] )->name('home');
@@ -100,18 +100,7 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
     Route::get('/services-transfer-edit/{id}', [ServicesController::class, 'transferedit'])->name('Edit transfer services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-transfer-update/{id}', [ServicesController::class, 'transferupdate'])->name('Update transfer services');
     Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
-
-    Route::post('/pay', [BillingController::class, 'redirectToGateway'])->name('pay');
-    Route::get('/verify/{reference_id}', [BillingController::class, 'verifyPayment'])->name('verify.payment');
-    Route::get('/payment/callback/{id}', [BillingController::class,'handleGatewayCallback']);
-
-    Route::get('/billing', [BillingController::class, 'index'])->name('plans');
-    Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
-    Route::post('/subscription', [BillingController::class, 'create'])->name('subscription.create');
-    Route::post('/subscription-cancel', [BillingController::class, 'cancelsub'])->name('subscription.cancel');
-    Route::post('/subscription-enable', [BillingController::class, 'enablesub'])->name('subscription.enable');
-    Route::get('/subscriptions', [BillingController::class, 'showsub'])->name('subscriptions.list');
-    Route::post('/invoices', [BillingController::class, 'invoices'])->name('subscriptions.invoices');
+  
 
     Route::get('/smspayment', function () {return view('sms_payment');})->name('sms.pay');
     Route::post('/smspayment', [BillingController::class, 'sms_payment'])->name('sms.payment');
@@ -167,6 +156,21 @@ Route::group(['middleware' => 'auth:sanctum', 'verified', 'subware'], function()
 
     Route::post('order-post', ['as'=>'order-post','uses'=>'UserController@orderPost']);
 });
+
+Route::group(['middleware' => ['auth:sanctum', 'verified']], function() { 
+    Route::get('/billing', [BillingController::class, 'index'])->name('plans');
+    Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
+    Route::post('/subscription', [BillingController::class, 'create'])->name('subscription.create');
+    Route::post('/subscription-cancel', [BillingController::class, 'cancelsub'])->name('subscription.cancel');
+    Route::post('/subscription-enable', [BillingController::class, 'enablesub'])->name('subscription.enable');
+    Route::get('/subscriptions', [BillingController::class, 'showsub'])->name('subscriptions.list');
+    Route::post('/invoices', [BillingController::class, 'invoices'])->name('subscriptions.invoices');
+    Route::post('/pay', [BillingController::class, 'redirectToGateway'])->name('pay');
+    Route::get('/verify/{reference_id}', [BillingController::class, 'verifyPayment'])->name('verify.payment');
+    Route::get('/payment/callback/{id}', [BillingController::class,'handleGatewayCallback']);
+});
+
+
 
 Route::get('/billings', function () {
     return view('users.billing');

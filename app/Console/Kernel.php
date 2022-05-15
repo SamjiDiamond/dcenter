@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\SubscriptionCheck;
+use App\Console\Commands\trialSubscriptionCheck;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,7 +15,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        SubscriptionCheck::class,
+        trialSubscriptionCheck::class
+
     ];
 
     /**
@@ -25,6 +29,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('subscription:check')->hourly();
+        $schedule->command('trialSubscription:check')->hourly();
+
     }
 
     /**

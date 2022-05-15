@@ -19,6 +19,7 @@
                             <th>Plan</th>
                             <th>Trial</th>
                             <th>Status</th>
+                            <th>Days Left</th>
                             <th>Start date</th>
                             <th>Action</th>
                         </tr>
@@ -30,7 +31,12 @@
                             <tr>
                                 <td>{{$i++}}</td>
                                 <td>{{$data->company->name}}</td>
+                                @if($data->plan)
                                 <td>{{$data->plan->name}}</td>
+                                @else
+                                <td>Trial (Free)</td>
+                                @endif
+
                                 <td>
                                     @if($data->trial_ends_at!=null)
                                         @if(\Carbon\Carbon::now()->diffInMinutes(\Carbon\Carbon::parse($data->trial_ends_at), false) < 0)
@@ -41,15 +47,23 @@
                                     @endif
                                 </td>
 
-                                <td>
-                                    @if($data->ends_at!=null)
-                                        @if(\Carbon\Carbon::now()->diffInMinutes(\Carbon\Carbon::parse($data->ends_at), false) < 0)
-                                            Expired
-                                        @else
-                                            Active
-                                        @endif
-                                    @endif
+                                <td class="text-warning">
+                                @if($data->status)
+                                <td>{{$data->status}}</td>
+                                @else
+                                    {{$data->trial_status}}
+                                 @endif
+                                    
                                 </td>
+
+                                @if($data->remaining_days)
+                                <td>{{$data->remaining_days}}</td>
+                                @else
+
+                                <td>{{$data->remaining_trial_days}}</td>
+
+                                @endif
+                                
 
                                 <td>{{$data->created_at}}</td>
                                 <td>

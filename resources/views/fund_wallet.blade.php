@@ -26,7 +26,7 @@
                     @endif
 
                     <h4 class="mt-0 header-title">Fund Wallet</h4>
-                    <p class="text-muted m-b-30">Fund User wallet.</p>
+                    <p class="text-muted m-b-30">Fund Customer wallet.</p>
 
                     <form method="POST" action="/fundwallet">
                             @csrf

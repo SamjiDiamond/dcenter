@@ -8,7 +8,7 @@
                 <div class="card-body">
 
                     <h4 class="mt-0 header-title">Add Permission</h4>
-                    <p class="text-muted m-b-30">Add a new Permission to control user access.</p>
+                    <p class="text-muted m-b-30">Add a new Permission to control Customer access.</p>
 
                     <form method="POST" action="">
                             @csrf

@@ -13,7 +13,10 @@ use Bouncer;
 use Illuminate\Support\Facades\Auth;
 use App\Models\VirtualAccount;
 use App\Mail\newAccountMail;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Mail;
+
+use Carbon\Carbon;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -138,6 +141,17 @@ class CreateNewUser implements CreatesNewUsers
                     $virtual_account->bank_code = "035";
                     
                     $virtual_account->save();    
+
+
+                    $trialSub = new Subscription();
+                    $trialSub->company_id = $company->id;
+                    $trialSub->trial_start_date = Carbon::now();
+                    $trialSub->trial_end_date =   Carbon::now()->addDays(3);
+                    $trialSub->trial_status = "activated";
+
+                    $trialSub->save();
+
+
 
             }else{
                 return redirect()->back()->with(['erorr' => 'error with account details ']);

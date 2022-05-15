@@ -17,6 +17,7 @@ use Paystack;
 use Stripe\Stripe;
 use App\Mail\transactionMail;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class BillingController extends Controller
 {
@@ -28,7 +29,7 @@ class BillingController extends Controller
 
         if($sub) {
             $sub = DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->first();
-            $sub = $sub->paystack_plan;
+            $sub = $sub->plan_id;
         }else{
             $sub='ntn';
         }
@@ -38,7 +39,7 @@ class BillingController extends Controller
     public function show(Plan $plan, Request $request)
     {
         if ($request->user()->subscribedToPlan($plan->paystack_plan, 'main')) {
-            return redirect()->route('home')->with('success', 'You have already subscribed the plan');
+            return redirect()->route('home')->with('message', 'You have already subscribed the plan');
         }
         return view('show', compact('plan'));
     }
@@ -46,16 +47,23 @@ class BillingController extends Controller
     public function invoice(Plan $plan, Request $request)
     {
         $reference = substr(md5(time()), 0, 10);
-        $sub=DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->exists();
+        $sub=DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id);
 
-        if($sub) {
+        if($sub->exists() && $sub->pluck('plan_status') == "Active") {
+            
+            return redirect()->route('plans')->with('message', 'You have already subscribed to a plan.');
+        }
+
+      /*  if($sub) {
             $sub = DB::table('subscriptions')->where('company_id', '=', auth()->user()->company_id)->first();
 
 //        if($company->subscribedToPlan($plan, 'user_sub')) {
-            if ($plan->paystack_plan == $sub->paystack_plan) {
-                return redirect()->route('plans')->with('success', 'You have already subscribed the plan');
+            if ($plan->id == $sub->plan_id) {
+                return redirect()->route('plans')->with('message', 'You have already subscribed the plan');
             }
         }
+
+        */
 
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
         $others = User::where([['company_id', '=', Auth::user()->company_id],])->get();
@@ -72,6 +80,7 @@ class BillingController extends Controller
      */
     public function redirectToGateway(Request $request)
     {
+    
         $reference = substr(md5(time()), 0, 10);
 
         $request->all();
@@ -103,17 +112,18 @@ class BillingController extends Controller
               ),
         ));
 
+
+
         $response = curl_exec($curl);
 
         curl_close($curl);
         $rep=json_decode($response, true);
+        dd($rep);
         if($rep['status']== true) {
             $payout_link = $rep['data']['checkout_url'];
                 //save details to virtual_account table
                 $checkout = new Checkout();
-                $checkout->first_name = $request->first_name;
-                $checkout->last_name = $request->last_name;
-                $checkout->email = $request->email;
+                $checkout->company_id = auth()->user()->company_id;
                 $checkout->reference_id = $rep['data']['reference'];
                 $checkout->plan_id = $request->plan;
                 $checkout->order_id = $request->orderID;
@@ -121,13 +131,26 @@ class BillingController extends Controller
                 $checkout->quantity = $request->quantity;
                 $checkout->currency = $request->currency;
                 $checkout->status =  $rep['status'];
-                $checkout->save();  
+                
+                    if($checkout->save()){
 
-                $user = auth()->user();
+                        $subscription = new Subscription();
+                        $subscription->company_id = auth()->user()->company_id;
+                        $subscription->checkout_id = $checkout->id;
+                        $subscription->plan_id =  $checkout->plan_id;
+                        
+                        $subscription->save();
 
-                Mail::to($user)->send(new transactionMail($user, $checkout));
+                        $user = auth()->user();
 
-                return redirect($payout_link);
+                        Mail::to($user)->send(new transactionMail($user, $checkout));
+        
+                        return redirect($payout_link);
+
+                    }else{
+                        return redirect()->back()->with(['erorr' => 'Subscription was unsuccessful! ']);
+                    }
+                     
 
         }else{
             return redirect()->back()->with(['erorr' => 'error occued! Payment not successful! ']);
@@ -175,8 +198,43 @@ class BillingController extends Controller
                  $checkout->update([
                      'status' => $rep['data']['status']
                  ]);
-     
-                 return redirect('/dashboard')->with('message', 'Subscription Successful!');
+
+
+                 if($checkout->pluck('status')->first() == "success" ){
+                     $subscription = Subscription::where('checkout_id', $checkout->pluck('id')->first());
+                     $plan_id = $subscription->pluck('plan_id')->first();
+
+                   
+
+                    $plan_end_date = '';
+
+                    if($plan_id == 1  ){
+                        $plan_end_date =  Carbon::now()->addDay();
+                    }
+                    else{
+                        $plan_end_date =  Carbon::now()->addDays(30);
+                        
+                    }
+
+                     $subscription->update([
+                         'plan_start_date' => Carbon::now(),
+                         'plan_end_date' => $plan_end_date ,
+                         'plan_status' => 'active'
+                     ]);
+                 
+
+                 if($subscription->pluck('status')->first() == "Active"){
+                    return redirect('/dashboard')->with('message', 'Subscription Activated Successfully!');
+                 }else{
+
+                    return redirect('/dashboard')->with('message', 'Subscription Activation in Progress!');
+
+                 }
+
+                }
+                return redirect('/dashboard')->with('message', 'Subscription Activation Unsuccessful');
+
+                 
              }
             
         }
@@ -382,7 +440,7 @@ class BillingController extends Controller
         if(auth()->user()->company_id==1) {
             $data = Subscription::get();
         }else{
-            $data = Subscription::where('company.id', '=', auth()->user()->company_id)
+            $data = Subscription::where('company_id', '=', auth()->user()->company_id)
                 ->get();
         }
 
