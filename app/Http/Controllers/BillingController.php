@@ -117,6 +117,7 @@ class BillingController extends Controller
 
         curl_close($curl);
         $rep=json_decode($response, true);
+
       
         
         if($rep && $rep['status']== true) {
