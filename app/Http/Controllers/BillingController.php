@@ -113,13 +113,13 @@ class BillingController extends Controller
         ));
 
 
-
         $response = curl_exec($curl);
 
         curl_close($curl);
         $rep=json_decode($response, true);
-        dd($rep);
-        if($rep['status']== true) {
+      
+        
+        if($rep && $rep['status']== true) {
             $payout_link = $rep['data']['checkout_url'];
                 //save details to virtual_account table
                 $checkout = new Checkout();
@@ -148,12 +148,12 @@ class BillingController extends Controller
                         return redirect($payout_link);
 
                     }else{
-                        return redirect()->back()->with(['erorr' => 'Subscription was unsuccessful! ']);
+                        return redirect()->back()->with(['message' => 'Subscription was unsuccessful! ']);
                     }
                      
 
         }else{
-            return redirect()->back()->with(['erorr' => 'error occued! Payment not successful! ']);
+            return redirect()->back()->with('message',  'Payment not Successful ! An Error occurred!  ');
         }
 
        
@@ -223,7 +223,7 @@ class BillingController extends Controller
                      ]);
                  
 
-                 if($subscription->pluck('status')->first() == "Active"){
+                 if($subscription->pluck('plan_status')->first() == "Active"){
                     return redirect('/dashboard')->with('message', 'Subscription Activated Successfully!');
                  }else{
 

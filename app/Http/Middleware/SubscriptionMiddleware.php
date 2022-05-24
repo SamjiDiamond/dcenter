@@ -20,9 +20,9 @@ class SubscriptionMiddleware
     public function handle(Request $request, Closure $next)
     {
 
-        $sub = Subscription::where('company_id', auth()->user()->company_id)->first();
+        $sub = Subscription::where('company_id', auth()->user()->company_id)->latest()->first();
 
-        if($sub->plan_status == "pending" && $sub->trial_status="deactivated"){
+        if($sub->plan_status == "pending" && $sub->trial_status == "deactivated"){
             return redirect('billing')->with('message', 'You have no active subscription. Kindly subscribe to a new plan.');
         }
 

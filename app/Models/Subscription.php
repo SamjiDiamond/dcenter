@@ -48,10 +48,13 @@ class Subscription extends Model
     public function getRemainingTrialDaysAttribute()
     {
 
-        if ($this->trial_end_date) {
-            $remaining_trial_days = Carbon::now()->diffInDays(Carbon::parse($this->trial_end_date));
+        if ($this->trial_end_date >= Carbon::now()) {
+
+            $remaining_trial_days = Carbon::now()->diffInDays(Carbon::parse($this->trial_end_date));  
+            
         } else {
             $remaining_trial_days = 0;
+           
         }
         return $remaining_trial_days;
     }

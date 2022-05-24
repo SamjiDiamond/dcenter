@@ -39,7 +39,8 @@ class SubscriptionCheck extends Command
      */
     public function handle()
     {
-        $subStatus = Subscription::where('plan_status', 'active')->first();
+        $subStatus = Subscription::where('plan_status', 'active')->latest()->first();
+
 
         if($subStatus){
             

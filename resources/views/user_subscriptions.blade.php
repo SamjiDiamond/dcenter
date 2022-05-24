@@ -17,10 +17,10 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Plan</th>
-                            <th>Trial</th>
                             <th>Status</th>
                             <th>Days Left</th>
                             <th>Start date</th>
+                            <th>End date</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -37,24 +37,14 @@
                                 <td>Trial (Free)</td>
                                 @endif
 
-                                <td>
-                                    @if($data->trial_ends_at!=null)
-                                        @if(\Carbon\Carbon::now()->diffInMinutes(\Carbon\Carbon::parse($data->trial_ends_at), false) < 0)
-                                            Expired
-                                        @else
-                                            Active
-                                        @endif
-                                    @endif
-                                </td>
-
-                                <td class="text-warning">
-                                @if($data->status)
-                                <td>{{$data->status}}</td>
+                                
+                                @if($data->plan_start_date)
+                                <td class="text-success">{{$data->plan_status}}</td>
                                 @else
-                                    {{$data->trial_status}}
+                                <td class="text-warning"> {{$data->trial_status}}</td>
                                  @endif
                                     
-                                </td>
+                                
 
                                 @if($data->remaining_days)
                                 <td>{{$data->remaining_days}}</td>
@@ -64,8 +54,18 @@
 
                                 @endif
                                 
+                                @if($data->plan_start_date)
+                                <td>{{Carbon\Carbon::parse($data->plan_start_date)->format('l, jS \of F Y h:i:s A')}}</td>
+                                @else
 
-                                <td>{{$data->created_at}}</td>
+                                <td>{{Carbon\Carbon::parse($data->trial_start_date)->format('l, jS \of F Y h:i:s A')}}</td>
+                                @endif
+
+                                @if($data->plan_start_date)
+                                <td>{{Carbon\Carbon::parse($data->plan_end_date)->format('l, jS \of F Y h:i:s A')}}</td>
+                                @else
+                                <td>{{Carbon\Carbon::parse($data->trial_end_date)->format('l, jS \of F Y h:i:s A')}}</td>
+                                @endif
                                 <td>
                                     <a type="button" class="btn btn-success waves-effect waves-light" href=""
                                        style="margin: 5px"><i class="fab fa-wpexplorer"></i> View Invoice</a>

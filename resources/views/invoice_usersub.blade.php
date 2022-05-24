@@ -140,7 +140,7 @@
                                                         <input type="hidden" name="first_name" value="{{$company->name}}">
                                                         <input type="hidden" name="last_name" value="dcenter">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
-                                                        <input type="hidden" name="amount" value="{{ $total * 1000 }}">
+                                                        <input type="hidden" name="amount" value="{{ $total }}">
                                                         <input type="hidden" name="plan" value="{{ $plan->id}}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
@@ -184,7 +184,7 @@
 
 @section('after-scripts')
     <script>
-        function payKorapay() {
+       /* function payKorapay() {
         window.Korapay.initialize({
             key: "{{env('KORAPAY_KEY')}}", 
             amount: {{$total*100}}, 
