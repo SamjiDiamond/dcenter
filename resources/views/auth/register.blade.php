@@ -73,7 +73,7 @@
 
                             <div class="p-2">
                                 <form class="form-horizontal m-t-20" method="POST" action="{{ route('register') }}">
-                                    @csrf
+                                     {{ csrf_field() }}
 
                                     <div class="form-group row">
                                         <div class="col-12">
