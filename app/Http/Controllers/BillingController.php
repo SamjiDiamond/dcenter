@@ -82,8 +82,6 @@ class BillingController extends Controller
     {
     
         $reference = substr(md5(time()), 0, 10);
-
-        dd($request->all());
     
         $curl = curl_init();
 
