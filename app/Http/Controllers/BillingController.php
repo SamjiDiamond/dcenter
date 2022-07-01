@@ -83,7 +83,7 @@ class BillingController extends Controller
     
         $reference = substr(md5(time()), 0, 10);
 
-        $request->all();
+        dd($request->all());
     
         $curl = curl_init();
 
@@ -100,7 +100,7 @@ class BillingController extends Controller
             "reference": "' . $reference . '",
             "amount": "'. $request->amount . '",
             "currency": "NGN",
-            "redirect_url": "http://localhost:8000/verify/'.$reference .'",
+            "redirect_url": "' .env('APP_URL') . '"/verify/'.$reference .'",
                 "customer": {
                     "name": "'. $request->first_name .' ' .$request->last_name . '",
                     "email": "' .$request->email .'"

@@ -87,14 +87,12 @@
                                                 </td>
                                                 @php
 
-                                                    $subtotal = number_format((float)$plan->cost, 2);
+                                                $subtotal = number_format((float)$plan->cost, 2);
 
-                                                    $vat = number_format(($plan->cost * 0.075), 2);
+                                                $vat = number_format(($plan->cost * 0.075), 2);
 
-                                                    $display_total = $subtotal;
-                                                    $total = number_format((float)$subtotal, 2);
-
-
+                                                $display_total = $subtotal;
+                                                $total = number_format((float)$subtotal, 2);
                                                 @endphp
 
                                                 <td class="thick-line text-right">₦{{ $subtotal }}</td>
@@ -140,7 +138,7 @@
                                                         <input type="hidden" name="first_name" value="{{$company->name}}">
                                                         <input type="hidden" name="last_name" value="dcenter">
                                                         <input type="hidden" name="orderID" value="{{$orderid}}">
-                                                        <input type="hidden" name="amount" value="{{ $total * 1000 }}">
+                                                        <input type="hidden" name="amount" value="{{ $total}}">
                                                         <input type="hidden" name="plan" value="{{ $plan->id}}">
                                                         <input type="hidden" name="quantity" value="1">
                                                         <input type="hidden" name="currency" value="NGN">
