@@ -92,7 +92,7 @@ class CreateNewUser implements CreatesNewUsers
        // The customer's most recent authorization would be used to charge subscription
        //        $comp->newSubscription($plan_name, $plan_code)->create();
        // Initialize a new charge for a subscription
-               $comp->newSubscription($plan_name, $plan_code)->charge();
+            //    $comp->newSubscription($plan_name, $plan_code)->charge();
 
 
                //Korapay

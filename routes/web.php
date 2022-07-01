@@ -100,8 +100,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
     Route::get('/services-transfer-edit/{id}', [ServicesController::class, 'transferedit'])->name('Edit transfer services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-transfer-update/{id}', [ServicesController::class, 'transferupdate'])->name('Update transfer services');
     Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
-  
 
+    
     Route::get('/smspayment', function () {return view('sms_payment');})->name('sms.pay');
     Route::post('/smspayment', [BillingController::class, 'sms_payment'])->name('sms.payment');
     Route::get('/smspayments', [BillingController::class, 'sms_payments'])->name('sms.payments');

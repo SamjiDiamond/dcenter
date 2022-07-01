@@ -9,7 +9,7 @@
                 <div class="col-lg-6">
                     <div>
                         <div >
-                            <a href="#" class="logo logo-admin"><img src="assets/images/logo.png" height="28" alt="logo"></a>
+                            <a href="#" class="logo logo-admin"><img src="./assets/images/logo.png" height="28" alt="logo"></a>
                         </div>
                         <h5 class="font-14 text-muted mb-4">WELCOME TO DYNAMIC CENTRE
                             <br/>
@@ -174,6 +174,17 @@
                                     </span>
                                         @enderror
                                     </div>
+
+                                     {{-- <div class="form-group row">
+                                        <div class="col-12">
+                                            <input class="form-control @error('trial_ends_at') is-invalid @enderror" name="trial_ends_at" value="{{ old('trial_ends_at') }}" required autocomplete="trial_ends_at" type="date" placeholder="" min="11" max="11" maxlength="11">
+                                        </div>
+                                        @error('trial_ends_at')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
+                                    </div> --}}
 
                                     <div class="form-group row">
                                         <div class="col-12">
