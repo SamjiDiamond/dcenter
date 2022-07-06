@@ -657,7 +657,7 @@ class BillingController extends Controller
             $data = SMSLog::join("company", "company.id", "=", "smslog.company_id")
                 ->join("users", "users.id", "=", "smslog.user_id")
                 ->select('smslog.*', 'company.name as company', 'users.first_name', 'users.last_name')
-                ->whrere('company.id', '=', auth()->user()->company_id)
+                ->where('company.id', '=', auth()->user()->company_id)
                 ->get();
         }
 

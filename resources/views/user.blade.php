@@ -12,7 +12,7 @@
             </form>
             <!-- Simple card -->
             <div class="card m-b-30">
-                <img class="card-img-top img-fluid" src= "{{URL::to('/')}}/storage/images/{{auth()->user()->image }}" alt="profile image">
+                <img class="card-img-top img-fluid" src= "{{URL::to('/')}}/public/images/{{auth()->user()->image }}" alt="profile image">
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">{{$user->last_name}} {{$user->first_name}}</h4>
                     <p class="card-text">Wallet Balance: {{$user->wallet}}</p>

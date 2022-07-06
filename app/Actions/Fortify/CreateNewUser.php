@@ -50,6 +50,12 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => $this->passwordRules(),
             ])->validate();
         }
+    //validating bank code
+    $code = new Company;
+if(empty($code->bank_code)){
+    return  redirect()->back()->with('code', 'No bank selected');
+}
+       
 
                //create company account
                $comp=$input;

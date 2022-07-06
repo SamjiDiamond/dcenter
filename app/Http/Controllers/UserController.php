@@ -372,28 +372,39 @@ class UserController extends Controller
         $this->validate($request, [
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg',
         ]);
-
-       if( $request->hasFile('image') && $request->file('image')->isValid())
-       {
-        $image = $request->file('image');
-
-        $filename = $request->file('image')->getClientOriginalName();
-        $path = $request->file('image')->store('public/images');
-
-        $avatar = substr($path, 14);
-
-        $user = auth()->user();
-        $prevImage = $user->image;
-        if($prevImage){
-            $path = $_SERVER['DOCUMENT_ROOT']. '\storage\images\\' . $prevImage;
-            unlink($path);
+$im = auth()->user();
+        if($request->hasfile('image')){
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time(). '.' . $extension;
+            $file->move('public/images/', $filename);
+            $im->image = $filename;
         }
-        $user->image = $avatar;
-
-        if($user->save()){
-
+       $im->save();
+        if($im->save()){
             return redirect()->back()->with('success', 'Image uploaded successfully');
         }
+//        if( $request->hasFile('image') && $request->file('image')->isValid())
+//        {
+//         $image = $request->file('image');
+
+//         $filename = $request->file('image')->getClientOriginalName();
+//         $path = $request->file('image')->store('public');
+// return $path;
+//         $avatar = substr($path, 14);
+
+//         $user = auth()->user();
+//         $prevImage = $user->image;
+//         if($prevImage){
+//             $path = $_SERVER['DOCUMENT_ROOT']. '\storage\images\\' . $prevImage;
+//             // unlink($path);
+//         }
+//         $user->image = $avatar;
+
+//         if($user->save()){
+
+//             return redirect()->back()->with('success', 'Image uploaded successfully');
+//         }
 
         }
 
@@ -401,4 +412,4 @@ class UserController extends Controller
 
 
 
-}
+

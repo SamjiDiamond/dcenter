@@ -16,7 +16,7 @@
                                     <div class="editable-text" style="line-height: 2;">
 										<span class="text_container">
 											<multiline>
-												This mail was sent to {{ $user->email }} via :<a href="#" style="color: #303f9f;text-decoration: none;"> Ayomide Data Ventures</a>
+												{{-- This mail was sent to {{ $user->email }} via :<a href="#" style="color: #303f9f;text-decoration: none;"> Ayomide Data Ventures</a> --}}
 											</multiline>
 										</span>
                                     </div>

@@ -114,7 +114,7 @@
                     <li class="list-inline-item dropdown notification-list nav-user">
                         <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="false" aria-expanded="false">
-                            <img src= "{{URL::to('/')}}/storage/images/{{auth()->user()->image }}"alt="profile pics" class="rounded-circle">
+                            <img src= "{{URL::to('/')}}/public/images/{{auth()->user()->image }}"alt="profile pics" class="rounded-circle">
                             <span class="d-none d-md-inline-block ml-1">{{Auth::user()->first_name}} <i class="mdi mdi-chevron-down"></i> </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown">

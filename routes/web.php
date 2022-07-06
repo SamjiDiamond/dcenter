@@ -1,18 +1,23 @@
 <?php
 
-use App\Http\Controllers\BillingController;
-use App\Http\Controllers\HistoryController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ServicesController;
-use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PayoutController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\SettingsController;
+use App\Models\User;
+use App\Mail\FundwalletMail;
+use App\Mail\newAccountMail;
+use App\Mail\NewmessageMail;
 use Illuminate\Http\Request;
+use App\Mail\transactionMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -215,19 +220,24 @@ Route::get('/report_service_charge', function () {
 });
 
 Route::get('/fundwalletmail', function () {
-    return (new App\Mail\FundwalletMail())->render();
+     $user = auth()->user();
+    //  dd($user);
+    return (new App\Mail\FundwalletMail($user))->render();
 });
 
 Route::get('/newaccountmail', function () {
-    return (new App\Mail\NewaccountMail())->render();
+    $user = auth()->user();
+    return (new App\Mail\newAccountMail($user))->render();
 });
 
 Route::get('/newmessagemail', function () {
-    return (new App\Mail\NewmessageMail())->render();
+    $user = auth()->user();
+    return (new App\Mail\NewmessageMail($user))->render();
 });
 
 Route::get('/newtransactionmail', function () {
-    return (new App\Mail\NewtransactionMail())->render();
+    $user = auth()->user();
+    return (new App\Mail\transactionMail($user))->render();
 });
 
 
