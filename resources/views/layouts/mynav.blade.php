@@ -30,7 +30,7 @@
                         </div>
                     </li>
                     <li class="list-inline-item notification-list">
-                        <a href="/faq" class="nav-link waves-effect">
+                        <a href="vfa" class="nav-link waves-effect">
                             Faq
                         </a>
                     </li>
@@ -213,16 +213,16 @@
 
                                     <li><a href="/report_audit_trail">Audit Trail</a></li>
                                     <li><a href="/report_deposit">Customer Deposit Monitoring</a></li>
-                                    <li><a href="ui-tabs-accordions.html">Company Wallet Ledger</a></li>
+                                    <li><a href="/companywallethistory">Company Wallet Ledger</a></li>
                                 </ul>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <ul>
 
                                     <li><a href="ui-modals.html">Customer Bank Transfer</a></li>
                                     <li><a href="ui-images.html">Customer ATM payment</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
 
@@ -233,7 +233,7 @@
                                 <a href="#">Reversal</a>
                                 <ul class="submenu">
                                     <li><a href="/reversal">Post Reversal</a></li>
-                                    <li><a href="icons-ion.html">Reversal List</a></li>
+                                    <li><a href="/reversalli">Reversal List</a></li>
                                 </ul>
                             </li>
                             @can('fund_wallet')
@@ -245,21 +245,21 @@
                                 <a href="#">Charge Customer </a>
                                 <ul class="submenu">
                                     <li><a href="/chargecustomer">Direct Posting</a></li>
-                                    <li><a href="charts-chartist.html">Posting List</a></li>
+                                    {{-- <li><a href="charts-chartist.html">Posting List</a></li> --}}
                                 </ul>
                             </li>
                             <li class="has-submenu">
                                 <a href="#">Transaction </a>
                                 <ul class="submenu">
                                     <li><a href="/postairtimetransaction">Post Airtime Transaction</a></li>
-                                    <li><a href="charts-chartist.html">Transaction List</a></li>
+                                    <li><a href="/tranlist">Transaction List</a></li>
                                 </ul>
                             </li>
                             <li class="has-submenu">
                                 <a href="#">Recharge Card </a>
                                 <ul class="submenu">
                                     <li><a href="/rechargecard">Post Recharge Card</a></li>
-                                    <li><a href="charts-chartist.html">Recharge Card List</a></li>
+                                    <li><a href="/rechargecardlist">Recharge Card List</a></li>
                                 </ul>
                             </li>
 

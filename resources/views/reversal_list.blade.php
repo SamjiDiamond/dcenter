@@ -36,27 +36,27 @@
                             <th>Registered on</th>
                             <th>Wallet</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            {{-- <th>Action</th> --}}
                         </tr>
                         </thead>
 
 
                         <tbody>
-                        @foreach($users as $user)
+                        @foreach($user as $users)
                         <tr>
-                            <td>{{$i++}}</td>
+                            {{-- <td>{{$i++}}</td> --}}
                             <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                                {{$user->last_name}} {{$user->first_name}}</td>
-                            <td>{{$user->phoneno}}</td>
-                            <td>{{$user->created_at}}</td>
-                            <td>{{$user->wallet}}</td>
-                            <td>{{$user->status}}</td>
-                            <td>
-                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $user->id }}"><i class="fab fa-wpexplorer"></i> View</a>
+                                {{$users->last_name}} {{$users->first_name}}</td>
+                            <td>{{$users->phoneno}}</td>
+                            <td>{{$users->created_at}}</td>
+                            <td>{{$users->wallet}}</td>
+                            <td>{{$users->status}}</td>
+                            {{-- <td>
+                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $users->id }}"><i class="fab fa-wpexplorer"></i> View</a>
                                 @can('edit-user')
-                                <a href="/user-edit/{{ $user->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
+                                <a href="/user-edit/{{ $users->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
                                     @endcan
-                            </td>
+                            </td> --}}
                         </tr>
                         @endforeach
 

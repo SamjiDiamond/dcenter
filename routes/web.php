@@ -89,6 +89,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
     Route::post('/admin-update/{id}', [UserController::class, 'update'])->name('admin.update');
     Route::post('/admin-create', [UserController::class, 'store'])->name('admin.create');
 
+    //for faqs, plan, and permission
+
+    Route::post('/faqss', [TransactionController::class,'faqs']);
+    Route::post('/plans', [TransactionController::class,'planss']);
+    Route::post('/permission', [TransactionController::class,'permissions']);
+    Route::get('/vfa', [TransactionController::class,'viewfaq']);
+    
+
     Route::get('/services', [ServicesController::class, 'index'])->name('services.list');
     Route::get('/services-airtime-edit/{id}', [ServicesController::class, 'airtimeedit'])->name('Edit airtime services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-airtime-update/{id}', [ServicesController::class, 'airtimeupdate'])->name('Update airtime services');
@@ -122,20 +130,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
     Route::get('/chargecustomer', function () {
         return view('charge_customer');
     });
-    Route::post('/chargecustomer', 'TransactionController@charge_customer')->name('user.charge_customer');
-    Route::get('/postairtimetransaction', function () {
-        return view('post_airtime_transaction');
-    });
-    Route::post('/postairtimetransaction', 'TransactionController@post_airtime_transaction')->name('user.post_airtime_transaction');
-    Route::get('/rechargecard', function () {
-        return view('recharge_card');
-    });
-    Route::post('/rechargecard', 'TransactionController@recharge_card')->name('user.rechargecard');
-    Route::get('/reversal', function () {
-        return view('reversal');
-    });
-    Route::post('/reversal', 'TransactionController@reversal')->name('transaction.reversal');
-    Route::post('/reversal-post', 'TransactionController@reversalpost')->name('transaction.reversal.post');
+    Route::post('/chargecustomer', [TransactionController::class,'charge_customer'])->name('user.charge_customer');
+    // Route::get('/postairtimetransactionl', function () {
+    //     return view('transaction_list');
+    // });
+    Route::post('/postairtimetransaction', [TransactionController::class,'post_airtime_transaction'])->name('user.post_airtime_transaction');
+    Route::get('/rechargecardlist', [TransactionController::class,'recharge_cardlist']);
+    Route::post('/rechargecard', [TransactionController::class,'recharge_card'])->name('user.rechargecard');
+    Route::get('/tranlist', [TransactionController::class, 'tranlist']);
+    Route::get('/reversalli', [TransactionController::class, 'reversalist']);
+    Route::post('/reversal', [TransactionController::class, 'reversal'])->name('transaction.reversal');
+    Route::post('/reversal-post', [TransactionController::class, 'reversalpost'])->name('transaction.reversal.post');
+
 
 
     Route::get('/addfaq', function () {
