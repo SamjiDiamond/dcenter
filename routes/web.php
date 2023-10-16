@@ -98,6 +98,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware', 'lockscree
     Route::post('/admin-update/{id}', [UserController::class, 'update'])->name('admin.update');
     Route::post('/admin-create', [UserController::class, 'store'])->name('admin.create');
 
+    //for faqs, plan, and permission
+
+    Route::post('/faqss', [TransactionController::class,'faqs']);
+    Route::post('/plans', [TransactionController::class,'planss']);
+    Route::post('/permission', [TransactionController::class,'permissions']);
+    Route::get('/vfa', [TransactionController::class,'viewfaq']);
+    
+
     Route::get('/services', [ServicesController::class, 'index'])->name('services.list');
     Route::get('/services-airtime-edit/{id}', [ServicesController::class, 'airtimeedit'])->name('Edit airtime services')->middleware(['middleware' => 'password.confirm']);
     Route::post('/services-airtime-update/{id}', [ServicesController::class, 'airtimeupdate'])->name('Update airtime services');

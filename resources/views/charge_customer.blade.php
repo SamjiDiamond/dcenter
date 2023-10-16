@@ -28,7 +28,7 @@
                     <h4 class="mt-0 header-title">Charge Customer</h4>
                     <p class="text-muted m-b-30">In case you need to charge your customer for a specific reason.</p>
 
-                    <form method="POST" action="/chargecustomer">
+                    <form method="POST" action="{{ route('user.charge_customer') }}">
                             @csrf
                         <div class="form-group">
                             <label>Email / Phone number</label>

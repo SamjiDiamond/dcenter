@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Faq;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\permission;
 use App\Jobs\FundwalletJob;
 use App\Models\CompanyWallet;
 use App\Models\ServiceCharge;
 use App\Models\Transaction;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\AirtimeConfig;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
@@ -424,6 +428,30 @@ class TransactionController extends Controller
         }
     }
 
+    public function reversalist()
+    {
+        $user = User::all();
+        return view('reversal_list', compact('user'));
+    }
+
+
+    public function tranlist()
+    {
+        $tran = Transaction::all();
+        return view('transaction_list', compact('tran'));
+    }
+
+    public function recharge_cardlist()
+    {
+        $recharge = AirtimeConfig::all();
+        return view('rechargecard_list', compact('recharge'));
+    }
+
+    public function viewfaq()
+    {
+        $vfaq = Faq::all();
+        return view('d_faq', compact('vfaq'));
+    }
     public function sendEmail()
     {
         $emailJob = (new SendEmailJob())->delay(Carbon::now()->addSeconds(3));
@@ -431,7 +459,6 @@ class TransactionController extends Controller
 
         echo 'email sent';
     }
-
 
     public function showReversals()
     {
@@ -441,8 +468,61 @@ class TransactionController extends Controller
     }
 
 
-    public function postingList(){
+
+    public function postingList()
+    {
         $transactions = Transaction::with('user')->where('user_id', auth()->user()->id)->get();
         return view('posting_list', compact('transactions'));
+        $faq =  new Faq();
+        $faq->title = $request->title;
+        $faq->content = $request->content;
+        $faq->posted_by = $request->posted_by;
+        $faq->company_id = $request->company_id;
+
+        $faq->save();
+        if ($faq->save()) {
+            return redirect()->back()->with('faq', "Faq has been Added Successfully!");
+        } else {
+            return redirect()->back()->with('fa', "Unable to Add Faq!");
+        }
+    }
+
+    public function faqs(Request $request)
+    {
+    }
+
+
+    public function planss(Request $request)
+    {
+        $plan = new Plan();
+        $plan->name = $request->name;
+        $plan->slug = $request->slug;
+        $plan->stripe_plan = $request->stripe_plan;
+        $plan->paystack_plan = $request->paystack_plan;
+        $plan->cost = $request->cost;
+        $plan->description = $request->description;
+
+        $plan->save();
+        if ($plan->save()) {
+            return redirect()->back()->with('pla', 'Plan has been Successfully Added!');
+        } else {
+            return redirect()->back()->with('pl', 'Unable to Add Plan!');
+        }
+    }
+
+    public function permissions(Request $request)
+    {
+        $permi = new permission();
+        $permi->ability = $request->ability;
+        $permi->entity_type = $request->entity_type;
+        $permi->entity_id = $request->entity_id;
+        $permi->forbidden = $request->forbidden;
+
+        $permi->save();
+        if ($permi->save()) {
+            return redirect()->back()->with('perm', 'Permission has been Added Successfully!');
+        } else {
+            return redirect()->back()->with('per', 'Unable to Add Permission!');
+        }
     }
 }
