@@ -18,7 +18,7 @@
                                             <tr>
                                                 <td align="left">
                                                     <a href="#" class="editable-img">
-                                                        <img editable="true" mc:edit="image001" src="images/logo-text.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
+                                                        <img editable="true" mc:edit="image001" src="assets/images/logo.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -32,7 +32,7 @@
                                             <tr>
                                                 <td align="right">
                                                     <a href="#" style="border-style: none !important; display: block; border: 0 !important;" class="editable-img">
-                                                        <img editable="true" mc:edit="image002" src="images/options.png" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
+                                                        <img editable="true" mc:edit="image002" src="assets/images/logo.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
                                                     </a>
                                                 </td>
                                             </tr>

@@ -8,8 +8,8 @@
             <!-- Simple card -->
             <div class="card m-b-30">
                 <div class="card-body">
-                    <h4 class="card-title font-16 mt-0">Deposit Monitoring Search</h4>
-                    <form action="{{route('report.deposit.index')}}" method="GET">
+                    <h4 class="card-title font-16 mt-0">Bank Transfer Deposit Search</h4>
+                    <form action="{{route('bank.tranfer.deposit')}}" method="GET">
                         <p class="card-text">Customer Id: <input type="text" name="customer_id" value="{{old('customer_id') ?? request('customer_id')}}" id ="customerId"  class="form-control" required data-parsley-minlength="2"/></p>
                         <p class="card-text">Transaction Id: <input type="text" name="transaction_id" value="{{old('transaction_id') ?? request('transaction_id')}}" id="transactionId" class="form-control" required data-parsley-minlength="2"/></p>
                         {{-- <p class="card-text">Date: <input class="form-control" type="date" value="{{now()->toDateString()}}" id="example-date-input"> --}}

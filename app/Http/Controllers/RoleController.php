@@ -50,13 +50,16 @@ class RoleController extends Controller
                 ->select('roles.*', 'company.name as company')
                 ->where('company_id','=',auth()->user()->company_id)
                 ->orderBy('id','DESC')->get();
+                
         }
 
         $rolePermissions = Role::join("permissions","permissions.entity_id","=","roles.id")
             ->join("abilities","abilities.id","=","permissions.ability_id")
             ->select('roles.*', 'permissions.*', 'abilities.title as ability_name')
             ->get();
-        $permission =  Ability::all();
+            
+        $permissions =  Ability::all();
+        
 
 //        auth()->user()->assign('admin');
 ////        auth()->user()->assign('admin');
@@ -65,7 +68,7 @@ class RoleController extends Controller
 //
 //        echo auth()->user()->getAbilities();
 
-        return view('roles', ['roles' => $roles, 'permissions' =>$permission, 'rolePermissions' => $rolePermissions, 'i'=>1]);
+        return view('roles', ['roles' => $roles, 'permissions' => $permissions, 'rolePermissions' => $rolePermissions, 'i'=>1]);
     }
 
 

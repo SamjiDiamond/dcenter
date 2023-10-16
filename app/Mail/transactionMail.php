@@ -20,7 +20,7 @@ class transactionMail extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user, Checkout $checkout)
+    public function __construct(User $user, Checkout $checkout=null)
     {
         $this->user = $user;
         $this->checkout = $checkout;

@@ -9,15 +9,17 @@
             <div class="card m-b-30">
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">New Account Report Search</h4>
-                    <p class="card-text">Introducer: <input type="text" name="customerid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">Company: <input type="text" name="transactionid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">From Date: <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
-                    <p class="card-text">To Date: <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
-
-                    <p></p>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Search</a>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a>
-                    <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                    <form action="{{route('account.index')}}" method="GET">
+                        <p class="card-text">Introducer: <input type="text" name="introducer" value="{{request()->query('introducer') ?? ''}}" class="form-control" required data-parsley-minlength="2" id="introducerId"/></p>
+                        <p class="card-text">Company: <input type="text" name="company" value="{{request('company') ?? ''}}" class="form-control" required data-parsley-minlength="2" id="companyId"/></p>
+                        <p class="card-text">From Date: <input class="form-control" type="date" name="fromDate" value="{{ request()->query('fromDate') ?? now()->toDateString()}}" id="example-date-input">
+                        <p class="card-text">To Date: <input class="form-control" type="date" name="toDate" value="{{request()->query('toDate') ?? now()->toDateString()}}" id="example-date-input">
+    
+                        <p></p>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                        <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
+                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                    </form>
                 </div>
             </div>
 
@@ -34,27 +36,29 @@
                             <th>Phoneno</th>
                             <th>Email</th>
                             <th>Wallet</th>
-                            <th>Gender</th>
+                            <!--<th>Gender</th>-->
                             <th>Action</th>
                         </tr>
                         </thead>
 
 
                         <tbody>
-                        @if($i??'')
-                        @foreach($users as $user)
+                        @if(isset($accounts))
+                        @forelse($accounts as $account)
                             <tr>
-                                <td>{{$i++}}</td>
+                                <td>{{$sn++}}</td>
                                 <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                                    {{$user->last_name}} {{$user->first_name}}</td>
-                                <td>{{$user->role}}</td>
-                                <td>{{$user->phoneno}}</td>
-                                <td>{{$user->created_at}}</td>
-                                <td>{{$user->wallet}}</td>
+                                    {{$account->last_name}} {{$account->first_name}}</td>
+                                <td>{{$account->phoneno}}</td>
+                                <td>{{$account->email}}</td>
+                                <td>400</td>
+                                <!--<td>{{$account->gender}}</td>-->
                                 <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
                             </tr>
-                        @endforeach
-                            @endif
+                        @empty
+                        <tr><td colspan="6" class="text-center">Empty</td></tr>
+                        @endforelse
+                        @endif
 
 
                         </tbody>
@@ -87,6 +91,16 @@
 
     <!-- Datatable init js -->
     <script src="assets/pages/datatables.init.js"></script>
+    
+    <script>
+    
+    $("#resetId").on('click', function(){
+        $("#introducerId").val('');
+        $("#companyId").val('');
+      
+    });
+        
+    </script>
 @stop
 
 @section('before-styles')

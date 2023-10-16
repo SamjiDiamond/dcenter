@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title','Service Change')
+@section('title','Service Charge')
 @section('content')
     <div class="row">
         <div class="col-md-3">
@@ -10,20 +10,28 @@
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">Service Charge Search</h4>
 
-                    <div class="form-group mb-0">
-                        <label>Date Range</label>
-                        <div>
-                            <div class="input-daterange input-group" id="date-range">
-                                <input type="text" class="form-control" name="start" placeholder="Start Date" />
-                                <input type="text" class="form-control" name="end" placeholder="End Date" />
+                    <form action="{{route('service.charge.index')}}" method="get">
+                        <div class="form-group mb-0">
+                            <div class="input-daterange" id="date-range">
+                                <div class="form-group m-2">
+                                    <label for="">Start Date</label>
+                                <input class="form-control" type="date" name="start_date" value="{{request('start_date') ?? '2012-01-01'}}" id="example-date-input">
+                                </div>
+    
+                                <div class="form-group m-2">
+                                    <label for="">End Date</label>
+                                    <input class="form-control" type="date" name="end_date" value="{{request('end_date') ?? now()->toDateString()}}" id="example-date-input">
+                                </div>
+                                
                             </div>
                         </div>
-                    </div>
-
-                    <p></p>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Search</a>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a>
-                    <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+    
+                        <p></p>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                        {{-- <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a> --}}
+                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                    </form>
+                  
                 </div>
             </div>
 
@@ -38,32 +46,26 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Amount</th>
-                            <th>Type</th>
-                            <th>Phone</th>
-                            <th>Address</th>
+                            <th>User</th>
                             <th>Date</th>
-                            <th>Action</th>
                         </tr>
                         </thead>
 
 
                         <tbody>
-                        @if($i??'')
-                        @foreach($users as $user)
+                        @if(isset($serviceCharges))
+                        @foreach($serviceCharges as $serviceCharge)
                             <tr>
-                                <td>{{$i++}}</td>
-                                <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                                    {{$user->last_name}} {{$user->first_name}}</td>
-                                <td>{{$user->role}}</td>
-                                <td>{{$user->phoneno}}</td>
-                                <td>{{$user->created_at}}</td>
-                                <td>{{$user->wallet}}</td>
-                                <td>{{$user->wallet}}</td>
-                                <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
+                                <td>{{$sn++}}</td>
+                                <td>{{$serviceCharge->name}}</td>
+                                <td>{{$serviceCharge->amount}}</td>
+                                <td>
+                                    {{$serviceCharge->user->last_name}} {{$serviceCharge->user->first_name}}
+                                </td>
+                                <td>{{$serviceCharge->created_at}}</td>
                             </tr>
                         @endforeach
                             @endif
-
 
                         </tbody>
                     </table>

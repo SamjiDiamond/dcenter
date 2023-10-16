@@ -38,6 +38,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => ['required', 'string', 'max:30', 'email:rfc,dns', 'unique:users'],
                 'company_name' => ['required', 'string', 'max:50', 'unique:company,name'],
                 'company_email' => ['required', 'string', 'max:50', 'email:rfc,dns', 'unique:company,email'],
+                'bank_code' => ['required'],
                 'password' => $this->passwordRules(),
             ])->validate();
         }else{
@@ -47,16 +48,15 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => ['required', 'string', 'max:30', 'unique:users'],
                 'company_name' => ['required', 'string', 'max:50', 'unique:company,name'],
                 'company_email' => ['required', 'string', 'max:50', 'unique:company,email'],
+                'bank_code' => ['required'],
                 'password' => $this->passwordRules(),
             ])->validate();
         }
-    //validating bank code
-    $code = new Company;
-if(empty($code->bank_code)){
-    return  redirect()->back()->with('code', 'No bank selected');
-}
-       
+        
+                //validating bank code
+               $comp = new Company;
 
+   
                //create company account
                $comp=$input;
                $comp['email']=$input['company_email'];
@@ -84,6 +84,7 @@ if(empty($code->bank_code)){
                    'company_id' => $company->id,
                    'account_type' => 'admin',
                    'password' => Hash::make($input['password']),
+                   'referral_id' => auth()->user()->id
                ]);
 
                //assign role to user
@@ -157,11 +158,13 @@ if(empty($code->bank_code)){
 
                     $trialSub->save();
 
+                }
 
 
-            }else{
-                return redirect()->back()->with(['erorr' => 'error with account details ']);
-            }
+            // }else{
+            //     dd('here');
+            //     return redirect()->back()->with(['erorr' => 'error with account details ']);
+            // }
 
             Mail::to($user)->send(new newAccountMail($user));
 

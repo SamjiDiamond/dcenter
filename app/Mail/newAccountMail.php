@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class newAccountMail extends Mailable
+class newAccountMail extends Mailable implements ShouldQueue
 {
     public $user;
 

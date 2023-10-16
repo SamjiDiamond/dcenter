@@ -1,5 +1,4 @@
 @section('content')
-<!-- Section-8 -->
 <table class="table_full editable-bg-color bg_color_e6e6e6 editable-bg-image" bgcolor="#e6e6e6" width="100%"
        align="center" mc:repeatable="castellab" mc:variant="Header" cellspacing="0" cellpadding="0" border="0"
        xmlns:mc="http://www.w3.org/1999/xhtml">
@@ -131,6 +130,5 @@
             </table><!-- END container -->
         </td>
     </tr>
-@stop
-    <!-- footer -->
-@extends('mail.footer')
+    @stop
+    

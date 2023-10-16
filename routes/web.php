@@ -8,16 +8,25 @@ use Illuminate\Http\Request;
 use App\Mail\transactionMail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\DepositController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\LockScreenController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ServiceChargeController;
+use App\Http\Controllers\TemplateVersionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +58,7 @@ Route::get('/confirm-password', function () {
 })->middleware('auth')->name('password.confirm');
 
 Route::post('/confirm-password', function (Request $request) {
-    if (! Hash::check($request->password, $request->user()->password)) {
+    if (!Hash::check($request->password, $request->user()->password)) {
         return back()->withErrors([
             'password' => ['The provided password does not match our records.']
         ]);
@@ -62,10 +71,10 @@ Route::post('/confirm-password', function (Request $request) {
 
 
 
-Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function() {
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware', 'lockscreen']], function () {
 
-    Route::get('/dashboard', [HomeController::class, 'index'] )->name('dashboard');
-    Route::get('/home', [HomeController::class, 'index'] )->name('home');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/roles', [RoleController::class, 'index'])->name('role.list');
     Route::get('/role/{id}', [RoleController::class, 'show'])->name('role.view');
@@ -106,8 +115,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
     Route::post('/services-transfer-update/{id}', [ServicesController::class, 'transferupdate'])->name('Update transfer services');
     Route::get('/services-transfer-sync', [ServicesController::class, 'syntran'])->name('transfer.services.sync');
 
-    
-    Route::get('/smspayment', function () {return view('sms_payment');})->name('sms.pay');
+
+    Route::get('/recharge-card-list', [ServicesController::class, 'rechargecardList'])->name('rechargecard.list');
+
+    Route::get('/smspayment', function () {
+        return view('sms_payment');
+    })->name('sms.pay');
     Route::post('/smspayment', [BillingController::class, 'sms_payment'])->name('sms.payment');
     Route::get('/smspayments', [BillingController::class, 'sms_payments'])->name('sms.payments');
     Route::get('/smstransactions', [BillingController::class, 'sms_transactions'])->name('sms.transactions');
@@ -134,8 +147,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
     Route::get('/reversal', function () {
         return view('reversal');
     });
+
+    Route::get('/reversal-list', [TransactionController::class, 'showReversals'])->name('transaction.reversal.show');
+
     Route::post('/reversal', 'TransactionController@reversal')->name('transaction.reversal');
     Route::post('/reversal-post', 'TransactionController@reversalpost')->name('transaction.reversal.post');
+
+
+    Route::get('/posting-list', [TransactionController::class, 'postingList'])->name('transaction.posting.list');
 
 
     Route::get('/addfaq', function () {
@@ -159,10 +178,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware']], function
 
 
 
-    Route::post('order-post', ['as'=>'order-post','uses'=>'UserController@orderPost']);
+    Route::post('order-post', ['as' => 'order-post', 'uses' => 'UserController@orderPost']);
 });
 
-Route::group(['middleware' => ['auth:sanctum', 'verified']], function() { 
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'lockscreen']], function () {
     Route::get('/billing', [BillingController::class, 'index'])->name('plans');
     Route::get('/plan/{plan}', [BillingController::class, 'invoice'])->name('planshow');
     Route::post('/subscription', [BillingController::class, 'create'])->name('subscription.create');
@@ -172,57 +191,84 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function() {
     Route::post('/invoices', [BillingController::class, 'invoices'])->name('subscriptions.invoices');
     Route::post('/pay', [BillingController::class, 'redirectToGateway'])->name('pay');
     Route::get('/verify/{reference_id}', [BillingController::class, 'verifyPayment'])->name('verify.payment');
-    Route::get('/payment/callback/{id}', [BillingController::class,'handleGatewayCallback']);
+    Route::get('/payment/callback/{id}', [BillingController::class, 'handleGatewayCallback']);
+
+
+    Route::resource('email-templates', TemplateController::class);
+    Route::resource('email-template-versions', TemplateVersionController::class);
+
+    Route::get('/account_ledger', [TransactionController::class, 'accountLedger'])->name('transaction.account.ledger');
+    Route::get('/company_wallet_ledger', [TransactionController::class, 'fetchTransaction'])->name('transaction.wallet');
+    Route::get('/transaction_list', [TransactionController::class, 'index'])->name('transaction.index');
+
+    Route::get('/new_account', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/report_audit_trail', [AuditController::class, 'index'])->name('audit.trail.index');
+
+    Route::get('/report_deposit', [DepositController::class, 'index'])->name('report.deposit.index');
+    Route::get('/bank_transfer_deposit', [DepositController::class, 'bankTransfer'])->name('bank.tranfer.deposit');
+    Route::get('/atm_deposit', [DepositController::class, 'atmDeposit'])->name('atm.deposit');
+
+    Route::get('notification-read/{id}', [NotificationController::class, 'markNotificationAsRead'])->name('notification.read');
+
+    Route::get('/report_service_charge', [ServiceChargeController::class, 'index'])->name('service.charge.index');
+
+
+    Route::get('/billings', function () {
+        return view('users.billing');
+    });
+
+    Route::get('/invoice', function () {
+        return view('invoice_usersub');
+    });
+
+    //Route::get('/admin', function () {
+    //    return view('admins');
+    //});
+
+    Route::get('/faq', function () {
+        return view('d_faq');
+    });
+
+    Route::get('/sa', function () {
+        return view('settings_sms');
+    });
+
+    Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');
 });
 
 
 
-Route::get('/billings', function () {
-    return view('users.billing');
-});
-
-Route::get('/invoice', function () {
-    return view('invoice_usersub');
-});
-
-//Route::get('/admin', function () {
-//    return view('admins');
-//});
-
-Route::get('/faq', function () {
-    return view('d_faq');
+Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+    Route::get('/lock-screen', [LockScreenController::class, 'index'])->name('lock.screen');
+    Route::post('/lock-screen-login', [LockScreenController::class, 'login'])->name('lock.screen.login');
 });
 
 
-Route::get('/sa', function () {
-    return view('settings_sms');
-});
 
 
-Route::get('/account_ledger', function () {
-    return view('report_account_ledger');
-});
 
-Route::get('/new_account', function () {
-    return view('report_newaccount');
-});
 
-Route::get('/report_deposit', function () {
-    return view('report_deposit_monitoring');
-});
 
-Route::get('/report_audit_trail', function () {
-    return view('report_audittrail');
-});
+// Route::get('/account_ledger', function () {
+//     return view('report_account_ledger');
+// });
 
-Route::get('/report_service_charge', function () {
-    return view('report_service_charge');
-});
+
+// Route::get('/new_account', function () {
+//     return view('report_newaccount');
+// });
+
+
+
+
+
 
 Route::get('/fundwalletmail', function () {
-     $user = auth()->user();
+    //dd('here');
+    $user = auth()->user();
+    return view('email-templates.fund-wallet');
     //  dd($user);
-    return (new App\Mail\FundwalletMail($user))->render();
+    // return (new App\Mail\FundwalletMail($user))->render();
 });
 
 Route::get('/newaccountmail', function () {
@@ -241,10 +287,18 @@ Route::get('/newtransactionmail', function () {
 });
 
 
+// Route::get('notify', function(){
+
+//     // Generate a new notification class
+//      Artisan::call('migrate', ['--path' => 'database/migrations/2023_08_21_203711_create_notifications_table.php']);
+
+//     $output = Artisan::output();
+//     echo $output;
+// });
+
+
 Route::get('/payout', [PayoutController::class, 'create'])->name('admin.payout.create');
 Route::post('/store', [PayoutController::class, 'store'])->name('admin.payment.store');
 
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('admin.checkout.create');
-
-Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');

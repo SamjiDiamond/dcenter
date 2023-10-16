@@ -19,7 +19,7 @@
                                             <tr>
                                                 <td align="left">
                                                     <a href="#" class="editable-img">
-                                                        <img editable="true" mc:edit="image001" src="{{$message->embed('assets/images/logo_small.png')}}" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
+                                                        <img editable="true" mc:edit="image001" src="assets/images/logo_small.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -33,7 +33,7 @@
                                             <tr>
                                                 <td align="right">
                                                     <a href="#" style="border-style: none !important; display: block; border: 0 !important;" class="editable-img">
-                                                        <img editable="true" mc:edit="image002" src="{{$message->embed('assets/images/logo_small.png')}}" width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
+                                                        <img editable="true" mc:edit="image002" src="assets/images/logo_small.png" width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
                                                     </a>
                                                 </td>
                                             </tr>
@@ -74,7 +74,7 @@
                                         <div class="editable-text">
 										<span class="text_container">
 											<multiline>
-                                            {{ $checkout->created_at }}
+                                            {{ $checkout->created_at ?? now() }}
 											</multiline>
 										</span>
                                         </div>
@@ -105,7 +105,7 @@
                                     <td mc:edit="text003" align="left" class="center_content text_color_282828" style="color: #282828; font-size: 14px; font-weight: 900; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                         <div class="editable-text">
 										<span class="text_container">
-											<multiline>Hi {{ $checkout->first_name }} {{ $checkout->last_name }}</multiline>
+											<multiline>Hi {{ $checkout->first_name ?? auth()->user()->first_name }} {{ $checkout->last_name ?? auth()->user()->last_name}}</multiline>
 										</span>
                                         </div>
                                     </td>
@@ -223,7 +223,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_b0b0b0" style="color: #b0b0b0; font-size: 13px;line-height: 1.5; font-weight: 400; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>Amount : {{ $checkout->amount }}</multiline>
+																				<multiline>Amount : {{ $checkout->amount ?? 1000 }}</multiline>
 																			</span>
                                                                             </div>
                                                                         </td>
@@ -236,7 +236,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_282828" style="color: #282828; font-size: 12px;line-height: 1.5; font-weight: 300; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>Quantity : {{ $checkout->quantity }}</multiline>
+																				<multiline>Quantity : {{ $checkout->quantity ?? 200 }}</multiline>
 																			</span>
                                                                             </div>
                                                                         </td>
@@ -246,7 +246,7 @@
                                                                         <td mc:edit="text006" align="left" class="center_content text_color_282828" style="color: #282828;font-size: 11px;line-height: 1.5; font-weight: 100; font-family: lato, Helvetica, sans-serif; mso-line-height-rule: exactly;">
                                                                             <div class="editable-text" style="line-height: 1.5;">
 																			<span class="text_container">
-																				<multiline>24 hrs months support <span style="color: #b0b0b0"> Order ID: {{ $checkout->order_id }}</span></multiline>
+																				<multiline>24 hrs months support <span style="color: #b0b0b0"> Order ID: {{ $checkout->order_id ?? 'Qwer123456' }}</span></multiline>
 																			</span>
                                                                             </div>
                                                                         </td>

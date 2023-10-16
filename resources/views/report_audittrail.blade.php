@@ -9,14 +9,16 @@
             <div class="card m-b-30">
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">Audit trail Search</h4>
-                    <p class="card-text">Admin Id: <input type="text" name="customerid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">Transaction Id: <input type="text" name="transactionid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">Date: <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+                    <form action="{{route('audit.trail.index')}}" method="GET">
+                    <p class="card-text">Admin Id: <input type="text" id="adminId" value="{{request('adminId') ?? old('adminId')}}" name="adminId" class="form-control" required data-parsley-minlength="2"/></p>
+                    <p class="card-text">Company Id: <input type="text" id="companyId" value="{{request('companyId') ?? old('companyId')}}" name="companyId" class="form-control" required data-parsley-minlength="2"/></p>
+                    <p class="card-text">Date: <input class="form-control" type="date" name="date" value="{{now()->toDateString()}}" id="dateId">
 
                     <p></p>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Search</a>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                    <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
                     <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                </form>
                 </div>
             </div>
 
@@ -30,7 +32,7 @@
                         <tr>
                             <th>#</th>
                             <th>Action Initiator</th>
-                            <th>Subject</th>
+                            {{-- <th>Subject</th> --}}
                             <th>Action</th>
                             <th>Action Date</th>
                             <th>Data Type</th>
@@ -40,20 +42,25 @@
 
 
                         <tbody>
-                        @if($i??'')
-                        @foreach($users as $user)
+                        @if(isset($auditTrails))
+                        @foreach($auditTrails as $auditTrail)
                             <tr>
-                                <td>{{$i++}}</td>
+                                <td>{{$sn++}}</td>
                                 <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                                    {{$user->last_name}} {{$user->first_name}}</td>
-                                <td>{{$user->role}}</td>
-                                <td>{{$user->phoneno}}</td>
-                                <td>{{$user->created_at}}</td>
-                                <td>{{$user->wallet}}</td>
-                                <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
+                                    {{$auditTrail->admin->last_name}} {{$auditTrail->admin->first_name}}</td>
+                                {{-- <td>{{$auditTrail->admin->role}}</td> --}}
+                                <td>{{$auditTrail->action}}</td>
+                                <td>{{$auditTrail->created_at}}</td>
+                                <td>{{$auditTrail->type}}</td>
+                                <td> <button type="button" class="btn btn-info waves-effect waves-light">
+                                    <i class="fas fas fa-user-edit"></i>Edit</button> 
+                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button>
+                                </td>
                             </tr>
                         @endforeach
-                            @endif
+                        @else
+                          
+                        @endif
 
 
                         </tbody>
@@ -86,6 +93,16 @@
 
     <!-- Datatable init js -->
     <script src="assets/pages/datatables.init.js"></script>
+
+    <script>
+    
+        $("#resetId").on('click', function(){
+            $("#adminId").val('');
+            $("#companyId").val('');
+          
+        });
+            
+    </script>
 @stop
 
 @section('before-styles')

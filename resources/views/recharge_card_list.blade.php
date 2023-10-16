@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title','Reversal')
+@section('title','Recharge Card List')
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -16,13 +16,8 @@
                         </div>
                     @endif
 
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Success! {{ session('success') }} </strong>
-                        </div>
+                    @if($apiError)
+                     <div class="alert alert-danger">{{ $apiError }}</div>
                     @endif
 
                     <h4 class="mt-0 header-title">Reversal List</h4>
@@ -31,34 +26,35 @@
                                                     <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Company Name</th>
-                                                        <th>Reference No.</th>
+                                                        <th>Plan</th>
                                                         <th>Amount</th>
-                                                        <th>Description</th>
+                                                        <th>MTN</th>
+                                                        <th>NINE MOBILE</th>
+                                                        <th>AIRTEL</th>
+                                                        <th>GLO</th>
                                                         <th>Status</th>
-                                                        <th>Old Wallet </th>
-                                                        <th>New Wallet</th>
-                                                        <th>Created at</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @forelse($transactions as $transaction)
+                                                        {{-- @dd($rechargeCardLists) --}}
+                                                        @if($rechargeCardLists)
+                                                    @forelse($rechargeCardLists as $key => $rechargeCardList)
                                                     <tr>
-                                                        <th scope="row">{{ $sn++ }}</th>
-                                                        <td>{{ $transaction->company->name }}</td>
-                                                        <td>{{ $transaction->reference_id }}</td>
-                                                        <td>{{ $transaction->amount}}</td>
-                                                        <td>{{ $transaction->description }}</td>
-                                                        <td>{{ $transaction->status }}</td>
-                                                        <td>{{ $transaction->companyWallet->old_wallet }}</td>
-                                                        <td>{{ $transaction->companyWallet->new_wallet }}</td>
-                                                         <td>{{ $transaction->created_at }}</td>
-                                                      
+                                                        <th scope="row">{{$sn++}}</th>
+                                                        <td>{{$rechargeCardList['plan']}}</td>
+                                                        <td>{{$rechargeCardList['amount']}}</td>
+                                                        <td>{{$rechargeCardList['mtn']}}</td>
+                                                        <td>{{$rechargeCardList['ninemobile']}}</td>
+                                                        <td>{{$rechargeCardList['airtel']}}</td>
+                                                        <td>{{$rechargeCardList['glo']}}</td>
+                                                        <td>{{$rechargeCardList['status']}}</td>
+                                                    
                                                     </tr>
 
                                                     @empty
-                                                    <tr><td colspan="9" class="text-center">No reversal transactions to display.</td></tr>
+                                                    <tr><td colspan="9" class="text-center">No Recharge card list to display.</td></tr>
                                                     @endforelse
+                                                    @endif
                                                     </tbody>
                                                 </table>
 

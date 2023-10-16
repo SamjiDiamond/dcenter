@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\FundwalletJob;
+use App\Models\CompanyWallet;
+use App\Models\ServiceCharge;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,6 +15,39 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
+    public function index()
+    {
+        $transactions = Transaction::with('company', 'user')->where('user_id', auth()->user()->id)->get();
+        $sn = 1;
+        return view('transaction_list', compact('sn', 'transactions'));
+    }
+
+
+
+    public function accountLedger()
+    {
+
+        if (request()->filled('customerId') && request()->filled('transactionId')) {
+            $transactions = Transaction::where('user_id', request()->query('customerId'))->where('reference_id', request()->filled('transactionId'))->get();
+            return view('report_account_ledger', compact('transactions'));
+        }
+
+        return view('report_account_ledger');
+    }
+
+
+
+    public function fetchTransaction()
+    {
+        $authenticatedUser = auth()->user();
+        $companyWallets = CompanyWallet::with('company')->where('company_id', $authenticatedUser->company_id)->get();
+        $i = 1;
+        return view('report_company_wallet_ledger', compact('i', 'companyWallets'));
+    }
+
+
+
+
     public function fund_wallet(Request $request)
     {
 
@@ -25,60 +60,61 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
-//            try {
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
-                if(!$user){
-                    return redirect('fundwallet')->with(['error' => 'Email or Phone number does not exist.']);
-                }
+            //            try {
+            $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
+            if (!$user) {
+                return redirect('fundwallet')->with(['error' => 'Email or Phone number does not exist.']);
+            }
 
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
+            $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
 
-                if($user->company_id != auth()->user()->company_id){
-                    return redirect('fundwallet')->with(['error' => 'Email or Phone number does not exist.']);
-                }
+            if ($user->company_id != auth()->user()->company_id) {
+                return redirect('fundwallet')->with(['error' => 'Email or Phone number does not exist.']);
+            }
 
             $input['reference_id'] = Auth::user()->company_id . "c" . date('ymd') . rand();
             $input['company_id'] = $user->company_id;
-                $input['user_id']=$user->id;
-                $input['i_wallet']=$user->wallet;
-                $input['f_wallet']=$user->wallet + $input['amount'];
-                $input['name']="Wallet";
-                $input['status']="successful";
-                $input['date']=Carbon::now();
-                $input['ip_address']=$_SERVER['REMOTE_ADDR'];
-                $input['device']=$_SERVER['HTTP_USER_AGENT'];
-                $input['extra']="Wallet funded by ". Auth::user()->email;
-                $input['code']="fund_wallet";
-                $input['type']="fund_wallet";
-                $input['description']="wallet funded successfully ".$input['odescription'];
+            $input['user_id'] = $user->id;
+            $input['i_wallet'] = $user->wallet;
+            $input['f_wallet'] = $user->wallet + $input['amount'];
+            $input['name'] = "Wallet";
+            $input['status'] = "successful";
+            $input['date'] = Carbon::now();
+            $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+            $input['device'] = $_SERVER['HTTP_USER_AGENT'];
+            $input['extra'] = "Wallet funded by " . Auth::user()->email;
+            $input['code'] = "fund_wallet";
+            $input['type'] = "fund_wallet";
+            $input['description'] = "wallet funded successfully " . $input['odescription'];
 
-                Transaction::create($input);
+            Transaction::create($input);
 
-                $user->wallet += $input['amount'];
-                $user->save();
+            $user->wallet += $input['amount'];
+            $user->save();
 
-                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
-                dispatch($emailJob);
+            $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
+            dispatch($emailJob);
 
 
-                return redirect('fundwallet')->with('success', $user->first_name . ' wallet funded successfully');
-//            }catch(\Exception $e){
-//                DB::rollback();
-//                return redirect('fundwallet')->with('error','Error funding wallet');
-//            }
-        }else{
+            return redirect('fundwallet')->with('success', $user->first_name . ' wallet funded successfully');
+            //            }catch(\Exception $e){
+            //                DB::rollback();
+            //                return redirect('fundwallet')->with('error','Error funding wallet');
+            //            }
+        } else {
             DB::rollback();
-            return redirect('fundwallet')->with('error','Error funding wallet, check your input and try again');
+            return redirect('fundwallet')->with('error', 'Error funding wallet, check your input and try again');
         }
-
     }
 
-    public function charge_customer(Request $request){
+    public function charge_customer(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -90,58 +126,68 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
             try {
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
-                if(!$user){
+                $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
+                if (!$user) {
                     return redirect('chargecustomer')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
+                $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
 
-                if($user->company_id != auth()->user()->company_id){
+                if ($user->company_id != auth()->user()->company_id) {
                     return redirect('chargecustomer')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $input['company_id']=$user->company_id;
-                $input['user_id']=$user->id;
-                $input['i_wallet']=$user->wallet;
-                $input['f_wallet']=$user->wallet - $input['amount'];
-                $input['name']="Wallet Charges";
-                $input['status']="successful";
-                $input['date']=Carbon::now();
-                $input['ip_address']=$_SERVER['REMOTE_ADDR'];
-                $input['device']=$_SERVER['HTTP_USER_AGENT'];
-                $input['extra']="Wallet charged by ". Auth::user()->email;
-                $input['code']="charge_customer";
-                $input['type']="charge_customer";
+                $input['company_id'] = $user->company_id;
+                $input['user_id'] = $user->id;
+                $input['i_wallet'] = $user->wallet;
+                $input['f_wallet'] = $user->wallet - $input['amount'];
+                $input['name'] = "Wallet Charges";
+                $input['status'] = "successful";
+                $input['date'] = Carbon::now();
+                $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+                $input['device'] = $_SERVER['HTTP_USER_AGENT'];
+                $input['extra'] = "Wallet charged by " . Auth::user()->email;
+                $input['code'] = "charge_customer";
+                $input['type'] = "charge_customer";
 
-                Transaction::create($input);
+                $transaction =   Transaction::create($input);
+
+                ServiceCharge::create([
+                    'name' => $transaction->name . 'charges',
+                    'user_id' => $transaction->user_id,
+                    'transaction_id' => $transaction->id,
+                    'amount' => ServiceCharge::calculateServiceCharge($transaction->amount),
+                    'charge_date' => now()->toDateString()
+                ]);
+
 
                 $user->wallet -= $input['amount'];
                 $user->save();
 
-//                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
-//                dispatch($emailJob);
+                //                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
+                //                dispatch($emailJob);
 
 
                 return redirect('chargecustomer')->with('success', $user->first_name . ' wallet charged successfully');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 DB::rollback();
-                return redirect('chargecustomer')->with('error','Error charging customer');
+                return redirect('chargecustomer')->with('error', 'Error charging customer');
             }
-        }else{
+        } else {
             DB::rollback();
-            return redirect('chargecustomer')->with('error','Error charging customer, check your input and try again');
+            return redirect('chargecustomer')->with('error', 'Error charging customer, check your input and try again');
         }
-
     }
 
-    public function post_airtime_transaction(Request $request){
+    public function post_airtime_transaction(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -153,58 +199,59 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
             try {
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
-                if(!$user){
+                $user = User::where("email", $input['user_name'])->orWhere("phoneno", $input['user_name'])->exists();
+                if (!$user) {
                     return redirect('postairtimetransaction')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
+                $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
 
-                if($user->company_id != auth()->user()->company_id){
+                if ($user->company_id != auth()->user()->company_id) {
                     return redirect('postairtimetransaction')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $input['company_id']=$user->company_id;
-                $input['user_id']=$user->id;
-                $input['i_wallet']=$user->wallet;
-                $input['f_wallet']=$user->wallet - $input['amount'];
-                $input['name']="Transaction";
-                $input['status']="successful";
-                $input['date']=Carbon::now();
-                $input['ip_address']=$_SERVER['REMOTE_ADDR'];
-                $input['device']=$_SERVER['HTTP_USER_AGENT'];
-                $input['extra']="Transaction posted by ". Auth::user()->email;
-                $input['code']="post_transaction";
-                $input['type']="airtime";
-                $input['description']="airtime " . $input['amount'] . " on ".$input['phoneno'];
+                $input['company_id'] = $user->company_id;
+                $input['user_id'] = $user->id;
+                $input['i_wallet'] = $user->wallet;
+                $input['f_wallet'] = $user->wallet - $input['amount'];
+                $input['name'] = "Transaction";
+                $input['status'] = "successful";
+                $input['date'] = Carbon::now();
+                $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+                $input['device'] = $_SERVER['HTTP_USER_AGENT'];
+                $input['extra'] = "Transaction posted by " . Auth::user()->email;
+                $input['code'] = "post_transaction";
+                $input['type'] = "airtime";
+                $input['description'] = "airtime " . $input['amount'] . " on " . $input['phoneno'];
 
                 Transaction::create($input);
 
                 $user->wallet -= $input['amount'];
                 $user->save();
 
-//                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
-//                dispatch($emailJob);
+                //                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
+                //                dispatch($emailJob);
 
 
                 return redirect('postairtimetransaction')->with('success', $user->first_name . ' transaction posted successfully');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 DB::rollback();
-                return redirect('postairtimetransaction')->with('error','Error posting transaction');
+                return redirect('postairtimetransaction')->with('error', 'Error posting transaction');
             }
-        }else{
+        } else {
             DB::rollback();
-            return redirect('postairtimetransaction')->with('error','Error posting , check your input and try again');
+            return redirect('postairtimetransaction')->with('error', 'Error posting , check your input and try again');
         }
-
     }
-    public function recharge_card(Request $request){
+    public function recharge_card(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -217,60 +264,61 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
             try {
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
-                if(!$user){
+                $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->exists();
+                if (!$user) {
                     return redirect('rechargecard')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $user=User::where("email","=",$input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
+                $user = User::where("email", "=", $input['user_name'])->orWhere("phoneno", "=", $input['user_name'])->first();
 
-                if($user->company_id != auth()->user()->company_id){
+                if ($user->company_id != auth()->user()->company_id) {
                     return redirect('rechargecard')->with(['error' => 'Email or Phone number does not exist.']);
                 }
 
-                $input['description']=$input['network'] . " rechargecard " . $input['amount'] . " of ".$input['quantity'] ." quantity";
-                $amount=$input['amount'] * $input['quantity'];
-                $input['amount']=$amount;
-                $input['company_id']=$user->company_id;
-                $input['user_id']=$user->id;
-                $input['i_wallet']=$user->wallet;
-                $input['f_wallet']=$user->wallet - $amount;
-                $input['name']="Recharge Card";
-                $input['status']="successful";
-                $input['date']=Carbon::now();
-                $input['ip_address']=$_SERVER['REMOTE_ADDR'];
-                $input['device']=$_SERVER['HTTP_USER_AGENT'];
-                $input['extra']="Transaction posted by ". Auth::user()->email;
-                $input['code']="recharge_card";
-                $input['type']=$input['network'];
+                $input['description'] = $input['network'] . " rechargecard " . $input['amount'] . " of " . $input['quantity'] . " quantity";
+                $amount = $input['amount'] * $input['quantity'];
+                $input['amount'] = $amount;
+                $input['company_id'] = $user->company_id;
+                $input['user_id'] = $user->id;
+                $input['i_wallet'] = $user->wallet;
+                $input['f_wallet'] = $user->wallet - $amount;
+                $input['name'] = "Recharge Card";
+                $input['status'] = "successful";
+                $input['date'] = Carbon::now();
+                $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+                $input['device'] = $_SERVER['HTTP_USER_AGENT'];
+                $input['extra'] = "Transaction posted by " . Auth::user()->email;
+                $input['code'] = "recharge_card";
+                $input['type'] = $input['network'];
 
                 Transaction::create($input);
 
                 $user->wallet -= $amount;
                 $user->save();
 
-//                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
-//                dispatch($emailJob);
+                //                $emailJob = (new FundwalletJob())->delay(Carbon::now()->addSeconds(30));
+                //                dispatch($emailJob);
 
                 return redirect('rechargecard')->with('success', $user->first_name . ' recharge card sent successfully');
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 DB::rollback();
-                return redirect('rechargecard')->with('error','Error sending recharge card');
+                return redirect('rechargecard')->with('error', 'Error sending recharge card');
             }
-        }else{
+        } else {
             DB::rollback();
-            return redirect('rechargecard')->with('error','Error computing recharge card , check your input and try again');
+            return redirect('rechargecard')->with('error', 'Error computing recharge card , check your input and try again');
         }
-
     }
 
-    public function reversal(Request $request){
+    public function reversal(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -280,51 +328,51 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
             try {
-                $tran=Transaction::where("id","=",$input['id'])->exists();
-                if(!$tran){
+                $tran = Transaction::where("id", "=", $input['id'])->exists();
+                if (!$tran) {
                     return redirect('reversal')->with(['error' => 'Transaction ID does not exist.']);
                 }
 
-                $tran=Transaction::join('users','users.id','=','transactions.user_id')
-                    ->select('transactions.*','users.first_name','users.last_name')
-                    ->where('transactions.id','=',$input['id'])
+                $tran = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
+                    ->select('transactions.*', 'users.first_name', 'users.last_name')
+                    ->where('transactions.id', '=', $input['id'])
                     ->first();
 
-                if($tran->company_id != auth()->user()->company_id){
+                if ($tran->company_id != auth()->user()->company_id) {
                     return redirect('reversal')->with(['error' => 'Transaction ID does not exist.']);
                 }
 
-                if($tran->name == 'Reversal'){
+                if ($tran->name == 'Reversal') {
                     return redirect('reversal')->with(['error' => 'Reversed Transaction can not be reversed']);
                 }
 
-                $rtran=Transaction::where([['description','LIKE', '%'.$tran->description.'%'], ['name', '=', 'Reversal']])->exists();
+                $rtran = Transaction::where([['description', 'LIKE', '%' . $tran->description . '%'], ['name', '=', 'Reversal']])->exists();
 
-                if($rtran){
+                if ($rtran) {
                     return redirect('reversal')->with(['error' => 'Transaction can only be reversed once']);
                 }
 
-                return view('reversal', ['data' =>$tran, 't'=>true]);
-
-            }catch(\Exception $e){
+                return view('reversal', ['data' => $tran, 't' => true]);
+            } catch (\Exception $e) {
                 DB::rollback();
-                return redirect('reversal')->with('error','Error fetching transaction details');
+                return redirect('reversal')->with('error', 'Error fetching transaction details');
             }
-        }else{
+        } else {
             DB::rollback();
-            return redirect('reversal')->with('error','Error fetching transaction details , check your input and try again');
+            return redirect('reversal')->with('error', 'Error fetching transaction details , check your input and try again');
         }
-
     }
 
 
-    public function reversalpost(Request $request){
+    public function reversalpost(Request $request)
+    {
 
         $input = $request->all();
         $rules = array(
@@ -334,47 +382,46 @@ class TransactionController extends Controller
         $messages = array(
             'min' => 'Hmm, that looks short.',
             'max' => 'Oops, that too long.',
-            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.');
+            'alpha_num'  => 'Use alphabet or alphabet with numbers to secure your password.'
+        );
 
         $validator = Validator::make($input, $rules, $messages);
 
         if ($validator->passes()) {
             try {
-                $tran=Transaction::where("id","=",$input['id'])->exists();
-                if(!$tran){
+                $tran = Transaction::where("id", "=", $input['id'])->exists();
+                if (!$tran) {
                     return redirect('reversal')->with(['error' => 'Transaction ID does not exist.']);
                 }
 
-                $tran=Transaction::join('users','users.id','=','transactions.user_id')
-                    ->select('transactions.*','users.first_name','users.last_name')
-                    ->where('transactions.id','=',$input['id'])
+                $tran = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
+                    ->select('transactions.*', 'users.first_name', 'users.last_name')
+                    ->where('transactions.id', '=', $input['id'])
                     ->first();
 
-                if($tran->company_id != auth()->user()->company_id){
+                if ($tran->company_id != auth()->user()->company_id) {
                     return redirect('reversal')->with(['error' => 'Transaction ID does not exist.']);
                 }
 
-                if($tran->name == 'Reversal'){
+                if ($tran->name == 'Reversal') {
                     return redirect('reversal')->with(['error' => 'Reversed Transaction can not be reversed']);
                 }
 
-                $rtran=Transaction::where([['description','LIKE', '%'.$tran->description.'%'], ['name', '=', 'Reversal']])->exists();
+                $rtran = Transaction::where([['description', 'LIKE', '%' . $tran->description . '%'], ['name', '=', 'Reversal']])->exists();
 
-                if($rtran){
+                if ($rtran) {
                     return redirect('reversal')->with(['error' => 'Transaction can only be reversed once']);
                 }
 
-                return redirect('reversal')->with('success','Reversal posted successfully');
-
-            }catch(\Exception $e){
+                return redirect('reversal')->with('success', 'Reversal posted successfully');
+            } catch (\Exception $e) {
                 DB::rollback();
-                return redirect('reversal')->with('error','Error fetching transaction details');
+                return redirect('reversal')->with('error', 'Error fetching transaction details');
             }
-        }else{
+        } else {
             DB::rollback();
-            return redirect('reversal')->with('error','Error fetching transaction details , check your input and try again');
+            return redirect('reversal')->with('error', 'Error fetching transaction details , check your input and try again');
         }
-
     }
 
     public function sendEmail()
@@ -386,4 +433,16 @@ class TransactionController extends Controller
     }
 
 
+    public function showReversals()
+    {
+        $sn = 1;
+        $transactions = Transaction::with(['user', 'company'])->where('user_id', auth()->user()->id)->where('type', 'reversal')->get();
+        return view('reversal_list', compact('transactions', 'sn'));
+    }
+
+
+    public function postingList(){
+        $transactions = Transaction::with('user')->where('user_id', auth()->user()->id)->get();
+        return view('posting_list', compact('transactions'));
+    }
 }

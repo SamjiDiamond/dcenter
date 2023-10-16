@@ -57,7 +57,7 @@
                                     <div class="card m-b-30">
                                         <div class="card-body">
 
-                                            <h4 class="mt-0 header-title">Transactions</h4>
+                                            <h4 class="mt-0 header-title">Company Wallet</h4>
                                             <p class="text-muted m-b-30 font-14"></p>
 
                                             <div class="table-responsive">
@@ -66,9 +66,10 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Company Name</th>
-                                                        <th>Reference No.</th>
+                                                        <th>Payment Id.</th>
                                                         <th>Amount</th>
                                                         <th>Description</th>
+                                                        <th>Type</th>
                                                         <th>Status</th>
                                                         <th>Old Wallet </th>
                                                         <th>New Wallet</th>
@@ -76,24 +77,25 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @forelse($transactions as $transaction)
+                                                    @forelse($companyWallets as $companyWallet)
                                                     <tr>
                                                         <th scope="row">{{ $i++ }}</th>
-                                                        <td>{{ $transaction->company->name }}</td>
-                                                        <td>{{ $transaction->reference_id }}</td>
-                                                        <td>{{ $transaction->amount}}</td>
-                                                        <td>{{ $transaction->description }}</td>
-                                                        <td>{{ $transaction->status }}</td>
-                                                        <td>{{ $transaction->companyWallet->old_wallet }}</td>
-                                                        <td>{{ $transaction->companyWallet->new_wallet }}</td>
-                                                         <td>{{ $transaction->created_at }}</td>
+                                                        <td>{{ $companyWallet->company->name }}</td>
+                                                        <td>{{ $companyWallet->payment_id }}</td>
+                                                        <td>{{ $companyWallet->amount}}</td>
+                                                        <td>{{ $companyWallet->description }}</td>
+                                                        <td>{{ $companyWallet->type}}</td>
+                                                        <td>{{ $companyWallet->status }}</td>
+                                                        <td>{{ $companyWallet->old_wallet }}</td>
+                                                        <td>{{ $companyWallet->new_wallet }}</td>
+                                                         <td>{{ $companyWallet->created_at }}</td>
                                                       
                                                     </tr>
 
                                                     @empty
-                                                    <tr><td colspan="9" class="text-center">No company transaction history to display</td></tr>
+                                                    <tr><td colspan="10" class="text-center">No company Wallet history to display</td></tr>
                                                     @endforelse
-                                                    </tbody>
+                                                    </tbody> 
                                                 </table>
                                             </div>
 

@@ -190,8 +190,14 @@
                                                         @endforeach--}}
 
                                                             @foreach ($permissions as $permission)
-                                                                {{ Form::checkbox('permission[]',  $permission->id ) }}
-                                                                {{ Form::label($permission->name, ucfirst($permission->title)) }}<br>
+                                                           
+                                            <input type="checkbox" value="{{$permission->id}}" name="permission[]">
+                                           
+                                         <label for="{{$permission->name}}">{{ ucfirst($permission->title)}}
+                                         </label>
+                                          <br>
+                                                                {{-- {{ Form::checkbox('permission[]',  $permission->id ) }}
+                                                                {{ Form::label($permission->name, ucfirst($permission->title)) }}<br> --}}
 
                                                             @endforeach
 

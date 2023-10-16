@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Deposit;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
 class User extends Authenticatable
@@ -20,7 +22,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRolesAndAbilities;
- 
+
 
     /**
      * The attributes that are mass assignable.
@@ -29,7 +31,7 @@ class User extends Authenticatable
      */
     protected $table = 'users';
     protected $fillable = [
-        'email', 'password', 'first_name', 'last_name', 'username', 'phoneno', 'gender', 'image', 'account_no', 'account_type', 'referral', 'company_id', 'role_id', 'trial_ends_at', 'paystack_id', 'accountno', 'monnify_id'
+        'email', 'password', 'first_name', 'last_name', 'username', 'phoneno', 'gender', 'referral_id', 'image', 'account_no', 'account_type', 'referral', 'company_id', 'role_id', 'trial_ends_at', 'paystack_id', 'accountno', 'monnify_id'
     ];
 
     /**
@@ -52,6 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'screen_locked' => 'boolean',
     ];
 
     /**
@@ -67,4 +70,57 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+
+    /**
+     * Define a self-referential relationship for the referrer.
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referral_id');
+    }
+
+    /**
+     * Define a relationship for users referred by this user.
+     */
+    public function referredUsers()
+    {
+        return $this->hasMany(User::class, 'referral_id');
+    }
+
+    public function initialDeposit()
+    {
+        return $this->hasOne(Deposit::class)->orderBy('DepositDate');
+    }
+
+
+    public function userNotifications()
+    {
+        return $this->notifications()->latest()->take(20)->get();
+    }
+
+    public function unreadNotificationsCount()
+    {
+        return  $this->unreadNotifications()->count();
+    }
+
+    public function isScreenLocked()
+    {
+        return $this->screen_locked;
+    }
+
+    public function lockScreen()
+    {
+        $this->screen_locked = true;
+        $this->save();
+    }
+
+    public function unlockScreen()
+    {
+        $this->screen_locked = false;
+        $this->save();
+    }
+
+
+
 }

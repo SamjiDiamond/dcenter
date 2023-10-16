@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\CompanyWallet;
+use App\Models\Company;
 
 class Transaction extends Model
 {
@@ -35,5 +38,10 @@ class Transaction extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    
+      public function companyWallet()
+    {
+        return $this->belongsTo(CompanyWallet::class, 'wallet_id');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.mylayouts')
 
-@section('title','Company Wallet Ledger')
+@section('title','Postings')
 @section('content')
     <div class="row">
         <div class="col-xl-12">
@@ -57,7 +57,7 @@
                                     <div class="card m-b-30">
                                         <div class="card-body">
 
-                                            <h4 class="mt-0 header-title">Transactions</h4>
+                                            <h4 class="mt-0 header-title">Transactions Postings</h4>
                                             <p class="text-muted m-b-30 font-14"></p>
 
                                             <div class="table-responsive">
@@ -69,6 +69,8 @@
                                                         <th>Reference No.</th>
                                                         <th>Amount</th>
                                                         <th>Description</th>
+                                                        <th>Code</th>
+                                                        <th>Type</th>
                                                         <th>Status</th>
                                                         <th>Old Wallet </th>
                                                         <th>New Wallet</th>
@@ -83,6 +85,8 @@
                                                         <td>{{ $transaction->reference_id }}</td>
                                                         <td>{{ $transaction->amount}}</td>
                                                         <td>{{ $transaction->description }}</td>
+                                                        <td>{{ $transaction->code }}</td>
+                                                        <td>{{ $transaction->type }}</td>
                                                         <td>{{ $transaction->status }}</td>
                                                         <td>{{ $transaction->companyWallet->old_wallet }}</td>
                                                         <td>{{ $transaction->companyWallet->new_wallet }}</td>
@@ -91,7 +95,7 @@
                                                     </tr>
 
                                                     @empty
-                                                    <tr><td colspan="9" class="text-center">No company transaction history to display</td></tr>
+                                                    <tr><td colspan="11" class="text-center">No posting history to display</td></tr>
                                                     @endforelse
                                                     </tbody>
                                                 </table>

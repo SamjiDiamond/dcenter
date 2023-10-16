@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConfigAirtimeModel;
-use App\Models\ConfigDataModel;
-use App\Models\ConfigDefaultModel;
-use App\Models\ConfigElectricityModel;
-use App\Models\ConfigTransferModel;
-use App\Models\ConfigTVModel;
+use Exception;
 use Illuminate\Http\Request;
+use App\Models\ConfigTVModel;
+use App\Models\ConfigDataModel;
+use App\Models\ConfigAirtimeModel;
+use App\Models\ConfigDefaultModel;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Models\ConfigTransferModel;
+use Illuminate\Support\Facades\Http;
+use App\Models\ConfigElectricityModel;
 
 class ServicesController extends Controller
 {
@@ -447,5 +449,29 @@ class ServicesController extends Controller
 
         return redirect()->route('services.list')
             ->with('success','Services sync successfully');
+    }
+
+
+    //recharge card list
+    public function rechargeCardList()
+    {
+        $rechargeCardLists = [];
+        $sn = 1;
+        $apiError = ''; // Initialize a variable to store API error messages
+    
+        try {
+            $response = Http::get('https://rechargecardportal.5starcompany.com.ng/api/pricing');
+    
+            if ($response->successful()) {
+                $rechargeCardLists = $response->json('data');
+            } else {
+                $apiError = 'API request failed'; // Set the API error message
+            }
+        } catch (Exception $e) {
+            $apiError = 'An error occurred while fetching data!';
+        }
+    
+        // Pass the API error message to the view along with other data
+        return view('recharge_card_list', compact('rechargeCardLists', 'sn', 'apiError'));
     }
 }

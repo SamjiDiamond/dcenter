@@ -9,14 +9,18 @@
             <div class="card m-b-30">
                 <div class="card-body">
                     <h4 class="card-title font-16 mt-0">Account Ledger Search</h4>
-                    <p class="card-text">Customer Id: <input type="text" name="customerid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">Transaction Id: <input type="text" name="transactionid" class="form-control" required data-parsley-minlength="2"/></p>
-                    <p class="card-text">Date: <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
-
-                    <p></p>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Search</a>
-                    <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a>
-                    <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                    <form action="{{route('transaction.index')}}" method="GET">
+                        
+                        <p class="card-text">Customer Id: <input type="text" name="customerId" id="customerId" value="{{old('customerId') ?? request('customerId')}}" class="form-control"  required data-parsley-minlength="2"/></p>
+                        <p class="card-text">Reference Id: <input type="text" name="transactionId" value="{{old('transactionId') ?? request('transactionId')}}" class="form-control" id="referenceId" required data-parsley-minlength="2"/></p>
+                        <p class="card-text">Date: <input class="form-control" type="date" name="date" value="{{now()->toDateString()}}" id="example-date-input">
+    
+                        <p></p>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                        <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
+                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                    </form>
+                  
                 </div>
             </div>
 
@@ -40,19 +44,20 @@
 
 
                         <tbody>
-                        @if($i??'')
-                        @foreach($users as $user)
+                        @if(isset($transactions))
+                        @forelse($transactions as $transaction)
                             <tr>
-                                <td>{{$i++}}</td>
-                                <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                                    {{$user->last_name}} {{$user->first_name}}</td>
-                                <td>{{$user->role}}</td>
-                                <td>{{$user->phoneno}}</td>
-                                <td>{{$user->created_at}}</td>
-                                <td>{{$user->wallet}}</td>
+                                <td>{{$loop->iterations()}}</td>
+                                <td>{{$transaction->created_at}}</td>
+                                <td>{{$transaction->description}}</td>
+                                <td>{{$transaction->amount}}</td>
+                                <td>{{$transaction->i_wallet}}</td>
+                                <td>{{$transaction->code}}</td>
                                 <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr><td colspan="7" class="text-center">Empty</td></tr>
+                        @endforelse
                             @endif
 
 
@@ -66,6 +71,8 @@
 
 
 @stop
+
+// 
 
 @section('after-scripts')
     <!-- Required datatable js -->
@@ -86,6 +93,18 @@
 
     <!-- Datatable init js -->
     <script src="assets/pages/datatables.init.js"></script>
+    
+    <script>
+    
+    $("#resetId").on('click', function(){
+        $("#referenceId").val('');
+        $("#customerId").val('');
+      
+    });
+        
+    </script>
+    
+    
 @stop
 
 @section('before-styles')

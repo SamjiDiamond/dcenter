@@ -18,7 +18,7 @@
                                         <tr>
                                             <td align="left">
                                                 <a href="#" class="editable-img">
-                                                    <img editable="true" mc:edit="image013" src="{{$message->embed('assets/images/logo_small.png')}}" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
+                                                    <img editable="true" mc:edit="image013" src="assets/images/logo_small.png" width="68" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="logo" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -31,7 +31,7 @@
                                         <tr>
                                             <td align="right">
                                                 <a href="#" style="border-style: none !important; display: block; border: 0 !important;" class="editable-img">
-                                                    <img editable="true" mc:edit="image014" src="{{$message->embed('assets/images/logo_small.png')}}"  width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
+                                                    <img editable="true" mc:edit="image014" src="assets/images/logo_small.png"  width="20" style="display:block; line-height:0; font-size:0; border:0;" border="0" alt="options" />
                                                 </a>
                                             </td>
                                         </tr>
