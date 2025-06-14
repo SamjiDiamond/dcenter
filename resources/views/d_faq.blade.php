@@ -1,96 +1,91 @@
 @extends('layouts.layout')
 
-@section('title','FAQ')
+@section('title','Faq')
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <div class="card m-b-30">
+        <div class="col-lg-6">
+            <div class="card faq-box">
                 <div class="card-body">
-
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Warning! {{ session('error') }} </strong>
-                        </div>
-                    @endif
-
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Success! {{ session('success') }} </strong>
-                        </div>
-                    @endif
-
-                    <h4 class="mt-0 header-title">Faq List</h4>
-
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                        <tr>
-                          
-                            <th>Topic</th>
-                            <th>Content</th>
-                            <th>Posted By</th>
-                            <th>Company Id</th>
-                            
-                        </tr>
-                        </thead>
-
-
-                        <tbody>
-                        @foreach($vfaq as $vfaqs)
-                        <tr>
-                            {{-- <td>{{$i++}}</td> --}}
-
-                            <td>{{$vfaqs->title}}</td>
-                            <td>{{$vfaqs->content}}</td>
-                            <td>{{$vfaqs->posted_by}}</td>
-                            <td>{{$vfaqs->company_id}}</td>
-                            
-                        </tr>
-                        @endforeach
-
-                        </tbody>
-                    </table>
-
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">What is Lorem Ipsum?</h5>
+                    <p class="text-muted mb-0">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
                 </div>
             </div>
-        </div> <!-- end col -->
-    </div> <!-- end row -->
-@stop
+            <!-- end faq-box -->
 
-@section('after-scripts')
-    <!-- Required datatable js -->
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables/dataTables.bootstrap4.min.js"></script>
-    <!-- Buttons examples -->
-    <script src="plugins/datatables/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/datatables/jszip.min.js"></script>
-    <script src="plugins/datatables/pdfmake.min.js"></script>
-    <script src="plugins/datatables/vfs_fonts.js"></script>
-    <script src="plugins/datatables/buttons.html5.min.js"></script>
-    <script src="plugins/datatables/buttons.print.min.js"></script>
-    <script src="plugins/datatables/buttons.colVis.min.js"></script>
-    <!-- Responsive examples -->
-    <script src="plugins/datatables/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables/responsive.bootstrap4.min.js"></script>
+            <div class="card faq-box">
+                <div class="card-body">
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">Where does it come from?
+                        @can('ban-users')
+                            <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fab fa-wpexplorer"></i> View</button>
+                        @endcan
+                    </h5>
+                    <p class="text-muted mb-0">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental.</p>
+                </div>
+            </div>
+            <!-- end faq-box -->
 
-    <!-- Datatable init js -->
-    <script src="assets/pages/datatables.init.js"></script>
-@stop
+            <div class="card faq-box">
+                <div class="card-body">
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">Why do we use it?</h5>
+                    <p class="text-muted mb-0">It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                </div>
+            </div>
+            <!-- end faq-box -->
 
-@section('before-styles')
-<!-- App Icons -->
-<link rel="shortcut icon" href="assets/images/favicon.ico">
+        </div>
+        <!-- end col -->
 
-<!-- DataTables -->
-<link href="plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-<link href="plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+        <div class="col-lg-6">
+            <div class="card faq-box">
+                <div class="card-body">
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">Where can I get some?</h5>
+                    <p class="text-muted mb-0">At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e.</p>
+                </div>
+            </div>
+            <!-- end faq-box -->
 
-<!-- Responsive datatable examples -->
-<link href="plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+            <div class="card faq-box">
+                <div class="card-body">
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">Why do we use it?</h5>
+                    <p class="text-muted mb-0">A un angleso it va semblar un simplificat Angles quam un skeptic Cambridge amico dit me que Occidental es. li Europan lingues es membres del sam familie Lor separat existentie es un myth. por scientie, music, sport etc, litot Europa usa li sam vocabular.</p>
+                </div>
+            </div>
+            <!-- end faq-box -->
+
+            <div class="card faq-box">
+                <div class="card-body">
+                    <div class="faq-icon">
+                        <i class="dripicons-question h2 icon-one"></i>
+                        <i class="dripicons-question h2 icon-two"></i>
+                    </div>
+                    <h5 class="font-16 mb-3">Where does it come from?</h5>
+                    <p class="text-muted mb-0">Their separate existence is a myth. For science music sport etc Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words. Everyone realizes why a new common language would be desirable one could refuse to pay expensive translators. to achieve this it would be necessary</p>
+                </div>
+            </div>
+            <!-- end faq-box -->
+
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
 @stop

@@ -45,6 +45,7 @@ class AuthenticateController extends Controller
                 $input['password'] = Hash::make($input['password']);
                 $input['status'] = "active";
                 $input['role'] = "user";
+                $input['referral_id'] = $input['referral'];
                 $input['account_type'] = "admin";
 
                 $email=User::where('email', $input['email'])->exists();

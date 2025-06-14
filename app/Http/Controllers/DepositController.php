@@ -17,14 +17,21 @@ class DepositController extends Controller
      */
     public function index()
     {
-        // $users = User::find(7);
+        $users = User::all();
 
-        // Notification::send($users, new UserNotification("However,
-        //  if you're looking for an alternative name that might convey the purpose or content of the notification more explicitly, 
-        //  you could consider something like 'UserProfileUpdateNotification' or 'UserAccountChangeNotification.' 
-        //  These names emphasize that the notification is related to user profiles or account changes. 
-        //  Ultimately, the choice of the name depends on your application's specific context and the type
-        //   of updates you're notifying users about."));
+        Notification::send($users, new UserNotification("🚧 Scheduled Maintenance Notice 🚧
+
+Dear Dynamic Center Website Users,
+
+We want to inform you that our website will undergo scheduled maintenance to enhance your browsing experience. During this time, certain features may be temporarily unavailable. Here are the details:
+
+📅 Date: [Insert Maintenance Date] 🕒 Time: [Insert Maintenance Time] ⏲️ Expected Duration: [Insert Expected Duration]
+
+During this maintenance period, we will be working diligently to improve our website's performance and implement necessary updates. We apologize for any inconvenience this may cause and appreciate your understanding as we strive to provide you with a more reliable and efficient browsing experience.
+
+Thank you for choosing Dynamic Center, and we look forward to serving you better in the future!
+
+Best regards, The Dynamic Center Team "));
 
      
 
@@ -36,7 +43,7 @@ class DepositController extends Controller
 
         if (request()->filled('customer_id') && request()->filled('transaction_id')) {
             $deposits = Deposit::FilterDeposits($customerId, $transactionId, $startDate, $endDate)->get();
-            $initialDeposit = auth()->user()->initialDeposit?->amount;
+            $initialDeposit = optional(auth()->user()->initialDeposit)->amount;
             $sn = 1;
             return view('report_deposit_monitoring', compact('deposits', 'initialDeposit', 'sn'));
         }
@@ -55,7 +62,7 @@ class DepositController extends Controller
 
         if (request()->filled('customer_id') && request()->filled('transaction_id')) {
             $deposits = Deposit::FilterDeposits($customerId, $transactionId, $startDate, $endDate, $bankTransfer)->get();
-            $initialDeposit = auth()->user()->initialDeposit?->amount;
+            $initialDeposit = optional(auth()->user()->initialDeposit)->amount;
             $sn = 1;
             return view('report_bank_transfer_deposit', compact('deposits', 'initialDeposit', 'sn'));
         }
@@ -74,7 +81,7 @@ class DepositController extends Controller
 
         if (request()->filled('customer_id') && request()->filled('transaction_id')) {
             $deposits = Deposit::FilterDeposits($customerId, $transactionId, $startDate, $endDate, $atm)->get();
-            $initialDeposit = auth()->user()->initialDeposit?->amount;
+            $initialDeposit = optional(auth()->user()->initialDeposit)->amount;
             $sn = 1;
             return view('report_atm_deposit', compact('deposits', 'initialDeposit', 'sn'));
         }

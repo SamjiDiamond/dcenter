@@ -30,7 +30,7 @@
                         </div>
                     </li>
                     <li class="list-inline-item notification-list">
-                        <a href="vfa" class="nav-link waves-effect">
+                        <a href="/faq" class="nav-link waves-effect">
                             Faq
                         </a>
                     </li>
@@ -219,7 +219,7 @@
                             <li>
                                 <ul>
                                     <li>
-                                        <a href="{{route('report.deposit.index')}}">
+                                        <a href="{{route('report.deposit.index')}}" style="font-size:12px;">
                                             Customer Deposit Monitoring
                                         </a>
                                     </li>
@@ -228,12 +228,12 @@
                                     <li><a href="{{route('atm.deposit')}}">Customer ATM payment</a></li>
                                 </ul>
                             </li>
-                            {{-- <li>
+                            <li>
                                 <ul>
 
                                     
                                 </ul>
-                            </li> --}}
+                            </li>
                         </ul>
                     </li>
 

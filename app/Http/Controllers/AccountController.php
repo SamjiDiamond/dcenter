@@ -48,4 +48,48 @@ class AccountController extends Controller
         //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\VirtualAccount  $virtualAccount
+     * @return \Illuminate\Http\Response
+     */
+    public function show(VirtualAccount $virtualAccount)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\VirtualAccount  $virtualAccount
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(VirtualAccount $virtualAccount)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\VirtualAccount  $virtualAccount
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, VirtualAccount $virtualAccount)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\VirtualAccount  $virtualAccount
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(VirtualAccount $virtualAccount)
+    {
+        //
+    }
 }

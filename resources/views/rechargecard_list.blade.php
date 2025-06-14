@@ -31,34 +31,32 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>default_id</th>
-                            <th>code</th>
-                            <th>price</th>
-                            <th>status</th>
-                            <th>desc</th>
-                            <th>identifier</th>
-                            {{-- <th>Action</th> --}}
+                            <th>Name</th>
+                            <th>Phoneno</th>
+                            <th>Registered on</th>
+                            <th>Wallet</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
 
 
                         <tbody>
-                        @foreach($recharge as $recharges)
+                        @foreach($users as $user)
                         <tr>
-                            {{-- <td>{{$i++}}</td> --}}
+                            <td>{{$i++}}</td>
                             <td><img class="d-flex mr-3 rounded-circle" src="assets/images/users/avatar-2.jpg" alt="" height="64">
-                            <td>{{$recharges->default_id}}</td>
-                            <td>{{$recharges->code}}</td>
-                            <td>{{$recharges->price}}</td>
-                            <td>{{$recharges->status}}</td>
-                            <td>{{$recharges->desc}}</td>
-                            <td>{{$recharges->identifier }}</td>
-                            {{-- <td>
-                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $recharges->id }}"><i class="fab fa-wpexplorer"></i> View</a>
+                                {{$user->last_name}} {{$user->first_name}}</td>
+                            <td>{{$user->phoneno}}</td>
+                            <td>{{$user->created_at}}</td>
+                            <td>{{$user->wallet}}</td>
+                            <td>{{$user->status}}</td>
+                            <td>
+                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $user->id }}"><i class="fab fa-wpexplorer"></i> View</a>
                                 @can('edit-user')
-                                <a href="/user-edit/{{ $recharges->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
+                                <a href="/user-edit/{{ $user->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
                                     @endcan
-                            </td> --}}
+                            </td>
                         </tr>
                         @endforeach
 
