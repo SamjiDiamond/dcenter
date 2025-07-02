@@ -48,6 +48,13 @@ class AuthenticateController extends Controller
                 $input['referral_id'] = $input['referral'];
                 $input['account_type'] = "admin";
 
+
+                $company=Company::find($input['company_id']);
+
+                if(!$company){
+                    return response()->json(['status' => 0, 'message' => 'Invalid Company ID']);
+                }
+
                 $email=User::where('email', $input['email'])->exists();
                 if($email){
                     return response()->json(['status' => 0, 'message' => 'Email has been taken']);
