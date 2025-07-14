@@ -117,6 +117,7 @@ class TransactionController extends Controller
                 CURLOPT_URL => "https://api.paystack.co/bank/resolve?account_number=". $input['account_number'] ."&bank_code=". $input['bank_code'],
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_HTTPHEADER => [
                     "authorization: Bearer ".env('PAYSTACK_SECRET'), //replace this with your own test key
                     "content-type: application/json",
@@ -238,7 +239,7 @@ class TransactionController extends Controller
         $rules = array(
             'number'      => 'required',
             'type'      => 'required',
-            'provider' => 'required');
+            'identifier' => 'required');
 
         $validator = Validator::make($input, $rules);
 
@@ -246,124 +247,61 @@ class TransactionController extends Controller
         {
             $type=$input['type'];
 
-            switch ($input['provider']){
-                case "PHCN":
-                    $provider="PHCN";
-                    $provider_code="01";
-                    if($type=="postpaid"){
-                        $provider="EKO_POSTPAID";
-                    }else{
-                        $provider="EKO_PREPAID";
-                    }
+            $provider=ElectricityConfig::where('identifier',$input['identifier'])->first();
 
-                    break;
-
-                case "IKEDC":
-                    $provider="IKEDC";
-                    $provider_code="02";
-                    if($type=="postpaid"){
-                        $provider="IKEJA";
-                    }else{
-                        $provider="IKEJA_TOKEN";
-                    }
-                    break;
-
-                case "KEDCO":
-                    $provider="KEDCO";
-                    $provider_code="04";
-                    if($type=="postpaid"){
-                        $provider="KEDCO_POSTPAID";
-                    }else{
-                        $provider="KEDCO_PREPAID";
-                    }
-
-                    break;
-
-                case "PHED":
-                    $provider="PHED";
-                    $provider_code="05";
-                    break;
-
-                case "JED":
-                    $provider="JED";
-                    $provider_code="06";
-                    break;
-
-                default:
-                    $provider="JED";
-                    $provider_code="06";
+            if(!$provider){
+                return response()->json(['status' => 0, 'message' => 'Invalid Identifier supplied']);
             }
-            /* $curl = curl_init();
-             curl_setopt_array($curl, array(
-                 CURLOPT_URL => "https://mobilenig.com/api/bills/user_check?username=samji10&password=Emmanuel@10&service=".$provider."&number=".$input['number'],
-                 CURLOPT_RETURNTRANSFER => true,
-                 CURLOPT_CUSTOMREQUEST => "GET",
-                 CURLOPT_HTTPHEADER => [
-                     "content-type: application/json",
-                     "cache-control: no-cache"
-                 ],
-             ));
 
-             $response = curl_exec($curl);
-             $err = curl_error($curl);
-
-             if($err){
-                 // there was an error contacting the Paystack API
-                 die('Curl returned error: ' . $err);
-             }
-
-             $tranx = json_decode($response, true);
-
-             echo $response. "<br />";
-
- $findme   = 'errorMessage';
- $pos = strpos($response, $findme);
- // Note our use of ===.  Simply == would not work as expected
- if ($pos === false) {
-     return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
- }else{
-     if ($type=="postpaid"){
-
-     }else{
-
-     }
-     return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $tranx['details']['firstName'] . " " . $tranx['details']['lastName']]);
- }*/
 
             $curl = curl_init();
+
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://www.nellobytesystems.com/APIVerifyElectricityV1.asp?UserID=CK10123847&APIKey=W5352Q23GDS924D7UA1B84YYY506178I69DDE4JR1ZRAR80FCBQF819D4T7HKI85&ElectricCompany=".$provider_code."&meterno=".$input['number'],
+                CURLOPT_URL => env('MCD_URL').'/validate',
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => [
-                    "content-type: application/json",
-                    "cache-control: no-cache"
-                ],
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_POSTFIELDS => '{
+    "service": "electricity",
+    "provider": "'.$provider->code.'",
+    "number": "'.$input['number'].'"
+}',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer '.env('MCD_TOKEN')
+                ),
             ));
 
             $response = curl_exec($curl);
-            $err = curl_error($curl);
 
-            if($err){
-                // there was an error contacting the Paystack API
-                die('Curl returned error: ' . $err);
-            }
+            curl_close($curl);
 
-            $tranx = json_decode($response, true);
+            $rep=json_decode($response, true);
 
-            $findme   = 'customer_name';
-            $pos = strpos($response, $findme);
-            // Note our use of ===.  Simply == would not work as expected
-            if ($pos === false) {
-                return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
-            }else {
-                if ($tranx['customer_name'] != "Invalid Meter Number.") {
-                    return response()->json(['status' => 1, 'message' => 'Validate successfully', 'data' => $tranx['customer_name']]);
-                } else {
-                    return response()->json(['status' => 0, 'message' => 'Could not resolve account name']);
+
+            Log::info('number:'. $input['number'].'serviceID:'. $input['identifier']."==Validate Meter Name ==".$response);
+
+            try{
+                if($rep['success'] == 1) {
+                    return response()->json(['status' => 1, 'message' => 'Validated successfully', 'data' => $rep['data'], 'details' => $rep['details']]);
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'message' => $rep['message']['error']
+                    ]);
                 }
+            }catch (\Exception $e){
+                Log::error('number:'. $input['number'].'serviceID:'. $input['identifier']."==Validate Meter Name ==".$response,[$e]);
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Could not resolve account name'
+                ]);
             }
-
         }else{
             return response()->json(['status'=> 0, 'message'=>'Unable to validate account', 'error' => $validator->errors()]);;
         }
