@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
@@ -179,79 +180,56 @@ class TransactionController extends Controller
         {
 
             $curl = curl_init();
+
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://mobilenig.com/api/bills/user_check?username=samji10&password=Emmanuel@10&service=".$input['provider']."&number=".$input['iuc'],
+                CURLOPT_URL => env('MCD_URL').'/validate',
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => [
-                    "content-type: application/json",
-                    "cache-control: no-cache"
-                ],
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_POSTFIELDS => '{
+    "service": "tv",
+    "provider": "'.$input['provider'].'",
+    "number": "'.$input['iuc'].'"
+}',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer '.env('MCD_TOKEN')
+                ),
             ));
 
             $response = curl_exec($curl);
-            $err = curl_error($curl);
 
-            if($err){
-                // there was an error contacting the Paystack API
-                die('Curl returned error: ' . $err);
-            }
+            curl_close($curl);
 
-            $tranx = json_decode($response, true);
+            $rep=json_decode($response, true);
 
-            if($input['provider']=='STARTIMES'){
-                if ($tranx['details']['customerName'] == null) {
-                    return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
+
+            Log::info('billersCode:'. $input['iuc'].'serviceID:'. $input['provider']."==Validate TV Name ==".$response);
+
+            try{
+                if($rep['success'] == 1) {
+                    return response()->json(['status' => 1, 'message' => 'Validated successfully', 'data' => $rep['data'], 'details' => $rep['details']]);
                 }else{
-                    return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $tranx['details']['customerName']]);
+                    return response()->json([
+                        'status' => 0,
+                        'message' => $rep['message']['error']
+                    ]);
                 }
-
-            }else{
-                $findme   = 'accountStatus';
-                $pos = strpos($response, $findme);
-                // Note our use of ===.  Simply == would not work as expected
-                if ($pos === false) {
-                    return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
-                }else{
-                    return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $tranx['details']['firstName'] . " " . $tranx['details']['lastName']]);
-                }
+            }catch (\Exception $e){
+                Log::error('billersCode:'. $input['iuc'].'serviceID:'. $input['provider']."==Validate TV Name ==".$response,[$e]);
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Could not resolve account name'
+                ]);
             }
-
-
-            /*
-                        $curl = curl_init();
-                        curl_setopt_array($curl, array(
-                            CURLOPT_URL => "https://www.nellobytesystems.com/APIVerifyCableTVV1.0.asp?UserID=CK10123847&APIKey=W5352Q23GDS924D7UA1B84YYY506178I69DDE4JR1ZRAR80FCBQF819D4T7HKI85&cabletv=".$tv_type_code."&smartcardno=".$input['iuc'],
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_CUSTOMREQUEST => "GET",
-                            CURLOPT_HTTPHEADER => [
-                                "content-type: application/json",
-                                "cache-control: no-cache"
-                            ],
-                        ));
-
-                        $response = curl_exec($curl);
-                        $err = curl_error($curl);
-
-                        if($err){
-                            // there was an error contacting the Paystack API
-                            die('Curl returned error: ' . $err);
-                        }
-
-                        $tranx = json_decode($response, true);
-
-                        echo $response. "<p> </p>";
-
-                        if($tranx['customer_name']!="INVALID_SMARTCARDNO"){
-                            return response()->json(['status' => 1, 'message'=>'Validate successfully', 'data'=> $tranx['customer_name']]);
-                        }else{
-                            return response()->json(['status' => 0, 'message'=>'Could not resolve account name']);
-                        }
-            */
-
 
         }else{
-            return response()->json(['status'=> 0, 'message'=>'Unable to validate account', 'error' => $validator->errors()]);;
+            return response()->json(['status'=> 0, 'message'=>implode(",",$validator->errors()->all()), 'error' => $validator->errors()]);
         }
     }
 
