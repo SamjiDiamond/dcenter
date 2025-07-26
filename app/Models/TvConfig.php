@@ -10,4 +10,6 @@ class TvConfig extends Model
     use HasFactory;
 
     protected $table= 'config_tv';
+
+    protected $guarded = [];
 }

@@ -57,7 +57,12 @@ class TransactionController extends Controller
         $user = Auth::user();
         $config = TvConfig::where([['company_id', $user->company_id], ['provider', $provider], ['status', 1]])->select('identifier', 'price', 'provider', 'desc')->get();
         if($config->isEmpty()){
-            return response()->json(['status' => 0, 'message'=>'Packages not available']);
+            $config = TvConfig::where([['company_id', 0], ['provider', $provider], ['status', 1]])->select('identifier', 'price', 'provider', 'desc')->get();
+            if($config->isEmpty()){
+                return response()->json(['status' => 0, 'message'=>'Packages not available']);
+            }else{
+                return response()->json(['status' => 1, 'message'=>'loaded successfully', 'data'=> $config]);
+            }
         }else{
             return response()->json(['status' => 1, 'message'=>'loaded successfully', 'data'=> $config]);
         }
