@@ -10,4 +10,5 @@ class ElectricityConfig extends Model
     use HasFactory;
 
     protected $table = 'config_electricity';
+    protected $guarded = [];
 }
