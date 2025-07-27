@@ -37,9 +37,9 @@ class ServerController extends Controller
                     return response()->json(['status' => 0, 'message' => 'Invalid Code supplied']);
                 }
 
-                if ($dc->company_id != Auth::user()->company_id) {
-                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
-                }
+//                if ($dc->company_id != Auth::user()->company_id) {
+//                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
+//                }
 
                 if ($dc->price > Auth::user()->wallet) {
                     return response()->json(['status' => 0, 'message' => 'Insufficient balance. Kindly topup']);
@@ -65,7 +65,7 @@ class ServerController extends Controller
                 return response()->json(['status' => 1, 'message' => 'Transaction Successful']);
 
             }catch(\Exception $e){
-                dd($e);
+//                dd($e);
                 return response()->json(['status'=> 0, 'message'=>'Error processing transaction','error' => $e]);
             }
 
@@ -93,9 +93,9 @@ class ServerController extends Controller
                     return response()->json(['status' => 0, 'message' => 'Invalid Code supplied']);
                 }
 
-                if ($dc->company_id != Auth::user()->company_id) {
-                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
-                }
+//                if ($dc->company_id != Auth::user()->company_id) {
+//                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
+//                }
 
                 $amount = $input['amount'];
                 $d = ($dc->price * $input['amount']) / 100;
@@ -125,7 +125,6 @@ class ServerController extends Controller
                 return response()->json(['status' => 1, 'message' => 'Transaction Successful']);
 
             } catch (\Exception $e) {
-                dd($e);
                 return response()->json(['status' => 0, 'message' => 'Error processing transaction', 'error' => $e]);
             }
         } else {
@@ -152,9 +151,9 @@ class ServerController extends Controller
                     return response()->json(['status' => 0, 'message' => 'Invalid Code supplied']);
                 }
 
-                if ($dc->company_id != Auth::user()->company_id) {
-                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
-                }
+//                if ($dc->company_id != Auth::user()->company_id) {
+//                    return response()->json(['status' => 0, 'message' => 'A fatai error occur. Kindly contact the server admin']);
+//                }
 
                 if ($dc->price > Auth::user()->wallet) {
                     return response()->json(['status' => 0, 'message' => 'Insufficient balance. Kindly topup']);
