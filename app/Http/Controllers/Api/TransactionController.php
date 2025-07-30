@@ -228,7 +228,7 @@ class TransactionController extends Controller
                 }else{
                     return response()->json([
                         'status' => 0,
-                        'message' => $rep['message']['error']
+                        'message' => $rep['message']
                     ]);
                 }
             }catch (\Exception $e){
@@ -302,7 +302,7 @@ class TransactionController extends Controller
                 }else{
                     return response()->json([
                         'status' => 0,
-                        'message' => $rep['message']['error']
+                        'message' => $rep['message']
                     ]);
                 }
             }catch (\Exception $e){
