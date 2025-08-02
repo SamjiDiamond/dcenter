@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\VirtualAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -190,6 +191,12 @@ class UserController extends Controller
             return response()->json(['status'=> 0, 'message'=>'Error changing password', 'error' => $validator->errors()]);
         }
 
+    }
+
+    public function vaccts(Request $request)
+    {
+        $vs=VirtualAccount::where('user_id',Auth::id())->get();
+        return response()->json(['status'=> 1, 'message'=>'Virtual accounts loaded successfully', 'data'=>$vs]);
     }
 
     public function documentupload(Request $request){

@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('uploaddp', [UserController::class, 'uploaddp'])->name('uploaddp');
     Route::post('updateprofile', [UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('changepassword', [UserController::class, 'changepassword'])->name('changepassword');
+    Route::get('vaccts', [UserController::class, 'vaccts'])->name('vaccts');
 
     Route::post('buy/data', [ServerController::class, 'buydata'])->name('buydata');
     Route::post('buy/airtime', [ServerController::class, 'buyairtime'])->name('buyairtime');
