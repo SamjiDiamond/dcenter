@@ -47,7 +47,12 @@ class TransactionController extends Controller
         $user = Auth::user();
         $config = DataConfig::where([['company_id', $user->company_id], ['network', $network], ['status', 1]])->select('identifier', 'price', 'network', 'desc')->get();
         if($config->isEmpty()){
-            return response()->json(['status' => 0, 'message'=>'Packages not available']);
+            $config = DataConfig::where([['company_id', 0], ['network', $network], ['status', 1]])->select('identifier', 'price', 'network', 'desc')->get();
+            if($config->isEmpty()){
+                return response()->json(['status' => 0, 'message'=>'Packages not available']);
+            }else{
+                return response()->json(['status' => 1, 'message'=>'loaded successfully', 'data'=> $config]);
+            }
         }else{
             return response()->json(['status' => 1, 'message'=>'loaded successfully', 'data'=> $config]);
         }
