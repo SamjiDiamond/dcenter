@@ -96,6 +96,8 @@ class TransactionController extends Controller
             CURLOPT_URL => "https://api.paystack.co/bank",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_HTTPHEADER => [
                 "authorization: Bearer ".env('PAYSTACK_SECRET'),
                 "content-type: application/json",

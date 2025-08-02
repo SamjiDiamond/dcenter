@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\KorapayWebhookController;
+use App\Http\Controllers\Api\WithdrawalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -60,7 +61,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::post('buy/paytv', [ServerController::class, 'paytv'])->name('paytv');
     Route::post('buy/a2c', [ServerController::class, 'a2c'])->name('a2c');
     Route::post('buy/electricity', [ServerController::class, 'buyelectricity'])->name('buyelectricity');
-    Route::post('buy/transfer', 'RequestServerController@buytransfer')->name('buytransfer')->middleware("apphelper");
+    Route::post('buy/transfer', [ServerController::class, 'buytransfer'])->name('buytransfer');
 
 });
 

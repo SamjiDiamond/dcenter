@@ -459,32 +459,72 @@ class ServerController extends Controller
     public function buytransfer(Request $request) {
         $input = $request->all();
         $rules = array(
-            'username'      => 'required',
-            'type'      => 'required',
+            'type'      => 'required|in:bank,wallet',
             'amount'      => 'required',
             'account_name'      => 'required',
             'provider' => 'required');
 
         $validator = Validator::make($input, $rules);
 
-        if ($validator->passes())
+        if (!$validator->passes())
         {
-            $input['company_id']=Auth::user()->company_id;
-            $input['i_wallet']=Auth::user()->wallet;
-            $input['f_wallet']='60';
-            $input['date']=date('Y-m-d H:i:s');
-            $input['status']="successful";
-            $input['code']="debit";
-            $input['ip_address']=$_SERVER['REMOTE_ADDR'];
-            $input['description']=$input['provider'] .' '. $input['amount'].' - '. $input['username'].' =>'. $input['account_name'];
-
-            Transaction::create($input);
-
-            return response()->json(['status' => 1, 'message' => 'Transaction successfully']);
-
-        }else{
-            return response()->json(['status'=> 0, 'message'=>'Unable to validate account', 'error' => $validator->errors()]);;
+            return response()->json(['status'=> 0, 'message'=> implode(",",$validator->errors()->all()), 'error' => $validator->errors()]);;
         }
+
+        $price=$input['amount'];
+        $code=$input['type'];
+
+        if ($price > Auth::user()->wallet) {
+            return response()->json(['status' => 0, 'message' => 'Insufficient balance. Kindly topup']);
+        }
+
+
+        if($code == "wallet") {
+            $rules = array(
+                'username'      => 'required',
+            );
+
+            $validator = Validator::make($input, $rules);
+
+            if (!$validator->passes())
+            {
+                return response()->json(['status'=> 0, 'message'=> implode(",",$validator->errors()->all()), 'error' => $validator->errors()]);;
+            }
+
+            $input['description']=$input['provider'] .' '. $input['amount'].' - '. $input['username'].' =>'. $input['account_name'];
+        }else{
+            $rules = array(
+                'account_number'      => 'required',
+                'bank_code'      => 'required',
+            );
+
+            $validator = Validator::make($input, $rules);
+
+            if (!$validator->passes())
+            {
+                return response()->json(['status'=> 0, 'message'=> implode(",",$validator->errors()->all()), 'error' => $validator->errors()]);;
+            }
+
+            $input['description']=$input['provider'] .' '. $input['amount'].' - '. $input['account_number'].' =>'. $input['account_name'];
+        }
+
+        $input['reference_id'] = Auth::user()->company_id . "d" . date('ymd') . rand();
+        $input['company_id'] = Auth::user()->company_id;
+        $input['user_id'] = Auth::id();
+        $input['amount'] = $price;
+        $input['i_wallet'] = Auth::user()->wallet;
+        $input['f_wallet'] = Auth::user()->wallet - $price;
+        $input['date'] = Carbon::now();
+        $input['status'] = "successful";
+        $input['code'] = $code;
+        $input['type'] = "debit";
+        $input['ip_address'] = $_SERVER['REMOTE_ADDR'];
+
+        Transaction::create($input);
+
+        User::where('id', Auth::id())->update(['wallet' => $input['f_wallet']]);
+
+        return response()->json(['status' => 1, 'message' => 'Transaction Successful']);
     }
 
 
