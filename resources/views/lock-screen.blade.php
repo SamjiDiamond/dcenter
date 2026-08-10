@@ -1155,9 +1155,6 @@ a:hover {
          Lock Screen
         </h1>
 
-        @if(session('error'))
-        <p class="text-danger">{{session('error')}}</p>
-        @endif
        
         <form action="{{route('lock.screen.login')}}" method="post">
           @csrf
@@ -1202,6 +1199,8 @@ a:hover {
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  @include('partials.toasts')
 
 </body>
 

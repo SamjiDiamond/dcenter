@@ -7,25 +7,7 @@
             <div class="card m-b-30">
                 <div class="card-body">
 
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Warning! {{ session('error') }} </strong>
-                        </div>
-                    @endif
-
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Success! {{ session('success') }} </strong>
-                        </div>
-                @endif
-
-                        @foreach ($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -103,18 +85,20 @@
                                                                     <td>{{$user->phoneno}}</td>
                                                                     <td>{{$user->role}}</td>
                                                                     <td>{{$user->company}}</td>
-                                                                    <td>{{$user->status}}</td>
+                                                                    <td>@include('partials.status-badge', ['status' => $user->status])</td>
                                                                     <td>{{$user->created_at}}</td>
                                                                     <td>
                                                                         <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="modal" data-target=".bs-example-modal-sm{{ $user->id }}" style="margin: 5px"><i class="fab fa-wpexplorer"></i> View</button>
                                                                         @can('admin-edit')
-                                                                        <a href="/admin-edit/{{ $user->id }}" type="button" class="btn btn-info waves-effect waves-light" style="margin: 5px"><i class="fas fas fa-user-edit"></i> Edit</a>
+                                                                        <a href="/admin-edit/{{ $user->uuid }}" type="button" class="btn btn-info waves-effect waves-light" style="margin: 5px"><i class="fas fas fa-user-edit"></i> Edit</a>
                                                                         @endcan
                                                                         @can('admin-disable')
-                                                                            @if($user->status == "active")
-                                                                                <a href="/admin-disable/{{ $user->id }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Disable</a>
-                                                                            @else
-                                                                                <a href="/admin-enable/{{ $user->id }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Enable</a>
+                                                                            @if($user->company_id == auth()->user()->company_id || auth()->user()->company_id == 1)
+                                                                                @if($user->status == "active")
+                                                                                    <a href="/admin-disable/{{ $user->uuid }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Disable</a>
+                                                                                @else
+                                                                                    <a href="/admin-enable/{{ $user->uuid }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px"><i class="fas fa-user-alt-slash"></i>Enable</a>
+                                                                                @endif
                                                                             @endif
                                                                         @endcan
                                                                     {{--  <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-trash"></i>Delete</button></td>--}}
@@ -144,11 +128,7 @@
                                                                                         <p>Phone
                                                                                             Number: {{$user->phoneno}}</p>
                                                                                         <p>
-                                                                                            Status: {{ $user->status }}</p>
-                                                                                        <p>
-                                                                                            Gender: {{ $user->gender }}</p>
-                                                                                        <p>
-                                                                                            Address: {{ $user->address }}</p>
+                                                                                            Status: @include('partials.status-badge', ['status' => $user->status])</p>
 
                                                                                     </div>
                                                                                 </div><!-- /.modal-content -->
@@ -250,7 +230,7 @@
                                                             <h4 class="mt-0 header-title">Edit Admin</h4>
                                                             <p class="text-muted m-b-30">Modify Admin</p>
 
-                                                            <form method="POST" action="/admin-update/{{$use->id}}">
+                                                            <form method="POST" action="/admin-update/{{$use->uuid}}">
                                                                 @csrf
 
                                                                 <div class="form-group">

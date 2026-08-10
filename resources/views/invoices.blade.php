@@ -15,7 +15,7 @@
                                     <tr>
                                         <td>{{$i++}}</td>
                                         <td>{{$company->name}}</td>
-                                        <td><a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $company->id }}" style="margin: 5px"><i class="fab fa-wpexplorer"></i> View Invoice</a> <button type="button" class="btn btn-info waves-effect waves-light" style="margin: 5px"><i class="fas fas fa-user-edit"></i>Change Plan</button>
+                                        <td><button type="button" class="btn btn-info waves-effect waves-light" style="margin: 5px"><i class="fas fas fa-user-edit"></i>Change Plan</button>
                                             <form method="POST" action="/subscription-cancel">
                                                 @csrf
                                                 <input type="hidden" class="form-control" required data-parsley-minlength="2" value="{{$company->id}}" name="companyid"/>

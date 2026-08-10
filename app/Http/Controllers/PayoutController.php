@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payout;
+use App\Notifications\TransactionNotification;
 use Illuminate\Http\Request;
 
 
@@ -127,10 +128,12 @@ class PayoutController extends Controller
                 $payout->bank_code = $request->bank_code;
                 
                 $payout->save();   
+
+                auth()->user()->notify(new TransactionNotification($rep['data']['amount'] ?? $request->amount, 'payout', 'Payout completed successfully'));
                 
-                return redirect()->back()->with('message', 'Payout Successful!');
+                return redirect()->back()->withToast('Payout Successful!');
             }else{
-                return redirect()->back()->with('message', 'Payout Failed!');
+                return redirect()->back()->withToast('Payout Failed!', 'danger');
             }
 
 

@@ -7,17 +7,8 @@
             <div class="card m-b-30">
                 <div class="card-body">
 
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Warning! {{ session('error') }} </strong>
-                        </div>
-                    @endif
-
                     @if($apiError)
-                     <div class="alert alert-danger">{{ $apiError }}</div>
+                        <template class="toast-flash" data-type="danger" data-message="{{ $apiError }}"></template>
                     @endif
 
                     <h4 class="mt-0 header-title">Reversal List</h4>

@@ -17,18 +17,20 @@
                     <h4 class="card-title font-16 mt-0">{{$user->last_name}} {{$user->first_name}}</h4>
                     <p class="card-text">Wallet Balance: {{$user->wallet}}</p>
                     @can('user-edit')
-                    <a href="/user-edit/{{ $user->id }}" class="btn btn-primary waves-effect waves-light">Edit</a>
+                    <a href="/user-edit/{{ $user->uuid }}" class="btn btn-primary waves-effect waves-light">Edit</a>
                     @endcan
 
 
-                        @if($user->status == "active")
-                            @can('user-disable')
-                                <a href="/user-disable/{{ $user->id }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px">Disable</a>
-                            @endcan
-                        @else
-                            @can('user-enable')
-                                <a href="/user-enable/{{ $user->id }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px">Enable</a>
-                            @endcan
+                        @if($user->company_id == auth()->user()->company_id || auth()->user()->company_id == 1)
+                            @if($user->status == "active")
+                                @can('user-disable')
+                                    <a href="/user-disable/{{ $user->uuid }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px">Disable</a>
+                                @endcan
+                            @else
+                                @can('user-enable')
+                                    <a href="/user-enable/{{ $user->uuid }}" type="button" class="btn btn-outline-warning waves-effect waves-light" style="margin: 5px">Enable</a>
+                                @endcan
+                            @endif
                         @endif
 
                 </div>
@@ -56,12 +58,15 @@
                         <dt class="col-sm-3">First Name:</dt>
                         <dd class="col-sm-9">{{$user->first_name}}</dd>
 
-                        <dt class="col-sm-3">Customer ID:</dt>
-                        <dd class="col-sm-9">{{$user->id}}</dd>
+                        <dt class="col-sm-3">Customer Ref:</dt>
+                        <dd class="col-sm-9">
+                            <b>{{ $user->reference }}</b>
+                            <small class="d-block text-muted">{{$user->uuid}}</small>
+                        </dd>
 {{--                        <dd class="col-sm-9 offset-sm-3">Donec id elit non mi porta gravida at eget metus.</dd>--}}
 
                         <dt class="col-sm-3">Status</dt>
-                        <dd class="col-sm-9">{{$user->status}}</dd>
+                        <dd class="col-sm-9">@include('partials.status-badge', ['status' => $user->status])</dd>
 
                         <dt class="col-sm-3">Company</dt>
                         <dd class="col-sm-9">{{$user->company->name}}</dd>
@@ -69,42 +74,11 @@
                         <dt class="col-sm-3">Account Type</dt>
                         <dd class="col-sm-9">{{$user->account_type}}</dd>
 
-                        <dt class="col-sm-3">Address: </dt>
-                        <dd class="col-sm-9">{{$user->address}}</dd>
-
-                        <dt class="col-sm-3">Gender: </dt>
-                        <dd class="col-sm-9">{{$user->gender}}</dd>
-
-                        <dt class="col-sm-3">Country: </dt>
-                        <dd class="col-sm-9">{{$user->country}}</dd>
-
                         <dt class="col-sm-3">Date Created: </dt>
                         <dd class="col-sm-9">{{$user->created_at}}</dd>
 
                         <dt class="col-sm-3">Last Login: </dt>
                         <dd class="col-sm-9">{{$user->updated_at}}</dd>
-
-                        <dt class="col-sm-3">Introducer: </dt>
-                        <dd class="col-sm-9">{{$user->referral_at}}</dd>
-
-{{--                        <dt class="col-sm-3 text-truncate">Truncated term is truncated</dt>--}}
-{{--                        <dd class="col-sm-9">Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>--}}
-
-                        <dt class="col-sm-3">Notification Via:</dt>
-                        <dd class="col-sm-9">
-                            <dl class="row mb-0">
-                                <dt class="col-sm-4">Email:</dt>
-                                <dd class="col-sm-8">{{$user->notification_email}}</dd>
-                            </dl>
-
-                            <dl class="row mb-0">
-                                <dt class="col-sm-4">SMS:</dt>
-                                <dd class="col-sm-8">{{$user->notification_sms}}</dd>
-                            </dl>
-                        </dd>
-
-                        <dt class="col-sm-3">Virtual Account </dt>
-                        <dd class="col-sm-9">7382494</dd>
 
                     </dl>
 

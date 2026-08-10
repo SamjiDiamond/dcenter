@@ -7,6 +7,7 @@
     <meta content="Dynamic Center Admin Dashboard" name="description" />
     <meta content="Samji Diamond @ 5Star Company" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App Icons -->
     <link rel="shortcut icon" href="../assets/images/favicon.ico">
@@ -83,17 +84,6 @@
 
             @yield('content')
 
-            <div class="p-3">
-                            @if(session()->has('message'))
-
-                                <div class="alert alert-success">
-
-                                    <button type="button" class="close" data-dismiss="alert">x</button>
-                                    <div style="text-align: center">{{session()->get('message') }}</div>
-                                </div>
-                            @endif
-            </div>
-
     </div> <!-- end container-fluid -->
 </div>
 <!-- end wrapper -->
@@ -118,6 +108,8 @@
 <script src="../assets/js/modernizr.min.js"></script>
 <script src="../assets/js/waves.js"></script>
 <script src="../assets/js/jquery.slimscroll.js"></script>
+
+@include('partials.toasts')
 
 @yield('after-scripts')
 <!-- App js -->

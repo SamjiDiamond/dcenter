@@ -142,17 +142,29 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="mt-0 header-title mb-4">Recent Activity</h4>
+                    @if($audits->isNotEmpty())
                     <ol class="activity-feed mb-0">
-
                         @foreach($audits as $audit)
                         <li class="feed-item">
                             <div class="feed-item-list">
-                                <span class="date text-white-50">{{\Carbon\Carbon::parse($audit->created_at)->toFormattedDateString()}}</span>
+                                <span class="date text-white-50">{{\Carbon\Carbon::parse($audit->created_at)->format('g:i A')}}</span>
                                 <span class="activity-text">{{$audit->type}} {{$audit->action}}</span>
                             </div>
                         </li>
                         @endforeach
                     </ol>
+                    @else
+                    <div class="text-center py-4">
+                        <i class="mdi mdi-history text-muted d-block h3 mb-1"></i>
+                        <p class="text-muted mb-0">No activity today.</p>
+                    </div>
+                    @endif
+
+                    <div class="text-right mt-2">
+                        <a href="{{ route('audit.trail.index') }}" class="btn btn-link btn-sm p-0">
+                            See more <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                    </div>
 
                 </div>
             </div>

@@ -11,6 +11,19 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <i class="mdi mdi-information-outline mr-1"></i>
+                Wallet top-up funding fee:
+                <b>₦{{ number_format($fundingFee, 2) }}</b>
+                <span class="text-muted">(live from system settings)</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         @foreach($plans as $plan)
         <div class="col-xl-3 col-md-6">
             <div class="pricing-box text-center mt-4 p-2">

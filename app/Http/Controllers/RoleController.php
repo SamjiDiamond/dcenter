@@ -99,10 +99,9 @@ class RoleController extends Controller
             {
                 $rol=BouncerRoleModel::where([['name','=',$request->input('name')], ['company_id', '=', auth()->user()->company_id]])->exists();
                 if($rol) {
-                    return redirect()->route('role.list')->with('error','Role already exist');
+                    return redirect()->route('role.list')->withToast('Role already exist', 'danger');
                 }
 
-                Bouncer::useRoleModel(BouncerRoleModel::class);
                 $role = Bouncer::role()->firstOrCreate([
                     'name' => $request->input('name'),
                     'title' => $request->input('description'),
@@ -111,74 +110,18 @@ class RoleController extends Controller
 
                 $role->allow($request->input('permission'));
 
-                return redirect()->route('role.list')->with('success','Role created successfully');
+                return redirect()->route('role.list')->withToast('Role created successfully');
             }catch(\Exception $e){
-                return redirect()->route('role.list')->with('error','Error creating Role');
+                return redirect()->route('role.list')->withToast('Error creating Role', 'danger');
             }
         }else{
             return redirect('/roles')
                 ->withErrors($validator)
                 ->withInput();
-//            return redirect()->route('role.list')->with('error','Error creating Role');
+//            return redirect()->route('role.list')->withToast('Error creating Role', 'danger');
 //            return response()->json(['status'=> 0, 'message'=>'Error creating account', 'error' => $validator]);
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $role = Role::get();
-        $rolePermissions = Role::join("role_has_permissions","role_has_permissions.role_id","=","roles.id")
-            ->join("permissions","role_has_permissions.permission_id","=","permissions.id")
-            ->get();
-        $permission = Permission::get();
-
-        $permi="";
-
-//        foreach($permission as $permissions) {
-
-
-
-                    foreach($permission as $permissions) {
-//                        echo $permissions->name;
-                        foreach ($rolePermissions as $rolePermission) {
-                            if ($rolePermission->role_id == $id) {
-
-                        if ($permi != $rolePermission->name) {
-                            $permi = $rolePermission->name;
-                            if ($rolePermission->permission_id == $permissions->id) {
-                                echo $rolePermission->name . "---";
-
-
-                                echo "yes <br /><br />";
-                            } else {
-                                echo "no <br /><br />";
-                            }
-                        }
-                    }
-
-//                    if ($rolePermission->permission_id == $permissions->id && $permi!=$rolePermission->name) {
-//                        $permi=$rolePermission->name;
-////                    echo $permission->name;
-//                        if ($rolePermission->name == $permissions->name) {
-//                            echo $rolePermission->name . " Checked <br /><br />";
-//                        }
-//                    }else {
-//                        echo $rolePermission->name . " unChecked <br /><br />";
-//                    }
-                }
-            }
-//        }
-
-        echo $role . " <br /><br />" . $rolePermissions . " <br /><br />" . $permission;
-
-//        return view('roles.show',compact('role','rolePermissions'));
-    }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -254,7 +197,7 @@ class RoleController extends Controller
 
         $rol=Role::where([['name','=',$request->input('name')], ['company_id', '=', auth()->user()->company_id]])->first();
         if($rol->id!=$id) {
-            return redirect()->route('role.list')->with('error','Duplicate Role name is not allowed');
+            return redirect()->route('role.list')->withToast('Duplicate Role name is not allowed', 'danger');
         }
 
         $role = Role::find($id);
@@ -272,7 +215,7 @@ class RoleController extends Controller
         $role->allow($request->input('permission'));
 
         return redirect()->route('role.list')
-            ->with('success','Role updated successfully');
+            ->withToast('Role updated successfully');
     }
     /**
      * Remove the specified resource from storage.
@@ -285,7 +228,7 @@ class RoleController extends Controller
         DB::table("roles")->where('id',$id)->delete();
         DB::table("permissions")->where("permissions.entity_id",$id)->delete();
         return redirect()->route('role.list')
-            ->with('success','Role deleted successfully');
+            ->withToast('Role deleted successfully');
     }
 
     public function createPermission(){

@@ -2,8 +2,8 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\BouncerRoleModel;
 use App\Models\Company;
+use App\Notifications\AccountCreatedNotification;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
@@ -65,7 +65,6 @@ class CreateNewUser implements CreatesNewUsers
                $company=Company::create($comp);
 
                //create role for ceo
-               Bouncer::useRoleModel(BouncerRoleModel::class);
                $role = Bouncer::role()->firstOrCreate([
                    'name' => 'ceo',
                    'title' => 'The owner of the business or company',
@@ -87,8 +86,11 @@ class CreateNewUser implements CreatesNewUsers
                    'referral_id' => auth()->user()->id
                ]);
 
-               //assign role to user
-               $user->assign(6);
+               //assign role to user (the ceo role just created above — never
+               // a hardcoded id, which would silently assign nothing if missing)
+               $user->assign($role);
+
+               $user->notify(new AccountCreatedNotification($input['first_name']));
 
 
                //Create subscription for company

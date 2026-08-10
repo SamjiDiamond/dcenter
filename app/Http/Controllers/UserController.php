@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\BouncerRoleModel;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Services\AuditService;
 use Bouncer;
 use DB;
 use Hash;
@@ -66,9 +67,9 @@ class UserController extends Controller
             $user->newSubscription('default', $input['plan'])->create($token, [
                 'email' => $user->email
             ]);
-            return back()->with('success','Subscription is completed.');
+            return back()->withToast('Subscription is completed.');
         } catch (Exception $e) {
-            return back()->with('success',$e->getMessage());
+            return back()->withToast($e->getMessage(), 'danger');
         }
 
     }
@@ -113,10 +114,17 @@ class UserController extends Controller
                 $u = User::where('email', '=', $input['email'])->exists();
                 if ($u) {
                     $user = User::where('email', '=', $input['email'])->first();
-                    if ($user->acount_type != $input['account_type']) {
-                        $user->update($input);
+                    if ($user->account_type != 'admin') {
+                        $user->update([
+                            'company_id'   => $nu['company_id'],
+                            'account_type' => 'admin',
+                            'last_name'    => $nu['last_name'],
+                            'first_name'   => $nu['first_name'],
+                            'email'        => $nu['email'],
+                            'phoneno'      => $nu['phoneno'],
+                        ]);
                     } else {
-                        return redirect()->route('admin.list')->with('error', 'Admin already exist');
+                        return redirect()->route('admin.list')->withToast('Admin already exist', 'danger');
                     }
 
                 }else {
@@ -126,12 +134,12 @@ class UserController extends Controller
 
                 $user->assign($request->input('role_id'));
 
-                return redirect()->route('admin.list')->with('success','Admin created successfully');
+                return redirect()->route('admin.list')->withToast('Admin created successfully');
             }catch(\Exception $e){
-                return redirect()->route('admin.list')->with('error','Error creating Admin');
+                return redirect()->route('admin.list')->withToast('Error creating Admin', 'danger');
             }
         }else{
-            return redirect()->route('admin.list')->with('error','Error creating Admin, check your input and try again');
+            return redirect()->route('admin.list')->withToast('Error creating Admin, check your input and try again', 'danger');
         }
 
     }
@@ -142,13 +150,21 @@ class UserController extends Controller
      * @param int $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
+        if (! $this->canManage($user)) {
+            return redirect()->route('admin.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
         $use = User::join("assigned_roles","assigned_roles.entity_id", "=","users.id")
 //            ->join("roles","roles.id", "=","assigned_roles.role_id")
-            ->where("users.id", "=", $id)
+            ->where("users.id", "=", $user->id)
             ->select("users.*", "assigned_roles.role_id")
             ->first();
+
+        if (! $use) {
+            return redirect()->route('admin.list')->withToast('Admin not found', 'danger');
+        }
 
         if(auth()->user()->company_id==1){
             $users = User::join("assigned_roles","assigned_roles.entity_id", "=","users.id")
@@ -180,8 +196,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
+        if (! $this->canManage($user)) {
+            return redirect()->route('admin.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
         $this->validate($request, [
             'last_name' => 'required|min:3',
             'first_name' => 'required|min:3',
@@ -194,13 +214,13 @@ class UserController extends Controller
 
 //        array_shift($input);
 
-        $user = User::where('id', $id)->update(['last_name' => $input['last_name'], 'first_name' => $input['first_name'], 'phoneno' => $input['phoneno'] ]);
+        User::where('id', $user->id)->update(['last_name' => $input['last_name'], 'first_name' => $input['first_name'], 'phoneno' => $input['phoneno'] ]);
 
-        $rt=DB::table('assigned_roles')->where('entity_id', '=', $id)->update(['role_id'=>$input['role_id']]);
+        DB::table('assigned_roles')->where('entity_id', $user->id)->update(['role_id'=>$input['role_id']]);
 
 
         return redirect()->route('admin.list')
-            ->with('success','Admin updated successfully');
+            ->withToast('Admin updated successfully');
     }
 
 
@@ -214,7 +234,7 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('users.index')
-            ->with('success','User deleted successfully');
+            ->withToast('User deleted successfully');
     }
 
     /**
@@ -222,15 +242,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function disable($id)
+    public function disable(User $user)
     {
-        $user=User::where('id', '=', $id)->update(['status'=>'disable']);
-        $user=User::find($id);
-        // cancel the subscription
-//        $user->subscription('user_sub')->cancel();
+        if (! $this->canManage($user)) {
+            return redirect()->route('admin.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
+        User::where('id', '=', $user->id)->update(['status'=>'disable']);
+
+        AuditService::log('admin.disabled', 'Admin ' . $user->email . ' disabled', 'warning', 'User', $user->id);
 
         return redirect()->route('admin.list')
-            ->with('success','Admin disabled successfully');
+            ->withToast('Admin disabled successfully');
     }
 
     /**
@@ -238,16 +261,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function enable($id)
+    public function enable(User $user)
     {
-        $user=User::where('id', '=', $id)->update(['status'=>'active']);
-        $user=User::find($id);
-        // enable subscription
-        // resume the plan
-//        $user->subscription('user_sub')->resume();
+        if (! $this->canManage($user)) {
+            return redirect()->route('admin.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
+        User::where('id', '=', $user->id)->update(['status'=>'active']);
+
+        AuditService::log('admin.enabled', 'Admin ' . $user->email . ' enabled', 'warning', 'User', $user->id);
 
         return redirect()->route('admin.list')
-            ->with('success','Admin enabled successfully');
+            ->withToast('Admin enabled successfully');
     }
 
     public function userslist(Request $request)
@@ -268,59 +293,74 @@ class UserController extends Controller
         return view('users', ['users' => $users, 'i'=>1]);
     }
 
-    public function userdetails($id){
-        $user=User::where('users.id','=',$id)->exists();
-        if(!$user){
+    public function userdetails(User $user){
+        if (! $this->canManage($user)) {
             return view('errors.404');
         }
 
-        $user = User::find($id);
+        $transactions=Transaction::where('user_id', '=', $user->id)->get();
 
-        if($user->company_id!=auth()->user()->company_id && auth()->user()->company_id!=1){
-            return view('errors.404');
-        }
-
-        $transactions=Transaction::where('user_id', '=', $id)->get();
-
-        $data_order=Transaction::where([['user_id','=',$id], ['type', '=', 'data']])->count();
-        $tv_order=Transaction::where([['user_id','=',$id], ['type', '=', 'tv']])->count();
-        $airtime_order=Transaction::where([['user_id','=',$id], ['type', '=', 'airtime']])->count();
-        $transfer_order=Transaction::where([['user_id','=',$id], ['type', '=', 'transfer']])->count();
-        $electricity_order=Transaction::where([['user_id','=',$id], ['type', '=', 'electricity']])->count();
+        $data_order=Transaction::where([['user_id','=',$user->id], ['type', '=', 'data']])->count();
+        $tv_order=Transaction::where([['user_id','=',$user->id], ['type', '=', 'tv']])->count();
+        $airtime_order=Transaction::where([['user_id','=',$user->id], ['type', '=', 'airtime']])->count();
+        $transfer_order=Transaction::where([['user_id','=',$user->id], ['type', '=', 'transfer']])->count();
+        $electricity_order=Transaction::where([['user_id','=',$user->id], ['type', '=', 'electricity']])->count();
 
         return view('user', ['user' => $user, 'transactions'=>$transactions, 'data'=>$data_order, 'tv'=>$tv_order, 'airtime'=>$airtime_order, 'transfer'=>$transfer_order, 'electricity'=>$electricity_order, 'i'=>1]);
     }
 
-    public function userenable($id)
+    public function userenable(User $user)
     {
-        $user=User::where('id', '=', $id)->update(['status'=>'active']);
-
-        return redirect()->route('user.list')
-            ->with('success','User enabled successfully');
-    }
-
-    public function userdisable($id)
-    {
-        $user=User::where('id', '=', $id)->update(['status'=>'disable']);
-
-        return redirect()->route('user.list')
-            ->with('success','User disabled successfully');
-    }
-
-    public function useredit($id){
-        $user=User::where('users.id','=',$id)->exists();
-        if(!$user){
-            return view('errors.404');
+        if (! $this->canManage($user)) {
+            return redirect()->route('user.list')->withToast('You cannot manage users from another company.', 'danger');
         }
 
+        User::where('id', '=', $user->id)->update(['status'=>'active']);
+
+        AuditService::log('user.enabled', 'User ' . $user->email . ' enabled', 'warning', 'User', $user->id);
+
+        return redirect()->route('user.list')
+            ->withToast('User enabled successfully');
+    }
+
+    public function userdisable(User $user)
+    {
+        if (! $this->canManage($user)) {
+            return redirect()->route('user.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
+        User::where('id', '=', $user->id)->update(['status'=>'disable']);
+
+        AuditService::log('user.disabled', 'User ' . $user->email . ' disabled', 'warning', 'User', $user->id);
+
+        return redirect()->route('user.list')
+            ->withToast('User disabled successfully');
+    }
+
+    /**
+     * Only a user's own company (or the platform super admin, company 1) may
+     * manage that account.
+     */
+    private function canManage(User $user)
+    {
+        return (int) $user->company_id === (int) auth()->user()->company_id
+            || (int) auth()->user()->company_id === 1;
+    }
+
+    public function useredit(User $user){
         $user = User::join("company","company.id", "=","users.company_id")
             ->join("assigned_roles","assigned_roles.entity_id", "=","users.id")
             ->join("roles","roles.id", "=","assigned_roles.role_id")
 //            ->join("roles", "roles.id", "=","users.role_id")
             ->select('users.*', 'company.name as company', 'roles.name as roles')
-            ->where('users.id','=',$id)->first();
+            ->where('users.id','=',$user->id)->first();
 
-        if($user->company_id!=auth()->user()->company_id && auth()->user()->company_id!=1){
+        // The inner joins can leave $user null when the account has no assigned role.
+        if (!$user) {
+            return view('errors.404');
+        }
+
+        if (! $this->canManage($user)) {
             return view('errors.404');
         }
 
@@ -334,8 +374,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function userupdate(Request $request, $id)
+    public function userupdate(Request $request, User $user)
     {
+        if (! $this->canManage($user)) {
+            return redirect()->route('user.list')->withToast('You cannot manage users from another company.', 'danger');
+        }
+
         $this->validate($request, [
             'last_name' => 'required|min:3',
             'first_name' => 'required|min:3',
@@ -345,26 +389,30 @@ class UserController extends Controller
 
         $input = $request->all();
 
-        $v=User::where('email', $input['email'])->first();
+        $v = User::where('email', $input['email'])->first();
 
-        if($v->id!=$id){
-            return redirect()->back()->with('error', 'Email Address belongs to another user');
+        // The email may legitimately belong to nobody (a brand new address);
+        // only reject it when it belongs to a different user.
+        if ($v && $v->id != $user->id) {
+            return redirect()->back()->withToast('Email Address belongs to another user', 'danger');
         }
 
-        $v=User::where('phoneno', $input['phoneno'])->first();
+        $v = User::where('phoneno', $input['phoneno'])->first();
 
-        if($v->id!=$id){
-            return redirect()->back()->with('error', 'Phone Number belongs to another user');
+        if ($v && $v->id != $user->id) {
+            return redirect()->back()->withToast('Phone Number belongs to another user', 'danger');
         }
 
-
-
-        array_shift($input);
-
-        $user = User::where('id', $id)->update($input);
+        // Update only the editable columns — never mass-assign raw request input.
+        $user->update([
+            'last_name'  => $input['last_name'],
+            'first_name' => $input['first_name'],
+            'email'      => $input['email'],
+            'phoneno'    => $input['phoneno'],
+        ]);
 
         return redirect()->route('user.list')
-            ->with('success', $input['last_name'].' profile updated successfully');
+            ->withToast($input['last_name'] . ' profile updated successfully');
     }
 
     public function uploadImage(Request $request)
@@ -382,7 +430,7 @@ $im = auth()->user();
         }
        $im->save();
         if($im->save()){
-            return redirect()->back()->with('success', 'Image uploaded successfully');
+            return redirect()->back()->withToast('Image uploaded successfully');
         }
 //        if( $request->hasFile('image') && $request->file('image')->isValid())
 //        {
@@ -403,7 +451,7 @@ $im = auth()->user();
 
 //         if($user->save()){
 
-//             return redirect()->back()->with('success', 'Image uploaded successfully');
+//             return redirect()->back()->withToast('Image uploaded successfully');
 //         }
 
         }

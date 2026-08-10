@@ -25,7 +25,7 @@ class SubscriptionMiddleware
         $trialSub = Subscription::where('company_id', auth()->user()->company_id)->first();
 
         if($planStatus == "pending" && $trialSub->trial_status == "deactivated"){
-            return redirect('billing')->with('message', 'You have no active subscription. Kindly subscribe to a new plan.');
+            return redirect('billing')->withToast('You have no active subscription. Kindly subscribe to a new plan.', 'warning');
         }
 
         return $next($request);

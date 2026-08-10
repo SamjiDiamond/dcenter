@@ -2,77 +2,62 @@
 
 @section('title','Account Ledger')
 @section('content')
-    <div class="row">
-        <div class="col-md-3">
+    @component('partials.collapsible-filter', ['filterTitle' => 'Account Ledger Search'])
+        @slot('form')
+            <form action="{{route('transaction.index')}}" method="GET">
 
-            <!-- Simple card -->
-            <div class="card m-b-30">
-                <div class="card-body">
-                    <h4 class="card-title font-16 mt-0">Account Ledger Search</h4>
-                    <form action="{{route('transaction.index')}}" method="GET">
-                        
-                        <p class="card-text">Customer Id: <input type="text" name="customerId" id="customerId" value="{{old('customerId') ?? request('customerId')}}" class="form-control"  required data-parsley-minlength="2"/></p>
-                        <p class="card-text">Reference Id: <input type="text" name="transactionId" value="{{old('transactionId') ?? request('transactionId')}}" class="form-control" id="referenceId" required data-parsley-minlength="2"/></p>
-                        <p class="card-text">Date: <input class="form-control" type="date" name="date" value="{{now()->toDateString()}}" id="example-date-input">
-    
-                        <p></p>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
-                        <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
-                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
-                    </form>
-                  
-                </div>
-            </div>
+                <p class="card-text">Customer Id: <input type="text" name="customerId" id="customerId" value="{{old('customerId') ?? request('customerId')}}" class="form-control"  required data-parsley-minlength="2"/></p>
+                <p class="card-text">Reference Id: <input type="text" name="transactionId" value="{{old('transactionId') ?? request('transactionId')}}" class="form-control" id="referenceId" required data-parsley-minlength="2"/></p>
+                <p class="card-text">Date: <input class="form-control" type="date" name="date" value="{{now()->toDateString()}}" id="example-date-input">
 
-        </div><!-- end col -->
+                <p></p>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
+                <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+            </form>
+        @endslot
 
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-body">
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Narration</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                        <th>Entry Code</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                    @if(isset($transactions))
+                    @forelse($transactions as $transaction)
                         <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Narration</th>
-                            <th>Amount</th>
-                            <th>Balance</th>
-                            <th>Entry Code</th>
-                            <th>Action</th>
+                            <td>{{$loop->iterations()}}</td>
+                            <td>{{$transaction->created_at}}</td>
+                            <td>{{$transaction->description}}</td>
+                            <td>{{$transaction->amount}}</td>
+                            <td>{{$transaction->i_wallet}}</td>
+                            <td>{{$transaction->code}}</td>
+                            <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
                         </tr>
-                        </thead>
+                    @empty
+                        <tr><td colspan="7" class="text-center">Empty</td></tr>
+                    @endforelse
+                        @endif
 
 
-                        <tbody>
-                        @if(isset($transactions))
-                        @forelse($transactions as $transaction)
-                            <tr>
-                                <td>{{$loop->iterations()}}</td>
-                                <td>{{$transaction->created_at}}</td>
-                                <td>{{$transaction->description}}</td>
-                                <td>{{$transaction->amount}}</td>
-                                <td>{{$transaction->i_wallet}}</td>
-                                <td>{{$transaction->code}}</td>
-                                <td> <button type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</button> <button type="button" class="btn btn-outline-danger waves-effect waves-light"><i class="fas fa-user-alt-slash"></i>Suspend</button></td>
-                            </tr>
-                        @empty
-                            <tr><td colspan="7" class="text-center">Empty</td></tr>
-                        @endforelse
-                            @endif
+                    </tbody>
+                </table>
 
-
-                        </tbody>
-                    </table>
-
-                </div>
             </div>
         </div>
-    </div> <!-- end row -->
-
-
+    @endcomponent
 @stop
-
-// 
 
 @section('after-scripts')
     <!-- Required datatable js -->
@@ -93,18 +78,18 @@
 
     <!-- Datatable init js -->
     <script src="assets/pages/datatables.init.js"></script>
-    
+
     <script>
-    
+
     $("#resetId").on('click', function(){
         $("#referenceId").val('');
         $("#customerId").val('');
-      
+
     });
-        
+
     </script>
-    
-    
+
+    @include('partials.collapsible-filter-scripts')
 @stop
 
 @section('before-styles')

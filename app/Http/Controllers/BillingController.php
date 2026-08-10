@@ -9,6 +9,7 @@ use App\Models\SmsPayment;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Checkout;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,13 +34,16 @@ class BillingController extends Controller
         }else{
             $sub='ntn';
         }
-        return view('billing', compact('plans', 'sub'));
+        // Live wallet top-up funding fee from system settings (no hardcoded figures).
+        $fundingFee = optional(Settings::find(1))->funding_fee ?? 80;
+
+        return view('billing', compact('plans', 'sub', 'fundingFee'));
     }
 
     public function show(Plan $plan, Request $request)
     {
         if ($request->user()->subscribedToPlan($plan->paystack_plan, 'main')) {
-            return redirect()->route('home')->with('message', 'You have already subscribed the plan');
+            return redirect()->route('home')->withToast('You have already subscribed the plan');
         }
         return view('show', compact('plan'));
     }
@@ -51,7 +55,7 @@ class BillingController extends Controller
 
         if($sub->exists() && $sub->pluck('plan_status') == "Active") {
             
-            return redirect()->route('plans')->with('message', 'You have already subscribed to a plan.');
+            return redirect()->route('plans')->withToast('You have already subscribed to a plan.');
         }
 
       /*  if($sub) {
@@ -59,7 +63,7 @@ class BillingController extends Controller
 
 //        if($company->subscribedToPlan($plan, 'user_sub')) {
             if ($plan->id == $sub->plan_id) {
-                return redirect()->route('plans')->with('message', 'You have already subscribed the plan');
+                return redirect()->route('plans')->withToast('You have already subscribed the plan');
             }
         }
 
@@ -147,12 +151,12 @@ class BillingController extends Controller
                         return redirect($payout_link);
 
                     }else{
-                        return redirect()->back()->with(['message' => 'Subscription was unsuccessful! ']);
+                        return redirect()->back()->withToast('Subscription was unsuccessful! ', 'danger');
                     }
                      
 
         }else{
-            return redirect()->back()->with('message',  'Payment not Successful ! An Error occurred!  ');
+            return redirect()->back()->withToast('Payment not Successful ! An Error occurred!  ', 'danger');
         }
 
        
@@ -223,15 +227,15 @@ class BillingController extends Controller
                  
 
                  if($subscription->pluck('plan_status')->first() == "Active"){
-                    return redirect('/dashboard')->with('message', 'Subscription Activated Successfully!');
+                    return redirect('/dashboard')->withToast('Subscription Activated Successfully!');
                  }else{
 
-                    return redirect('/dashboard')->with('message', 'Subscription Activation in Progress!');
+                    return redirect('/dashboard')->withToast('Subscription Activation in Progress!');
 
                  }
 
                 }
-                return redirect('/dashboard')->with('message', 'Subscription Activation Unsuccessful');
+                return redirect('/dashboard')->withToast('Subscription Activation Unsuccessful', 'danger');
 
                  
              }
@@ -266,10 +270,10 @@ class BillingController extends Controller
             $comp->newSubscription('main', session('subplan'))
                 ->trialDays(10)
                 ->create($paymentDetails['data']['authorization']['authorization_code']);
-            return redirect()->route('plans')->with('success', 'Your subscription is successful');
+            return redirect()->route('plans')->withToast('Your subscription is successful');
         }
 
-        return redirect()->route('plans')->with('danger', 'Something is wrong with the subscription.');
+        return redirect()->route('plans')->withToast('Something is wrong with the subscription.', 'danger');
     }
 
     public function create(Request $request)
@@ -312,7 +316,7 @@ class BillingController extends Controller
         return;
 
 //        if($company->subscribedToPlan($plan->stripe_plan, 'user_sub')) {
-//            return redirect()->route('home')->with('success', 'You have already subscribed to this plan');
+//            return redirect()->route('home')->withToast('You have already subscribed to this plan');
 //        }
 
         $sub=Subscription::where('company_id', '=', auth()->user()->company_id)->exists();
@@ -321,7 +325,7 @@ class BillingController extends Controller
             $sub = Subscription::where('company_id', '=', auth()->user()->company_id)->first();
 
             if ($plan->stripe_plan == $sub->stripe_plan) {
-                return redirect()->route('plans')->with('success', 'You have already subscribed the plan');
+                return redirect()->route('plans')->withToast('You have already subscribed the plan');
             }
         }
 
@@ -418,13 +422,13 @@ class BillingController extends Controller
             ->newSubscription("user_sub", $input['plan'])
             ->create('pm_card_visa');*/
 
-        return redirect()->route('home')->with('success', 'Your plan has been subscribed successfully');
+        return redirect()->route('home')->withToast('Your plan has been subscribed successfully');
     }
 
     public function create2(Request $request, Plan $plan)
     {
         if($request->user()->subscribedToPlan($plan->stripe_plan, 'main')) {
-            return redirect()->route('home')->with('success', 'You have already subscribed the plan');
+            return redirect()->route('home')->withToast('You have already subscribed the plan');
         }
         $plan = Plan::findOrFail($request->get('plan'));
 
@@ -432,7 +436,7 @@ class BillingController extends Controller
             ->newSubscription('main', $plan->stripe_plan)
             ->create($request->stripeToken);
 
-        return redirect()->route('home')->with('success', 'Your plan subscribed successfully');
+        return redirect()->route('home')->withToast('Your plan subscribed successfully');
     }
 
     public function showsub(){
@@ -485,10 +489,10 @@ class BillingController extends Controller
         $sub_status=$respons['status'];
 
         if($sub_status){
-            return redirect('subscriptions')->with(['success' => 'Subscription cancelled successfully.']);
+            return redirect('subscriptions')->withToast('Subscription cancelled successfully.');
 
         }else{
-            return redirect('subscriptions')->with(['success' => 'Subscription ended with error.']);
+            return redirect('subscriptions')->withToast('Subscription ended with error.', 'danger');
         }
 
     }
@@ -503,7 +507,7 @@ class BillingController extends Controller
         $com=Subscription::find($sub->id);
 
         if (!$com->subscription('user_sub')->onGracePeriod()) {
-            return redirect('subscriptions')->with(['success' => 'Subscription can not be enabled, kindly make a new subscription.']);
+            return redirect('subscriptions')->withToast('Subscription can not be enabled, kindly make a new subscription.', 'warning');
         }
 
             $com->subscription('user_sub')->cancel();
@@ -536,10 +540,10 @@ class BillingController extends Controller
         $sub_status=$respons['status'];
 
         if($sub_status){
-            return redirect('subscriptions')->with(['success' => 'Subscription cancelled successfully.']);
+            return redirect('subscriptions')->withToast('Subscription cancelled successfully.');
 
         }else{
-            return redirect('subscriptions')->with(['success' => 'Subscription ended with error.']);
+            return redirect('subscriptions')->withToast('Subscription ended with error.', 'danger');
         }
 
     }
@@ -587,7 +591,7 @@ class BillingController extends Controller
             $user->subscription('main')->swap($plan);
         }
 
-        return redirect('account')->with(['success' => 'Subscription updated.']);
+        return redirect('account')->withToast('Subscription updated.');
     }
 
     public function sms_payment(Request $request)
@@ -619,14 +623,14 @@ class BillingController extends Controller
                 $comp->sms_balance += $input['unit_purchased'];
                 $comp->save();
 
-                return redirect()->route('sms.payment')->with('success', $input['unit_purchased'] . ' SMS unit purchase successful');
+                return redirect()->route('sms.payment')->withToast($input['unit_purchased'] . ' SMS unit purchase successful');
             }catch(\Exception $e){
                 DB::rollback();
-                return redirect()->route('sms.payment')->with('error','SMS unit purchase ended with error');
+                return redirect()->route('sms.payment')->withToast('SMS unit purchase ended with error', 'danger');
             }
         }else{
             DB::rollback();
-            return redirect()->route('sms.payment')->with('error','Error purchasing units, check your input and try again');
+            return redirect()->route('sms.payment')->withToast('Error purchasing units, check your input and try again', 'danger');
         }
     }
 

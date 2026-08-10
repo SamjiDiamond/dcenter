@@ -26,7 +26,7 @@ class TemplateVersionController extends Controller
             'content' => $validated['content']
         ]);
      
-        return redirect()->back()->with('success', 'Template updated successfully.');
+        return redirect()->back()->withToast('Template updated successfully.');
     }
 
 }

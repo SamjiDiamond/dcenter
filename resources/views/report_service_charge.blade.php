@@ -2,80 +2,66 @@
 
 @section('title','Service Charge')
 @section('content')
-    <div class="row">
-        <div class="col-md-3">
-
-            <!-- Simple card -->
-            <div class="card m-b-30">
-                <div class="card-body">
-                    <h4 class="card-title font-16 mt-0">Service Charge Search</h4>
-
-                    <form action="{{route('service.charge.index')}}" method="get">
-                        <div class="form-group mb-0">
-                            <div class="input-daterange" id="date-range">
-                                <div class="form-group m-2">
-                                    <label for="">Start Date</label>
-                                <input class="form-control" type="date" name="start_date" value="{{request('start_date') ?? '2012-01-01'}}" id="example-date-input">
-                                </div>
-    
-                                <div class="form-group m-2">
-                                    <label for="">End Date</label>
-                                    <input class="form-control" type="date" name="end_date" value="{{request('end_date') ?? now()->toDateString()}}" id="example-date-input">
-                                </div>
-                                
-                            </div>
+    @component('partials.collapsible-filter', ['filterTitle' => 'Service Charge Search'])
+        @slot('form')
+            <form action="{{route('service.charge.index')}}" method="get">
+                <div class="form-group mb-0">
+                    <div class="input-daterange" id="date-range">
+                        <div class="form-group m-2">
+                            <label for="">Start Date</label>
+                        <input class="form-control" type="date" name="start_date" value="{{request('start_date') ?? '2012-01-01'}}" id="example-date-input">
                         </div>
-    
-                        <p></p>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
-                        {{-- <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a> --}}
-                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
-                    </form>
-                  
+
+                        <div class="form-group m-2">
+                            <label for="">End Date</label>
+                            <input class="form-control" type="date" name="end_date" value="{{request('end_date') ?? now()->toDateString()}}" id="example-date-input">
+                        </div>
+
+                    </div>
                 </div>
-            </div>
 
-        </div><!-- end col -->
+                <p></p>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                {{-- <a href="#" class="btn btn-primary waves-effect waves-light">Reset</a> --}}
+                <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+            </form>
+        @endslot
 
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-body">
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>User</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                    @if(isset($serviceCharges))
+                    @foreach($serviceCharges as $serviceCharge)
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Amount</th>
-                            <th>User</th>
-                            <th>Date</th>
+                            <td>{{$sn++}}</td>
+                            <td>{{$serviceCharge->name}}</td>
+                            <td>{{$serviceCharge->amount}}</td>
+                            <td>
+                                {{$serviceCharge->user->last_name}} {{$serviceCharge->user->first_name}}
+                            </td>
+                            <td>{{$serviceCharge->created_at}}</td>
                         </tr>
-                        </thead>
+                    @endforeach
+                        @endif
 
+                    </tbody>
+                </table>
 
-                        <tbody>
-                        @if(isset($serviceCharges))
-                        @foreach($serviceCharges as $serviceCharge)
-                            <tr>
-                                <td>{{$sn++}}</td>
-                                <td>{{$serviceCharge->name}}</td>
-                                <td>{{$serviceCharge->amount}}</td>
-                                <td>
-                                    {{$serviceCharge->user->last_name}} {{$serviceCharge->user->first_name}}
-                                </td>
-                                <td>{{$serviceCharge->created_at}}</td>
-                            </tr>
-                        @endforeach
-                            @endif
-
-                        </tbody>
-                    </table>
-
-                </div>
             </div>
         </div>
-    </div> <!-- end row -->
-
-
+    @endcomponent
 @stop
 
 @section('after-scripts')
@@ -97,6 +83,8 @@
 
     <!-- Datatable init js -->
     <script src="assets/pages/datatables.init.js"></script>
+
+    @include('partials.collapsible-filter-scripts')
 @stop
 
 @section('before-styles')

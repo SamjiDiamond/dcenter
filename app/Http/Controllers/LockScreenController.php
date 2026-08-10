@@ -24,7 +24,7 @@ class LockScreenController extends Controller
 
         if ($user && Hash::check($validated['password'], $user->password)) {
             $user->unlockScreen();
-            return redirect()->route('dashboard')->with(['success' => 'Login Successful']);
+            return redirect()->route('dashboard')->withToast('Login Successful');
         }
 
         return redirect()->back()->withErrors(['password' => 'Incorrect password']);

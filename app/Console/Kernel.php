@@ -4,6 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\PruneNotifications;
+use App\Console\Commands\ProcessAccountDeletions;
 use App\Console\Commands\SubscriptionCheck;
 use App\Console\Commands\trialSubscriptionCheck;
 
@@ -16,7 +18,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         SubscriptionCheck::class,
-        trialSubscriptionCheck::class
+        trialSubscriptionCheck::class,
+        ProcessAccountDeletions::class,
+        PruneNotifications::class
 
     ];
 
@@ -31,6 +35,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('subscription:check')->hourly();
         $schedule->command('trialSubscription:check')->hourly();
+        $schedule->command('account:process-deletions')->daily();
+        $schedule->command('notifications:prune')->daily();
 
     }
 

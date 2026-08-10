@@ -52,7 +52,13 @@ class HomeController extends Controller
 
         $data['users']=User::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
 
-        $data['audits']=AuditTrail::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
+        // Recent activity on the dashboard only shows the current day's entries;
+        // the full history lives on the audit trail report page ("See more").
+        $data['audits']=AuditTrail::where([['company_id','=',auth()->user()->company_id]])
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->limit(5)
+            ->get();
 
         $data['faqs']=Faq::where([['company_id','=',auth()->user()->company_id]])->latest()->limit(5)->get();
 

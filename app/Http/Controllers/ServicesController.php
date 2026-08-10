@@ -174,7 +174,7 @@ class ServicesController extends Controller
             ->update(['price'=>$input['price'], 'status' => $input['status'] , 'desc' => $input['description']]);
 
         return redirect()->route('services.list')
-            ->with('success','Service updated successfully');
+            ->withToast('Service updated successfully');
     }
 
        /**
@@ -226,7 +226,7 @@ class ServicesController extends Controller
             ->update(['price'=>$input['price'], 'status' => $input['status'] , 'desc' => $input['description']]);
 
         return redirect()->route('services.list')
-            ->with('success','Service updated successfully');
+            ->withToast('Service updated successfully');
     }
 
 
@@ -279,7 +279,7 @@ class ServicesController extends Controller
             ->update(['price'=>$input['price'], 'status' => $input['status'] , 'desc' => $input['description']]);
 
         return redirect()->route('services.list')
-            ->with('success','Service updated successfully');
+            ->withToast('Service updated successfully');
     }
 
 
@@ -331,7 +331,7 @@ class ServicesController extends Controller
             ->update(['price'=>$input['price'], 'status' => $input['status'] , 'desc' => $input['description']]);
 
         return redirect()->route('services.list')
-            ->with('success','Service updated successfully');
+            ->withToast('Service updated successfully');
     }
 
     /**
@@ -383,7 +383,7 @@ class ServicesController extends Controller
             ->update(['price'=>$input['price'], 'status' => $input['status'] , 'desc' => $input['description']]);
 
         return redirect()->route('services.list')
-            ->with('success','Service updated successfully');
+            ->withToast('Service updated successfully');
     }
 
     public function synair(){
@@ -396,7 +396,7 @@ class ServicesController extends Controller
         }
 
         return redirect()->route('services.list')
-            ->with('success','Services sync successfully');
+            ->withToast('Services sync successfully');
     }
 
     public function syndata(){
@@ -409,7 +409,7 @@ class ServicesController extends Controller
         }
 
         return redirect()->route('services.list')
-            ->with('success','Services sync successfully');
+            ->withToast('Services sync successfully');
     }
 
     public function syntv(){
@@ -422,7 +422,7 @@ class ServicesController extends Controller
         }
 
         return redirect()->route('services.list')
-            ->with('success','Services sync successfully');
+            ->withToast('Services sync successfully');
     }
 
     public function synelec(){
@@ -435,7 +435,7 @@ class ServicesController extends Controller
         }
 
         return redirect()->route('services.list')
-            ->with('success','Services sync successfully');
+            ->withToast('Services sync successfully');
     }
 
     public function syntran(){
@@ -448,7 +448,7 @@ class ServicesController extends Controller
         }
 
         return redirect()->route('services.list')
-            ->with('success','Services sync successfully');
+            ->withToast('Services sync successfully');
     }
 
 

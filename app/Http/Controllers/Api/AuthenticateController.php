@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Services\AuditService;
+use App\Services\TwoFactorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -107,8 +109,20 @@ class AuthenticateController extends Controller
             }
 
             if($user->status != "active"){
-                return response()->json(['status'=> 0, 'message'=>'User '.auth()->user()->status.', kindly contact support']);
+                return response()->json(['status'=> 0, 'message'=>'User '.$user->status.', kindly contact support']);
             }
+
+            if($user->deletion_scheduled_for){
+                return response()->json(['status'=> 0, 'message'=>'Your account is scheduled for deletion and can no longer be used. Kindly contact support.']);
+            }
+
+            if($user->email_2fa_enabled){
+                TwoFactorService::sendCode($user);
+                AuditService::log('two_factor.challenge_sent', 'Login 2FA challenge code sent', 'info', null, null, $user);
+                return response()->json(['status'=> 2, 'message' => 'Enter the verification code sent to your email.', 'requires_2fa' => true]);
+            }
+
+            AuditService::log('auth.login', 'User logged in', 'info', null, null, $user);
 
 //            $set=DB::table("Settings")->where("id","=","1")->first();
 

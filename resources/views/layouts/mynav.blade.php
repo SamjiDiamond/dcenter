@@ -61,27 +61,21 @@
                         <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button"
                            aria-haspopup="false" aria-expanded="false">
                             <i class="mdi mdi-bell-outline noti-icon"></i>
-                            <span class="badge badge-pill noti-icon-badge" id="notification-count">
+                            <span class="badge badge-pill noti-icon-badge {{ auth()->user()->unreadNotificationsCount() > 0 ? '' : 'd-none' }}" id="notification-count">
                              {{(auth()->user()->unreadNotificationsCount() > 99) ? '99+' : auth()->user()->unreadNotificationsCount() }}
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg dropdown-menu-animated">
                             <!-- item-->
-                            <div class="dropdown-item noti-title">
-                                <h5>Notifications</h5>
+                            <div class="dropdown-item noti-title d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Notifications</h5>
+                                <button type="button" id="mark-all-read" data-token="{{ csrf_token() }}" class="btn btn-link btn-sm p-0 text-primary" title="Mark all as read">
+                                    Mark all as read
+                                </button>
                             </div>
 
-                            <div class="slimscroll-notification" style="overflow: auto; height:500px">
-                                @foreach(auth()->user()->userNotifications() as $notification)
-                                <!-- item-->
-                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#notificationModal" onclick="showModal('{{$notification->id}}',{{json_encode($notification->data['text'])}})" data-id="{{$notification->id}}">
-                                        <p class="notify-details p-2 border-bottom" style="color:#ccc">
-                                            <b>{{Str::words($notification->data['text'],15)}}</b>
-                                            <span id="text-{{$notification->id}}" class="text-light {{($notification->read_at) ? '':'badge-success p-1 rounded '}}">
-                                                {{($notification->read_at) ? '' : 'new'}}</span>
-                                        </p>
-                                    </a>
-                                @endforeach
+                            <div class="slimscroll-notification" id="notification-feed" style="overflow-y: auto; overflow-x: hidden; height: 320px; scrollbar-width: thin;">
+                                @include('partials.notifications-feed')
 
                                 <!-- item-->
                                 <!--<a href="javascript:void(0);" class="dropdown-item notify-item">-->
@@ -111,9 +105,9 @@
 
 
                             <!-- All-->
-                            {{-- <a href="javascript:void(0);" class="dropdown-item notify-all">
-                                View All
-                            </a> --}}
+                            <a href="{{ route('notification.index') }}" class="dropdown-item notify-all">
+                                View All <i class="mdi mdi-chevron-right float-right"></i>
+                            </a>
 
                         </div>
                     </li>
@@ -125,7 +119,8 @@
                             <span class="d-none d-md-inline-block ml-1">{{Auth::user()->first_name}} <i class="mdi mdi-chevron-down"></i> </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown">
-                            <a class="dropdown-item" href="/user/{{Auth::user()->id}}"><i class="dripicons-user text-muted"></i> Profile</a>
+                            <a class="dropdown-item" href="{{ route('account.settings.index') }}"><i class="dripicons-user text-muted"></i> Account Settings</a>
+                            <a class="dropdown-item" href="{{ route('team.index') }}"><i class="dripicons-user-group text-muted"></i> Team members</a>
                             <a class="dropdown-item" href="{{route('company.wallet')}}"><i class="dripicons-wallet text-muted"></i> My Wallet</a>
                             <a class="dropdown-item" href="{{ route('admin.payout.create') }}"><i class="dripicons-wallet text-muted"></i> Payout </a>
                             <a class="dropdown-item" href="{{ route('admin.settings.index') }}"><span class="badge badge-success float-right m-t-5">5</span><i class="dripicons-gear text-muted"></i> Settings</a>
@@ -213,7 +208,7 @@
                                     <li><a href="/new_account">New Account</a></li>
                                     <li><a href="/account_ledger">Customer Account Ledger</a></li>
                                     <li><a href="/report_service_charge">Service Charge</a></li>
-                                    <li><a href="/report_audit_trail">Audit Trail</a></li>
+                                    <li><a href="{{ route('audit.trail.index') }}">Audit Trail</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -322,15 +317,55 @@
 
 
 <script>
+    function refreshNotificationBadge(count){
+        count = parseInt(count) || 0;
+        $('#notification-count').text(count > 99 ? '99+' : count);
+        if (count <= 0) {
+            $('#notification-count').addClass('d-none');
+        } else {
+            $('#notification-count').removeClass('d-none');
+        }
+    }
+
     function showModal(id, body){
         $('#notification-body').text(body);
         $.get(`notification-read/${id}`, function(data){
-            $('#notification-count').text(parseInt(data));
+            refreshNotificationBadge(data);
             $(`#text-${id}`).removeClass('badge-success').text('');
-            console.log($('#text-new').text());
+            // The dropdown lists unread only — drop the read item from the feed.
+            if ($('#notification-feed').length) {
+                $('#notification-feed').load('{{ route('notification.feed') }}');
+            }
         });
-
     }
+
+    // Mark every notification as read from the dropdown header.
+    $('#mark-all-read').on('click', function (e) {
+        e.preventDefault();
+        var token = $('#mark-all-read').data('token') || $('meta[name="csrf-token"]').attr('content');
+        $.post('{{ route('notification.read-all') }}', { _token: token }, function (data) {
+            if (data && data.status === 1) {
+                refreshNotificationBadge(0);
+                if ($('#notification-feed').length) {
+                    $('#notification-feed').load('{{ route('notification.feed') }}');
+                }
+                showToast('All notifications marked as read.', 'success');
+            }
+        }).fail(function (xhr) {
+            showToastAjaxError(xhr, 'Could not mark notifications as read.');
+        });
+    });
+
+    // Live notification polling — refresh the badge and the dropdown feed every 30s.
+    setInterval(function () {
+        $.get('{{ route('notification.count') }}', function (data) {
+            if (!data || typeof data.count === 'undefined') { return; } // e.g. session expired
+            refreshNotificationBadge(data.count);
+            if ($('#notification-feed').length) {
+                $('#notification-feed').load('{{ route('notification.feed') }}');
+            }
+        });
+    }, 30000);
 </script>
 
 
@@ -364,6 +399,21 @@
 
 .navigation-menu a:hover {
     color: #f0f0f0; /* Change color on hover */
+}
+
+/* Notification dropdown scrollbar */
+#notification-feed::-webkit-scrollbar {
+    width: 6px;
+}
+#notification-feed::-webkit-scrollbar-track {
+    background: transparent;
+}
+#notification-feed::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.25);
+    border-radius: 3px;
+}
+#notification-feed::-webkit-scrollbar-thumb:hover {
+    background: rgba(15, 23, 42, 0.4);
 }
 
 /* Media query for smaller screens */

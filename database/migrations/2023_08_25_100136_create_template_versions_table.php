@@ -16,7 +16,7 @@ class CreateTemplateVersionsTable extends Migration
         Schema::create('template_versions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('template_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('template_id')->constrained('templates')->cascadeOnDelete();
             $table->text('content');
             
             $table->timestamps();

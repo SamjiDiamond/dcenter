@@ -7,24 +7,6 @@
             <div class="card m-b-30">
                 <div class="card-body">
 
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Warning! {{ session('error') }} </strong>
-                        </div>
-                    @endif
-
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <strong>Success! {{ session('success') }} </strong>
-                        </div>
-                    @endif
-
                     <h4 class="mt-0 header-title">Customer List</h4>
 
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -50,11 +32,11 @@
                             <td>{{$user->phoneno}}</td>
                             <td>{{$user->created_at}}</td>
                             <td>{{$user->wallet}}</td>
-                            <td>{{$user->status}}</td>
+                            <td>@include('partials.status-badge', ['status' => $user->status])</td>
                             <td>
-                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $user->id }}"><i class="fab fa-wpexplorer"></i> View</a>
+                                <a type="button" class="btn btn-success waves-effect waves-light" href="/user/{{ $user->uuid }}"><i class="fab fa-wpexplorer"></i> View</a>
                                 @can('edit-user')
-                                <a href="/user-edit/{{ $user->id }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
+                                <a href="/user-edit/{{ $user->uuid }}" type="button" class="btn btn-info waves-effect waves-light"><i class="fas fas fa-user-edit"></i>Edit</a>
                                     @endcan
                             </td>
                         </tr>

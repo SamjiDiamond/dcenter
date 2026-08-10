@@ -3,25 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\User;
 use App\Models\VirtualAccount;
+use App\Services\AuditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function getUser() {
-        if(auth()->user()->status == "active"){
-            $user = Auth::user();
-            $set=DB::table("Settings")->where("id","=","1")->first();
-            return response()->json(['status' => 1, 'message'=>'User details generated successfully', 'data'=> $user, 'settings'=>$set]);
-        }else{
-            return response()->json(['status'=> 0, 'message'=>'User '.auth()->user()->status.', kindly contact support']);
+    /**
+     * Copy allowed profile fields onto the user, skipping any columns that do
+     * not exist on the users table. Never mass-assign raw request input.
+     */
+    private function fillExistingColumns(User $user, array $input, array $allowed)
+    {
+        $fields = [];
+
+        foreach ($allowed as $column) {
+            if (array_key_exists($column, $input) && Schema::hasColumn('users', $column)) {
+                $fields[$column] = $input[$column];
+            }
         }
+
+        $user->forceFill($fields)->save();
+    }
+
+    public function getUser() {
+        $user = Auth::user();
+        $set = Settings::find(1);
+        return response()->json(['status' => 1, 'message'=>'User details generated successfully', 'data'=> $user, 'settings'=>$set]);
+    }
+
+    public function removePhoto(Request $request) {
+        $user = User::find(Auth::id());
+
+        if ($user && $user->profile_photo_path) {
+            $file = basename($user->profile_photo_path);
+            if (Storage::disk('public')->exists('users/' . $file)) {
+                Storage::disk('public')->delete('users/' . $file);
+            }
+            $user->profile_photo_path = null;
+            $user->save();
+        }
+
+        return response()->json(['status'=> 1, 'message'=>'Profile photo removed successfully', 'data'=> $user]);
     }
 
     public function updateUser(Request $request) {
@@ -42,14 +73,20 @@ class UserController extends Controller
             $validator = Validator::make($input, $rules, $messages);
             if ($validator->passes())
             {
-                $genId="";
                 try
                 {
                     DB::beginTransaction();
 
-                    $input['first_name'] = ucfirst($input['first_name']);
-                    $input['last_name'] = ucfirst($input['last_name']);
-                    $user=User::where(['id'=> Auth::id()])->update($input);
+                    $user = User::find(Auth::id());
+
+                    // Whitelist editable profile fields — never mass-assign raw
+                    // request input (that would let a client overwrite status,
+                    // password, company_id, uuid, etc.). Only persist columns
+                    // that actually exist on the users table.
+                    $this->fillExistingColumns($user, [
+                        'first_name' => ucfirst($input['first_name']),
+                        'last_name'  => ucfirst($input['last_name']),
+                    ] + $input, ['dob', 'country', 'username', 'gender', 'address', 'phoneno', 'first_name', 'last_name']);
 
                     /*                $file_data= $request->input('image');
                                     //generating unique file name;
@@ -93,6 +130,11 @@ class UserController extends Controller
 
         if ($validator->passes()) {
             if ($input['image']) {
+                // Accept base64 data URIs only (data:image/...)
+                if (stripos($input['image'], 'data:image/') !== 0) {
+                    return response()->json(['status'=> 0, 'message'=>'Invalid image format']);
+                }
+
                 $file_data = $input['image'];
                 //generating unique file name;
                 $file_name = Auth::id() ."_".time(). '.jpg';
@@ -101,16 +143,12 @@ class UserController extends Controller
                 if ($file_data != "") {
                     // storing image in storage/app/public Folder
                     \Storage::disk('public')->put('users/'.$file_name, base64_decode($file_data));
-//
-//                     \File::put(storage_path('app/public'). '/' . $file_name, base64_decode($file_data));
-
-//                    $decodedImage = base64_decode("$image");
-//                    file_put_contents(storage_path("app/public/avatar/". $photo) , $decodedImage);
-
 
                     $user=User::find(Auth::id());
                     $user->profile_photo_path='user/image/'.$file_name;
                     $user->save();
+
+                    AuditService::log('profile.photo_uploaded', 'Profile photo uploaded', 'info', 'User', $user->id);
 
                     return response()->json(['status'=> 1, 'message'=>'DP uploaded successfully']);
                 }
@@ -138,14 +176,12 @@ class UserController extends Controller
 
         if ($validator->passes()) {
 
-            $user=User::find(Auth::id());
-            $user->phoneno=$input['phoneno'];
-            $user->email=$input['email'];
-            $user->first_name=$input['first_name'];
-            $user->last_name=$input['last_name'];
-            $user->address=$input['address'];
-            $user->gender=$input['gender'];
-            $user->save();
+            $user = User::find(Auth::id());
+
+            // Only persist columns that actually exist on the users table — the
+            // schema has no address/gender columns, so writing them blindly
+            // throws "Unknown column" and breaks the whole profile update.
+            $this->fillExistingColumns($user, $input, ['phoneno', 'email', 'first_name', 'last_name', 'address', 'gender']);
 
             return response()->json(['status'=> 1, 'message'=>'Profile updated successfully']);
 

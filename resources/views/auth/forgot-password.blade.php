@@ -9,9 +9,7 @@
         </div>
 
         @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
+            <template class="toast-flash" data-type="success" data-message="{{ session('status') }}"></template>
         @endif
 
         <x-jet-validation-errors class="mb-4" />

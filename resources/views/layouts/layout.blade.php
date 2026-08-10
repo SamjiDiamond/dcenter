@@ -7,6 +7,7 @@
     <meta content="Dynamic Center Admin Dashboard" name="description"/>
     <meta content="Samji Diamond @ 5Star Company" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- App Icons -->
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
@@ -66,11 +67,11 @@
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated">
                                         <a class="dropdown-item" href="#">SMS</a>
                                         <a class="dropdown-item" href="#">Email</a>
-                                        <a class="dropdown-item" href="#">System</a>
+                                        <a class="dropdown-item" href="{{ route('admin.settings.system') }}">System</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">Edit SMS</a>
                                         <a class="dropdown-item" href="#">Edit Email</a>
-                                        <a class="dropdown-item" href="#">Edit System</a>
+                                        <a class="dropdown-item" href="{{ route('admin.settings.system') }}">Edit System</a>
                                     </div>
                                 </div>
                             </div>
@@ -81,16 +82,6 @@
             </div>
         </div>
         <!-- end page title end breadcrumb -->
-            <div class="p-1">
-                            @if(session()->has('message'))
-
-                                <div class="alert alert-success">
-
-                                    <button type="button" class="close" data-dismiss="alert">x</button>
-                                    <div style="text-align: center">{{session()->get('message') }}</div>
-                                </div>
-                            @endif
-            </div>
             @yield('content')
          
 
@@ -119,9 +110,13 @@
 <script src="/assets/js/waves.js"></script>
 <script src="/assets/js/jquery.slimscroll.js"></script>
 
+@include('partials.toasts')
+
 @yield('after-scripts')
 <!-- App js -->
 <script src="/assets/js/app.js"></script>
+
+@include('partials.confirm-modal')
 
 </body>
 </html>

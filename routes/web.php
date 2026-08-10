@@ -14,6 +14,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\DepositController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UltilityController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServiceChargeController;
 use App\Http\Controllers\TemplateVersionController;
@@ -51,7 +54,7 @@ Route::group(['middleware' => ['role:ceo-1']], function () {
     });
 });
 
-Route::get('/queue', 'UltilityController@queue')->name('queue');
+Route::get('/queue', [UltilityController::class, 'queue'])->name('queue');
 
 Route::get('/confirm-password', function () {
     return view('auth.confirm-password');
@@ -77,25 +80,24 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware', 'lockscree
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/roles', [RoleController::class, 'index'])->name('role.list');
-    Route::get('/role/{id}', [RoleController::class, 'show'])->name('role.view');
     Route::get('/role-edit/{id}', [RoleController::class, 'edit'])->name('roles.edit')->middleware(['middleware' => 'password.confirm']);
     Route::post('/role-update/{id}', [RoleController::class, 'update'])->name('role.update');
     Route::post('/role-create', [RoleController::class, 'store'])->name('role.create');
     Route::get('/role-delete/{id}', [RoleController::class, 'destroy'])->name('role.delete');
 
     Route::get('/users', [UserController::class, 'userslist'])->name('user.list');
-    Route::get('/user/{id}', [UserController::class, 'userdetails'])->name('user.view');
-    Route::get('/user-edit/{id}', [UserController::class, 'useredit'])->name('user.edit')->middleware(['middleware' => 'password.confirm']);
-    Route::get('/user-disable/{id}', [UserController::class, 'userdisable'])->name('user.disable');
-    Route::get('/user-enable/{id}', [UserController::class, 'userenable'])->name('user.enable');
-    Route::post('/user-update/{id}', [UserController::class, 'userupdate'])->name('user.update');
+    Route::get('/user/{user}', [UserController::class, 'userdetails'])->name('user.view');
+    Route::get('/user-edit/{user}', [UserController::class, 'useredit'])->name('user.edit')->middleware(['middleware' => 'password.confirm']);
+    Route::get('/user-disable/{user}', [UserController::class, 'userdisable'])->name('user.disable');
+    Route::get('/user-enable/{user}', [UserController::class, 'userenable'])->name('user.enable');
+    Route::post('/user-update/{user}', [UserController::class, 'userupdate'])->name('user.update');
     Route::post('/upload-image', [UserController::class, 'uploadImage'])->name('user.uploadImage');
 
     Route::get('/admin', [UserController::class, 'index'])->name('admin.list');
-    Route::get('/admin-disable/{id}', [UserController::class, 'disable'])->name('admin.disable');
-    Route::get('/admin-enable/{id}', [UserController::class, 'enable'])->name('admin.enable');
-    Route::get('/admin-edit/{id}', [UserController::class, 'edit'])->name('admin.edit')->middleware(['middleware' => 'password.confirm']);
-    Route::post('/admin-update/{id}', [UserController::class, 'update'])->name('admin.update');
+    Route::get('/admin-disable/{user}', [UserController::class, 'disable'])->name('admin.disable');
+    Route::get('/admin-enable/{user}', [UserController::class, 'enable'])->name('admin.enable');
+    Route::get('/admin-edit/{user}', [UserController::class, 'edit'])->name('admin.edit')->middleware(['middleware' => 'password.confirm']);
+    Route::post('/admin-update/{user}', [UserController::class, 'update'])->name('admin.update');
     Route::post('/admin-create', [UserController::class, 'store'])->name('admin.create');
 
     //for faqs, plan, and permission
@@ -143,23 +145,23 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware', 'lockscree
     Route::get('/chargecustomer', function () {
         return view('charge_customer');
     });
-    Route::post('/chargecustomer', 'TransactionController@charge_customer')->name('user.charge_customer');
+    Route::post('/chargecustomer', [TransactionController::class, 'charge_customer'])->name('user.charge_customer');
     Route::get('/postairtimetransaction', function () {
         return view('post_airtime_transaction');
     });
-    Route::post('/postairtimetransaction', 'TransactionController@post_airtime_transaction')->name('user.post_airtime_transaction');
+    Route::post('/postairtimetransaction', [TransactionController::class, 'post_airtime_transaction'])->name('user.post_airtime_transaction');
     Route::get('/rechargecard', function () {
         return view('recharge_card');
     });
-    Route::post('/rechargecard', 'TransactionController@recharge_card')->name('user.rechargecard');
+    Route::post('/rechargecard', [TransactionController::class, 'recharge_card'])->name('user.rechargecard');
     Route::get('/reversal', function () {
         return view('reversal');
     });
 
     Route::get('/reversal-list', [TransactionController::class, 'showReversals'])->name('transaction.reversal.show');
 
-    Route::post('/reversal', 'TransactionController@reversal')->name('transaction.reversal');
-    Route::post('/reversal-post', 'TransactionController@reversalpost')->name('transaction.reversal.post');
+    Route::post('/reversal', [TransactionController::class, 'reversal'])->name('transaction.reversal');
+    Route::post('/reversal-post', [TransactionController::class, 'reversalpost'])->name('transaction.reversal.post');
 
 
     Route::get('/posting-list', [TransactionController::class, 'postingList'])->name('transaction.posting.list');
@@ -186,7 +188,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'subware', 'lockscree
 
 
 
-    Route::post('order-post', ['as' => 'order-post', 'uses' => 'UserController@orderPost']);
+    Route::post('order-post', [UserController::class, 'orderPost'])->name('order-post');
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'lockscreen']], function () {
@@ -217,6 +219,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'lockscreen']], funct
     Route::get('/atm_deposit', [DepositController::class, 'atmDeposit'])->name('atm.deposit');
 
     Route::get('notification-read/{id}', [NotificationController::class, 'markNotificationAsRead'])->name('notification.read');
+    Route::get('notifications/count', [NotificationController::class, 'countJson'])->name('notification.count');
+    Route::get('notifications/feed', [NotificationController::class, 'feed'])->name('notification.feed');
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notification.index');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notification.read-all');
 
     Route::get('/report_service_charge', [ServiceChargeController::class, 'index'])->name('service.charge.index');
 
@@ -242,6 +248,23 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'lockscreen']], funct
     });
 
     Route::get('settings', [SettingsController::class, 'index'])->name('admin.settings.index');
+    Route::get('settings/system', [SettingsController::class, 'system'])->name('admin.settings.system');
+    Route::post('settings/system', [SettingsController::class, 'updateSystem'])->name('admin.settings.update');
+
+    // Account Settings (web admin)
+    Route::get('account-settings', [AccountSettingsController::class, 'index'])->name('account.settings.index');
+    Route::get('account-settings/team', [TeamMemberController::class, 'index'])->name('team.index');
+    Route::post('account-settings/profile', [AccountSettingsController::class, 'updateProfile'])->name('account.settings.profile.update');
+    Route::post('account-settings/two-factor/enable', [AccountSettingsController::class, 'enableTwoFactor'])->name('account.settings.two-factor.enable');
+    Route::post('account-settings/two-factor/confirm', [AccountSettingsController::class, 'confirmTwoFactor'])->name('account.settings.two-factor.confirm');
+    Route::post('account-settings/two-factor/resend', [AccountSettingsController::class, 'resendTwoFactor'])->name('account.settings.two-factor.resend');
+    Route::post('account-settings/two-factor/disable', [AccountSettingsController::class, 'disableTwoFactor'])->name('account.settings.two-factor.disable');
+    Route::post('account-settings/photo', [AccountSettingsController::class, 'uploadPhoto'])->name('account.settings.photo.upload');
+    Route::post('account-settings/photo/remove', [AccountSettingsController::class, 'removePhoto'])->name('account.settings.photo.remove');
+    Route::post('account-settings/delete-request', [AccountSettingsController::class, 'deleteRequest'])->name('account.settings.delete.request');
+    Route::post('account-settings/delete-cancel', [AccountSettingsController::class, 'cancelDeleteRequest'])->name('account.settings.delete.cancel');
+    Route::post('account-settings/team/invite', [TeamMemberController::class, 'inviteMember'])->name('team.invite');
+    Route::post('account-settings/team/remove/{user}', [TeamMemberController::class, 'removeMember'])->name('team.remove');
 });
 
 

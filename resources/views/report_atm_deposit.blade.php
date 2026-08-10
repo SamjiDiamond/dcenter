@@ -2,93 +2,81 @@
 
 @section('title','Deposit Monitoring')
 @section('content')
-    <div class="row">
-        <div class="col-md-3">
+    @component('partials.collapsible-filter', ['filterTitle' => 'ATM Deposit Search'])
+        @slot('form')
+            <form action="{{route('atm.deposit')}}" method="GET">
+                <p class="card-text">Customer Id: <input type="text" name="customer_id"  id ="customerId"  value="{{old('customer_id') ?? request('customer_id')}}"class="form-control" required data-parsley-minlength="2"/></p>
+                <p class="card-text">Transaction Id: <input type="text" name="transaction_id"  id="transactionId"value="{{old('transaction_id') ?? request('transaction_id')}}" class="form-control" required data-parsley-minlength="2"/></p>
+                {{-- <p class="card-text">Date: <input class="form-control" type="date" value="{{now()->toDateString()}}" id="example-date-input"> --}}
 
-            <!-- Simple card -->
-            <div class="card m-b-30">
-                <div class="card-body">
-                    <h4 class="card-title font-16 mt-0">ATM Deposit Search</h4>
-                    <form action="{{route('atm.deposit')}}" method="GET">
-                        <p class="card-text">Customer Id: <input type="text" name="customer_id"  id ="customerId"  value="{{old('customer_id') ?? request('customer_id')}}"class="form-control" required data-parsley-minlength="2"/></p>
-                        <p class="card-text">Transaction Id: <input type="text" name="transaction_id"  id="transactionId"value="{{old('transaction_id') ?? request('transaction_id')}}" class="form-control" required data-parsley-minlength="2"/></p>
-                        {{-- <p class="card-text">Date: <input class="form-control" type="date" value="{{now()->toDateString()}}" id="example-date-input"> --}}
+                <div class="form-group mb-0">
+                    <label>Date Range</label>
+                    <div>
+                        <div class="input-daterange" id="date-range">
+                            <div class="form-group m-2">
+                                <label for="">Start Date</label>
+                            <input class="form-control" type="date" name="start_date" value="2011-08-19" id="example-date-input">
+                            </div>
 
-                        <div class="form-group mb-0">
-                            <label>Date Range</label>
-                            <div>
-                                <div class="input-daterange" id="date-range">
-                                    <div class="form-group m-2">
-                                        <label for="">Start Date</label>
-                                    <input class="form-control" type="date" name="start_date" value="2011-08-19" id="example-date-input">
-                                    </div>
+                            <div class="form-group m-2">
+                                <label for="">End Date</label>
+                                <input class="form-control" type="date" name="end_date" value="{{now()->toDateString()}}" id="example-date-input">
+                            </div>
 
-                                    <div class="form-group m-2">
-                                        <label for="">End Date</label>
-                                        <input class="form-control" type="date" name="end_date" value="{{now()->toDateString()}}" id="example-date-input">
-                                    </div>
-                                    
-                                
-                                </div>
+
                             </div>
                         </div>
+                    </div>
 
-                        <p></p>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
-                        <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
-                        <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
-                    </form>
-                </div>
-            </div>
+                    <p></p>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Search</button>
+                    <button type="button" class="btn btn-primary waves-effect waves-light" id="resetId">Reset</button>
+                    <a class="btn btn-primary waves-effect waves-light" onclick="print();">Print</a>
+                </form>
+        @endslot
 
-        </div><!-- end col -->
+        <div class="card">
+            <div class="card-body">
+                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Initial Deposit</th>
+                        <th>Lodgement</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Deposit Date</th>
+                        <th>Created At</th>
+                    </tr>
+                    </thead>
 
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-body">
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
+
+                    <tbody>
+                    @if(isset($deposits))
+                    @foreach($deposits as $deposit)
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Initial Deposit</th>
-                            <th>Lodgement</th>
-                            <th>Amount</th>
-                            <th>Balance</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Deposit Date</th>
-                            <th>Created At</th>
+                            <td>{{$sn++}}</td>
+                            <td>{{$deposit->user->last_name}} {{$deposit->user->first_name}}</td>
+                            <td>{{$initialDeposit}}</td>
+                            <td>{{$deposit->logement}}</td>
+                            <td>{{$deposit->amount}}</td>
+                            <td>{{$deposit->balance}}</td>
+                            <td>{{$deposit->phone}}</td>
+                            <td>{{$deposit->address}}</td>
+                            <td>{{$deposit->dateDate}}</td>
+                            <td>{{$deposit->created_at}}</td>
                         </tr>
-                        </thead>
+                    @endforeach
+                        @endif
+                    </tbody>
+                </table>
 
-
-                        <tbody>
-                        @if(isset($deposits))
-                        @foreach($deposits as $deposit)
-                            <tr>
-                                <td>{{$sn++}}</td>
-                                <td>{{$deposit->user->last_name}} {{$deposit->user->first_name}}</td>
-                                <td>{{$initialDeposit}}</td>
-                                <td>{{$deposit->logement}}</td>
-                                <td>{{$deposit->amount}}</td>
-                                <td>{{$deposit->balance}}</td>
-                                <td>{{$deposit->phone}}</td>
-                                <td>{{$deposit->address}}</td>
-                                <td>{{$deposit->dateDate}}</td>
-                                <td>{{$deposit->created_at}}</td>
-                            </tr>
-                        @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-
-                </div>
             </div>
         </div>
-    </div> <!-- end row -->
-
-
+    @endcomponent
 @stop
 
 @section('after-scripts')
@@ -113,14 +101,16 @@
 
 
     <script>
-    
+
         $("#resetId").on('click', function(){
             $("#customerId").val('');
             $("#transactionId").val('');
-          
+
         });
-            
+
     </script>
+
+    @include('partials.collapsible-filter-scripts')
 @stop
 
 @section('before-styles')
