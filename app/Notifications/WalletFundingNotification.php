@@ -5,21 +5,23 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class UserNotification extends Notification
+class WalletFundingNotification extends Notification
 {
     use Queueable;
-    public String $text;
 
+    public $amount;
+    public $reference;
 
     /**
      * Create a new notification instance.
      *
-     * @param string
-     * @param User
+     * @param  mixed  $amount
+     * @param  string|null  $reference
      */
-    public function __construct(String $text)
+    public function __construct($amount, $reference = null)
     {
-        $this->text = $text;
+        $this->amount = (float) $amount;
+        $this->reference = $reference;
     }
 
     /**
@@ -30,16 +32,9 @@ class UserNotification extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail'];
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     /**
      * Get the array representation of the notification (stored in the
      * notifications table via the database channel).
@@ -50,8 +45,10 @@ class UserNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'module' => 'user',
-            'text'   => $this->text,
+            'module'    => 'wallet_funding',
+            'text'      => 'Your wallet was funded with ₦' . number_format($this->amount, 2) . '.',
+            'amount'    => $this->amount,
+            'reference' => $this->reference,
         ];
     }
 }

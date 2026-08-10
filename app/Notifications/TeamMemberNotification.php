@@ -5,21 +5,23 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class UserNotification extends Notification
+class TeamMemberNotification extends Notification
 {
     use Queueable;
-    public String $text;
 
+    public $role;
+    public $companyName;
 
     /**
      * Create a new notification instance.
      *
-     * @param string
-     * @param User
+     * @param  string  $role  admin|finance|viewer
+     * @param  string|null  $companyName
      */
-    public function __construct(String $text)
+    public function __construct($role, $companyName = null)
     {
-        $this->text = $text;
+        $this->role = $role;
+        $this->companyName = $companyName;
     }
 
     /**
@@ -30,16 +32,9 @@ class UserNotification extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail'];
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     /**
      * Get the array representation of the notification (stored in the
      * notifications table via the database channel).
@@ -49,9 +44,12 @@ class UserNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        $where = $this->companyName ? ' for ' . $this->companyName : '';
+
         return [
-            'module' => 'user',
-            'text'   => $this->text,
+            'module' => 'team',
+            'role'   => $this->role,
+            'text'   => 'You were added to the team' . $where . ' as ' . ucfirst($this->role) . '.',
         ];
     }
 }

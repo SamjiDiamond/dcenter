@@ -5,21 +5,20 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class UserNotification extends Notification
+class AccountCreatedNotification extends Notification
 {
     use Queueable;
-    public String $text;
 
+    public $firstName;
 
     /**
      * Create a new notification instance.
      *
-     * @param string
-     * @param User
+     * @param  string|null  $firstName
      */
-    public function __construct(String $text)
+    public function __construct($firstName = null)
     {
-        $this->text = $text;
+        $this->firstName = $firstName;
     }
 
     /**
@@ -30,16 +29,9 @@ class UserNotification extends Notification
      */
     public function via($notifiable)
     {
-        // return ['mail'];
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     /**
      * Get the array representation of the notification (stored in the
      * notifications table via the database channel).
@@ -50,8 +42,8 @@ class UserNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'module' => 'user',
-            'text'   => $this->text,
+            'module' => 'account',
+            'text'   => 'Welcome' . ($this->firstName ? ', ' . $this->firstName : '') . '! Your account has been created successfully.',
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Withdraw;
+use App\Notifications\TransactionNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -134,6 +135,8 @@ class WithdrawalController extends Controller
         $u->save();
 
         Withdraw::create($input);
+
+        $u->notify(new TransactionNotification($input['amount'], 'withdrawal', 'Withdrawal request submitted'));
 
 //        $noti = new PushNotificationController();
 //        $noti->PushNoti('Izormor2019', "There is a pending withdrawal request, kindly approve on the dashboard.", "Withdrawal Request");

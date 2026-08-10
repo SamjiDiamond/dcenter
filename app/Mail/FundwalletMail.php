@@ -21,7 +21,7 @@ class FundwalletMail extends Mailable
      */
     public function __construct(User $user)
     {
-        $this->User = $user;
+        $this->user = $user;
     }
 
     /**
